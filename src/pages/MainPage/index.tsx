@@ -1,10 +1,9 @@
 import s from './styles.module.scss'
-import Registration from '../RegistrationMainContainer'
+import Header from '../../shared/Header'
+import UserCard from '../../shared/UserCard'
 
 export default function MainPage() {
     return (
-        <main className={s.main__page}>
-            <Registration />
-        </main>
+        <Header />
     )
 }
