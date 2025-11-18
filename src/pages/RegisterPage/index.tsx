@@ -1,5 +1,5 @@
 import s from './styles.module.scss'
-import Registration from './RegistrationMainContainer'
+import Registration from './myComponents/RegistrationMainContainer'
 
 export default function RegisterPage() {
     return (

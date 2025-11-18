@@ -1,5 +1,5 @@
 import s from './styles.module.scss'
-import Option from '../../../shared/Button'
+import Option from '../../../../shared/Button'
 
 type Props = {
     setActiveOption: (x: number) => void;

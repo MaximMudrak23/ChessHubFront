@@ -1,0 +1,21 @@
+.find__game__button {
+    width: 425px;
+    height: 75px;
+    
+    background-color: #3F6730;
+    color: white;
+    
+    font-size: 1.6rem;
+    border-radius: 5px;
+    border: 0;
+
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
+
+    transition: transform 0.25s ease;
+
+    &:hover {
+        transform: translate(0, -5%);
+    }
+}

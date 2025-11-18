@@ -17,11 +17,10 @@
 
 .textDIV {
     height: 100%;
-    padding-top: 12px;
 
     display: flex;
     gap: 6px;
     
-    .username, .elo{ font-size: 1.2rem; }
+    .username, .elo { font-size: 1.2rem; }
     .elo { color: #7C7C7C; }
 }
