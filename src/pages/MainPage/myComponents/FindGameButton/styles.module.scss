@@ -1,5 +1,5 @@
 .find__game__button {
-    width: 425px;
+    width: 375px;
     height: 75px;
     
     background-color: #3F6730;
@@ -9,13 +9,27 @@
     border-radius: 5px;
     border: 0;
 
-    position: absolute;
+    position: fixed;
     right: 32px;
     bottom: 32px;
 
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, background-color 0.25s ease;
+    cursor: grab;
 
     &:hover {
         transform: translate(0, -5%);
+        background-color: #3f6730ea;
+    }
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+@media (max-width: 440px) {
+    .find__game__button {
+        width: 85%;
+
+        right: 50%;
+        transform: translateX(50%);
     }
 }

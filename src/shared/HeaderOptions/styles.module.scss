@@ -5,7 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 48px;
+    gap: 32px;
+    user-select: none;
 
     .optionWrapper {
         width: 36px;

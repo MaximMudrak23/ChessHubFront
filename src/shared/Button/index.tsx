@@ -15,3 +15,5 @@ export default function Button({text, onClick}: Props) {
         </button>
     )
 }
+
+// ПОФИКСИТЬ КНОПКУ, А ТО ЕЕ НИГДЕ НЕЗЯ ЮЗАТЬ

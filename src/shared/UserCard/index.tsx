@@ -1,15 +1,15 @@
 import s from './styles.module.scss'
+import UserAvatar from '../ForFetch/UserAvatar'
 
 type Props = {
     username?: string;
-    pfp?: string;
     elo?: number;
 }
 
-export default function UserCard({username, pfp, elo}: Props) {
+export default function UserCard({username, elo}: Props) {
     return (
         <section className={s.user__card}>
-            <img src={pfp} alt={`${username} Avatar`} draggable={false} />
+            <UserAvatar username='Recront' />
             <div className={s.textDIV}>
                 <p className={s.username}>{username}</p>
                 <p className={s.elo}>({elo})</p>
