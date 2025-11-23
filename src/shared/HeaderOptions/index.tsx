@@ -15,6 +15,10 @@ export default function HeaderOptions() {
                 <img className={s.optionIMG} src="/ProfileIcon.svg" alt="Profile" draggable={false} />
                 <p className={s.option__hover__text}>Profile</p>
             </div>
+            <div className={s.optionWrapper}>
+                <img className={s.optionIMG} src="/MenuIcon.svg" alt="Profile" draggable={false} />
+                <p className={s.option__hover__text}>Menu</p>
+            </div>
         </section>
     )
 }

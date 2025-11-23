@@ -1,0 +1,13 @@
+.user__avatar__container {
+    width: auto;
+    height: auto;
+    position: relative;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .user__avatar {
+        display: block;
+    }
+}
