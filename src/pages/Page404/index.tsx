@@ -1,10 +1,16 @@
 import s from './styles.module.scss'
-import AnimationLoop from './myComponents/AnimationLoop'
+import Header from '../../shared/Header'
+import Space from './myComponents/Space'
+import Planet from './myComponents/Planet'
+import Text from './myComponents/Text'
 
 export default function Page404() {
     return (
         <main className={s.page__404}>
-            <AnimationLoop />
+            <Header />
+            <Space />
+            <Planet />
+            <Text />
         </main>
     )
 }
