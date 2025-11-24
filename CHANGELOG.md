@@ -6,4 +6,9 @@
 - Прибрав pfp пропс з Header
 - Створив UserFrame, тепер аватарка може мати гарну обводку
 - UserAvatar розміри тепер задаються в пропсах, також додав hasFrame і ссилку на потрібний фрейм, яка передається самому UserFrame
-- ProfileIcon в HeaderOptions змінена + з'явилась опція Menu
+- Іконка ProfileIcon в HeaderOptions змінена + з'явилась опція Menu
+## [24.11.2025]
+- В HeaderOptions додав нову опцію Market, а також покращив поведінку курсору і поправив alt`s у деяких img
+- Видалив вкладку Options, оскільки для MVP вона не потрібна
+- В Header додав gap 12px
+- В UserAvatar додав fit-content ширину, так фрейм накладається краще

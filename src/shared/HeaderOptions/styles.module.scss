@@ -6,12 +6,15 @@
     align-items: center;
     justify-content: center;
     gap: 32px;
+    
     user-select: none;
 
     .optionWrapper {
         width: 36px;
         height: 36px;
         position: relative;
+
+        cursor: grab;
 
         .optionIMG {
             width: 36px;
@@ -36,6 +39,10 @@
                 opacity: 1;
                 top: 175%;
             }
+        }
+
+        &:active {
+            cursor: grabbing;
         }
     }
 }

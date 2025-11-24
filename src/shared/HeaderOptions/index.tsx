@@ -4,8 +4,8 @@ export default function HeaderOptions() {
     return (
         <section className={s.header__options}>
             <div className={s.optionWrapper}>
-                <img className={s.optionIMG} src="/OptionsIcon.svg" alt="Options" draggable={false} />
-                <p className={s.option__hover__text}>Options</p>
+                <img className={s.optionIMG} src="/MarketIcon.svg" alt="Market" draggable={false} />
+                <p className={s.option__hover__text}>Market</p>
             </div>
             <div className={s.optionWrapper}>
                 <img className={s.optionIMG} src="/SearchIcon.svg" alt="Search" draggable={false} />
@@ -16,7 +16,7 @@ export default function HeaderOptions() {
                 <p className={s.option__hover__text}>Profile</p>
             </div>
             <div className={s.optionWrapper}>
-                <img className={s.optionIMG} src="/MenuIcon.svg" alt="Profile" draggable={false} />
+                <img className={s.optionIMG} src="/MenuIcon.svg" alt="Menu" draggable={false} />
                 <p className={s.option__hover__text}>Menu</p>
             </div>
         </section>
