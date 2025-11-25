@@ -3,6 +3,8 @@ import s from './styles.module.scss'
 type Props = {
     text?: string;
     img?: string;
+    imgW?: string;
+    imgH?: string;
     width?: string;
     height?: string;
     background?: string;
@@ -11,7 +13,7 @@ type Props = {
     onClick: () => void;
 }
 
-export default function Button({text, img, width='auto', height='auto', background='transparent', border='3px solid black', radius=5, onClick}: Props) {
+export default function Button({text, img, imgW='1.65rem', imgH='1.65rem', width='auto', height='auto', background='transparent', border='3px solid black', radius=5, onClick}: Props) {
     return <button
         type='button'
         className={s.button}
@@ -24,7 +26,7 @@ export default function Button({text, img, width='auto', height='auto', backgrou
         }}
         onClick={onClick}
     >
-        {img && <img src={img} alt={'Button icon'} />}
+        {img && <img src={img} style={{width: imgW, height: imgH}} alt={'Button icon'} />}
         {text && <span>{text}</span>}
     </button>
 }

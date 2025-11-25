@@ -10,11 +10,6 @@
 
     cursor: grab;
 
-    img {
-        width: 1.65rem;
-        height: 1.65rem;
-    }
-
     &:active {
         cursor: grabbing;
         transform:translateY(2px);
