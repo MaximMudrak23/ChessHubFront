@@ -13,4 +13,6 @@
 - В Header додав gap 12px
 - В UserAvatar додав fit-content ширину, так фрейм накладається краще
 - Оновив Page404, додав компоненти Space(Фон Lootie), Planet(Надпис 404 Lootie), Text(Текст, що такої сторінки не існує)
-- Додав z-index -1, щоб HeaderOptions корректно відображались.
+- Додав z-index -1, щоб HeaderOptions корректно відображались
+## [25.11.2025]
+- Button component is fixed, now it works correctly
