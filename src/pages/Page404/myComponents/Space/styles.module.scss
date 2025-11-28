@@ -1,8 +1,9 @@
 .space {
     flex: 1;
     overflow: hidden;
-    
-    z-index: -1;
+
+    position: absolute;
+    inset: 0;
 
     & > div {
         width: 100%;

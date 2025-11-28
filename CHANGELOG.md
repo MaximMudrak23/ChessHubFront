@@ -16,3 +16,7 @@
 - Додав z-index -1, щоб HeaderOptions корректно відображались
 ## [25.11.2025]
 - Button component is fixed, now it works correctly
+## [28.11.2025]
+- Refactored Button component (cleaner structure)
+- Added AnimatedButton component (separate button for animations)
+- Fixed layout issues on 404 page by removing unnecessary absolute positioning

@@ -1,6 +1,8 @@
 .text {
-    width: max-content;
+    width: 85%;
     max-width: 90%;
+
+    padding: 24px 0;
 
     display: flex;
     justify-content: center;
@@ -10,11 +12,6 @@
     font-size: 1.8rem;
     font-weight: bold;
     color: white;
-
-    position: absolute;
-    left: 50%;
-    top: 53%;
-    transform: translate(-50%,-50%);
 
     span {
         display: inline-block;
