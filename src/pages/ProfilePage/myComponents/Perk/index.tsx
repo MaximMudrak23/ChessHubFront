@@ -9,13 +9,21 @@ type Props = {
 }
 
 export default function Perk({perkType='other', imgSrc, text}: Props) {
+    const eloPerk = perkType === 'elo';
+    const songPerk = perkType === 'song';
+    const topPerks = eloPerk || songPerk;
+    
+    const classes = [
+        s.perk,
+        topPerks && s.topPerkBehavior,
+    ].filter(Boolean).join(' ');
     return (
-        <div className={perkType === 'other' || perkType === 'elo' ? `${s.perk} ${s.otherBehavior}` : s.perk}>
-            {perkType === 'song' && <div className={s.song_image_container}>
+        <div className={classes}>
+            {songPerk && <div className={s.song_image_container}>
                 <img src={imgSrc} alt="Perk IMG" />
                 <Lottie className={s.lottie} animationData={MusicFly} loop={true} />
             </div>}
-            <span>{perkType === 'elo' ? `${text} elo` : text}</span>
+            <span>{eloPerk ? `${text} elo` : text}</span>
         </div>
     )
 }
