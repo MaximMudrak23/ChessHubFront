@@ -1,7 +1,9 @@
 .header {
     width: 100%;
     min-height: 80px;
+
     background-color: #1A1817;
+
     position: sticky;
     top: 0;
 
@@ -9,4 +11,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+
+    z-index: 9999;
 }

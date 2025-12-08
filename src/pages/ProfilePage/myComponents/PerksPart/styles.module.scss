@@ -1,0 +1,24 @@
+.perks_container {
+    width: 325px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    padding: 24px 0;
+}
+
+.perks_container:has(> :nth-child(3):last-child) {
+    justify-content: center;
+}
+
+@media (max-width: 980px) {
+    .perks_container {
+        width: 100%;
+        background-color: rgba(15, 16, 17, 0.2);
+
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

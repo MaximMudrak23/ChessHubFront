@@ -20,3 +20,10 @@
 - Refactored Button component (cleaner structure)
 - Added AnimatedButton component (separate button for animations)
 - Fixed layout issues on 404 page by removing unnecessary absolute positioning
+## [01.12.2025]
+- Видалив компонент FindGameButton в MainPage > myComponents, замість неї тепер Button виконує її функції (можливо тимчасово), додав до нього position + 't,l,r,b'
+- Створив UniversalContainer, контейнер для верстки сторінки в котрий можна вставляти без проблем фон, стилі та класи
+- Видалив компонент ContentContainer в MainPage > myComponents, замість нього тепер UniversalContainer
+## [08.12.2025]
+- ProfilePage повністю створена і працює, для MVP працює як треба
+- Створив UserDescription && UserName в ForFetch папці

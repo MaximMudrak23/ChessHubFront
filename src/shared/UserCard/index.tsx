@@ -9,7 +9,7 @@ type Props = {
 export default function UserCard({username, elo}: Props) {
     return (
         <section className={s.user__card}>
-            <UserAvatar username='Recront' hasFrame size='64' frameURL='/steam3.png' />
+            <UserAvatar username='Recront' hasFrame size='64px' frameURL='/steam3.png' />
             <div className={s.textDIV}>
                 <p className={s.username}>{username}</p>
                 <p className={s.elo}>({elo})</p>

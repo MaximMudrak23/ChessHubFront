@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import s from './styles.module.scss'
 
 type Props = {
@@ -11,10 +12,15 @@ type Props = {
     radius?: number;
     fontSize?: string;
     isBold?: boolean;
+    position?: CSSProperties['position'];
+    top?: string;
+    left?: string;
+    right?: string;
+    bottom?: string;
     onClick: () => void;
 }
 
-export default function Button({text, img, imgSize='1.65rem', width='auto', height='auto', background='transparent', border='3px solid black', radius=5, fontSize='1.25rem', isBold=false, onClick}: Props) {
+export default function Button({text, img, imgSize='1.65rem', width='auto', height='auto', background='transparent', border='0', radius=5, fontSize='1.25rem', isBold=false, position, top, left, right, bottom, onClick}: Props) {
     return <button
         type='button'
         className={s.button}
@@ -26,6 +32,11 @@ export default function Button({text, img, imgSize='1.65rem', width='auto', heig
             borderRadius: `${radius}px`,
             fontSize: fontSize,
             fontWeight: isBold ? 'bold' : 500,
+            position: position,
+            top: top,
+            left: left,
+            right: right,
+            bottom: bottom,
         }}
         onClick={onClick}
     >

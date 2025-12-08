@@ -1,4 +1,6 @@
 .button {
+    transition: transform 0.25s ease, background-color 0.25s ease;
+
     color: white;
     padding: 16px 24px;
 
@@ -7,5 +9,27 @@
     justify-content: center;
     gap: 8px;
 
-    cursor: default;
+    // cursor: default;
+    cursor: grab;
+
+    &:hover {
+        transform: translate(0, -5%);
+        background-color: #3f6730ea;
+    }
+    
+    &:active {
+        cursor: grabbing;
+        transform: translate(0, 0);
+    }
+}
+
+@media (max-width: 440px) {
+    .button {
+        width: 85% !important;
+        right: 50% !important;
+        transform: translateX(50%) !important;
+        &:active {
+            transform: translate(50%, -5px) !important;
+        }
+    }
 }

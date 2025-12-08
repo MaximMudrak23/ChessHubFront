@@ -1,0 +1,73 @@
+.perk {
+    width: 90%;
+    height: 70px;
+    position: relative;
+    
+    background-color: rgba(15, 16, 17, 0.5);
+    padding: 0 8px;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(15, 16, 17, 0.3);
+    }
+
+    span {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .song_image_container {
+        width: auto;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+
+        img {
+            width: auto;
+            height: 75%;
+
+            border-radius: 50%;
+
+            animation: songRotate 30s infinite linear;
+            user-select: none;
+        }
+
+        .lottie {
+            height: 75%;
+            
+            position: absolute;
+            top: 0;
+
+            user-select: none;
+        }
+    }
+}
+
+.otherBehavior {
+    font-size: 1.2rem;
+    justify-content: center;
+}
+
+@keyframes songRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 980px) {
+    .perk {
+        flex: 0 0 calc(50% - 12px);
+        min-width: 0; //разобраться поч помогает
+        justify-content: center;
+    }
+    .perk:nth-child(3) {
+        flex: 0 0 calc(100% - 12px);
+    }
+}
