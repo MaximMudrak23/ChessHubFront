@@ -1,15 +1,14 @@
 import s from './styles.module.scss'
-import Header from '../../shared/Header'
-import UniversalContainer from '../../shared/UniversalContainer'
-import ProfileContainer from './myComponents/ProfileContainer'
+import UniversalContainer from '../../components/UniversalContainer'
+import ProfileInfo from './components/ProfileInfo'
 
 export default function ProfilePage() {
     return (
-        <main className={s.profile__page}>
-            <Header />
-            <UniversalContainer backgroundType='video' src='/steam.webm' className={s.zxczxc}>
-                <ProfileContainer />
-            </UniversalContainer>
-        </main>
+        <UniversalContainer className={s.containerMain} contentClassName={s.content} srcVideo='/steam.webm'>
+            <ProfileInfo
+                userElo={12000}
+                songIMG='/wholelotta.jpg' songName='Страгл'
+            />
+        </UniversalContainer>
     )
 }

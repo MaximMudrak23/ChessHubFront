@@ -1,19 +1,13 @@
-.main__page {
+.content {
     flex: 1;
+    background-color: #1B1918;
+
+    padding-top: 48px;
+    font-size: 1.2rem;
+
+    word-break: break-all;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    .zxc {
-        max-width: 975px;
-        background-color: #1B1918;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        padding-top: 48px;
-        font-size: 1.2rem;
-
-        word-break: break-all;
-    }
 }

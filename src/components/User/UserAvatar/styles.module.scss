@@ -1,0 +1,16 @@
+.userAvatarContainer {
+    width: fit-content;
+    height: auto;
+    position: relative;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: default;
+    user-select: none;
+
+    .userAvatar {
+        display: block;
+    }
+}

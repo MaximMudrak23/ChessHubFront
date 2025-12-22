@@ -1,0 +1,59 @@
+.aside_background {
+    width: 100%;
+    height: 100%;
+    
+    position: fixed;
+    inset: 0;
+
+    background-color: #0C0C0C;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.aside {
+    width: 365px;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    
+    z-index: 9999;
+    pointer-events: none;
+
+    background-color: #121212;
+}
+
+.open {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.bc_open {
+    opacity: 0.5;
+    pointer-events: auto;
+}
+
+@media (min-width: 600px) {
+    .open {
+        transform: translateX(100%);
+        pointer-events: none;
+    }
+    .bc_open {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+@media (max-width: 740px) {
+    .open {
+        transform: translateX(100%);
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,32 @@
+.optionWrapper {
+    width: 36px;
+    height: 36px;
+    position: relative;
+
+    .optionIMG {
+        width: 36px;
+        height: 36px;
+    }
+
+    .option__hover__text {
+        font-size: 1.2rem;
+        color: #B7B7B7;
+        opacity: 0;
+        
+        position: absolute;
+        left: 50%;
+        top: 170%;
+        
+        transform: translate(-50%);
+        transition: opacity 0.25s ease, top 0.25s ease;
+
+        pointer-events: none;
+    }
+
+    &:hover {
+        .option__hover__text {
+            opacity: 1;
+            top: 175%;
+        }
+    }
+}

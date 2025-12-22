@@ -1,0 +1,11 @@
+.optionsContainer {
+    height: 100%;
+    padding-right: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    
+    user-select: none;
+}

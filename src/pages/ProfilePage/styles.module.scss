@@ -1,6 +1,12 @@
-.profile__page {
+.content {
     flex: 1;
+    background-color: rgba(26, 27, 29, 0.85);
+    
+    font-size: 1.2rem;
+
+    word-break: break-all;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
 }

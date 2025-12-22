@@ -20,10 +20,12 @@ html, body {
 }
 
 #root {
+  min-width: fit-content;
   min-height: 100vh;
+  
   display: flex;
+  flex-direction: column;
 }
-
 
 button, input, textarea, select {
   font-family: inherit;
