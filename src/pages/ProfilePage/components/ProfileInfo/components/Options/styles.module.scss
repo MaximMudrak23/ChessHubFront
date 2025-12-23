@@ -57,3 +57,11 @@
     0% { transform: rotate(0); }
     100% { transform: rotate(360deg); }
 }
+
+@media (max-width: 1080px) {
+    .option {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+    }
+}

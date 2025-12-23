@@ -3,7 +3,6 @@ import UserCard from '../User/UserCard'
 import OptionsContainer from './components/OptionsContainer'
 import Option from './components/Option'
 import Aside from './components/Aside'
-import SearchStatus from './components/SearchStatus'
 import { useState } from 'react'
 
 export default function Header() {
@@ -13,7 +12,6 @@ export default function Header() {
         <>
             <header className={s.header}>
                 <UserCard />
-                {/* <SearchStatus /> */}
                 
                 <OptionsContainer className={s.wideScreen}>
                     <Option img='/MarketIcon.svg' text='Market' />
