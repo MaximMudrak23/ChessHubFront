@@ -1,0 +1,42 @@
+.close {
+    width: 42px;
+    height: 42px;
+    
+    background-color: rgba($color: #B7B7B7, $alpha: 0);
+    
+    position: absolute;
+    left: 32px;
+
+    border-radius: 50%;
+    border: 0;
+
+    transition: background-color 0.25s ease;
+
+    &::before, &::after {
+        content: '';
+        width: 3px;
+        height: 80%;
+        
+        background-color: #B7B7B7;
+        border-radius: 10px;
+        
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transition: background-color 0.25s ease;
+    }
+    &:before {
+        transform: translate(-50%,-50%) rotate(45deg);
+    }
+    &:after {
+        transform: translate(-50%,-50%) rotate(-45deg);
+    }
+    
+    &:hover {
+        background-color: rgba($color: #B7B7B7, $alpha: 0.1);
+        &::before, &::after {
+            background-color: #fff;
+        }
+    }
+}

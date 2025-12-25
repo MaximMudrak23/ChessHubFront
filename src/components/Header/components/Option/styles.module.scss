@@ -1,14 +1,12 @@
-.optionWrapper {
+.option_wrapper {
+    position: relative;
+}
+
+.option_header {
     width: 36px;
     height: 36px;
-    position: relative;
 
-    .optionIMG {
-        width: 36px;
-        height: 36px;
-    }
-
-    .option__hover__text {
+    p {
         font-size: 1.2rem;
         color: #B7B7B7;
         opacity: 0;
@@ -24,9 +22,36 @@
     }
 
     &:hover {
-        .option__hover__text {
+        p {
             opacity: 1;
             top: 175%;
         }
+    }
+}
+
+.option_aside {
+    padding-left: calc(36px + 16px + 16px);
+    height: 64px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 24%;
+
+    transition: background-color 0.25s ease;
+
+    img {
+        position: absolute;
+        left: 32px;
+    }
+
+    p {
+        font-size: 1.2rem;
+        color: #B7B7B7;
+        pointer-events: none;
+    }
+
+    &:hover {
+        background-color: rgba($color: #fff, $alpha: 0.1);
     }
 }
