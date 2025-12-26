@@ -9,4 +9,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+    .content_overview {
+        width: 100%;
+        flex: 1;
+        
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+
+        padding-right: 25px;
+    }
 }

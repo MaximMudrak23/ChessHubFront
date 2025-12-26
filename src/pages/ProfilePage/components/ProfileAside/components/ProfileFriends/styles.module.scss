@@ -1,0 +1,18 @@
+.profile_friends {
+    padding-left: 12px;
+    padding-top: 12px;
+
+    font-size: 1.4rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    user-select: none;
+
+    .freinds_cards {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+}

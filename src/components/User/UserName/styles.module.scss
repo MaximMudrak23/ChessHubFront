@@ -9,5 +9,13 @@
     cursor: default;
     user-select: none;
 
-    img { width: auto; height: 1.6rem; }
+    img {
+        width: auto;
+        height: 1.6rem;
+    }
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }

@@ -1,0 +1,25 @@
+.persona_state {
+    .variant_profile {
+        padding-left: 12px;
+        padding-top: 12px;
+        font-size: 1.4rem;
+    }
+    .variant_card {
+        font-size: 1rem;
+    }
+
+    .offline {
+        color: #757575;
+    }
+    .online {
+        color: #4DB0C0;
+    }
+    .ingame {
+        color: #769838;
+    }
+    .ingame_event {
+        color: #769838;
+        font-size: 1.1rem;
+        padding-left: 12px;
+    }
+}
