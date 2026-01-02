@@ -7,7 +7,7 @@ export default function ProfileFriends() {
             <p>Friends</p>
             <div className={s.freinds_cards}>
                 <FriendCard userAvatar='/steamgif.gif' userName='Recront' userFrame='/steam2.png' userStatus='ingame' />
-                <FriendCard userName='Snow' userStatus='online' />
+                <FriendCard userAvatar='/image.png' userName='wiv' userStatus='online' />
                 <FriendCard userAvatar='/wholelotta.jpg' userName='Выпирает чопер' userStatus='offline' />
             </div>
         </div>
