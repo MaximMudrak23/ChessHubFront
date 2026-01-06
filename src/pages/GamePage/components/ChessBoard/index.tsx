@@ -1,11 +1,13 @@
 import s from './styles.module.scss'
+import { CHARS, BOARD_SIZE, type Position, type Square } from './model';
 
-const BOARD_SIZE = 8 as const;
-const CHARS = ['a','b','c','d','e','f','g','h'] as const;
+type Props = {
+    perspective?: 'white' | 'black';
+    position: Position;
+    onSquareClick: (square: Square) => void
+};
 
-type Props = {perspective?: 'white' | 'black'};
-
-export default function ChessBoard({perspective = 'white'}: Props) {
+export default function ChessBoard({perspective = 'white', position, onSquareClick}: Props) {
     return (
         <div
             className={s.chess_board}
@@ -21,18 +23,22 @@ export default function ChessBoard({perspective = 'white'}: Props) {
                     const fIndex = whitePerspective ? colums : (BOARD_SIZE-1)-colums;
                     const file = CHARS[fIndex];
                     const rank = whitePerspective ? (BOARD_SIZE-rows) : (rows+1);
-                    const square = `${file}${rank}`;
+                    const square = `${file}${rank}` as keyof Position;
 
                     const showFile = rows === BOARD_SIZE - 1;
                     const showRank = colums === 0;
+
+                    const piece = position[square];
                     
                     return (
                         <div
                             className={`${s.cell} ${isWhite ? s.white : s.black}`}
                             key={square}
+                            onClick={()=>onSquareClick(square)}
                         >
                             {showRank && <span className={`${s.rank} ${isWhite ? s.even : ''}`}>{rank}</span>}
                             {showFile && <span className={`${s.file} ${isWhite ? s.even : ''}`}>{file}</span>}
+                            {piece && <img draggable={false} src={`/chessPieces/${piece}.png`} alt={piece} />}
                         </div>
                     )
                 }) 

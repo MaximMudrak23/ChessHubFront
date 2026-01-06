@@ -3,6 +3,10 @@
     height: 85vmin;
 
     margin-top: 24px;
+    
+    border: 2px solid #FFF;
+    border-radius: 10px;
+    overflow: hidden;
 
     display: grid;
     grid-template-columns: repeat(var(--size), 1fr);
@@ -19,6 +23,7 @@
             font-size: 1.2rem;
             font-weight: 500;
             color: #E7CDB2;
+            z-index: 9999;
 
             &.even { color: #8D6762; }
         }
