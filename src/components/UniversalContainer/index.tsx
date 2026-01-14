@@ -14,13 +14,25 @@ type Props =
     | defaultProps & {srcIMG?: never; srcVideo: string;}
     | defaultProps & {srcIMG?: never; srcVideo?: never;}
 
-export default function UniversalContainer({className, style, contentClassName, contentStyle, children, srcIMG, srcVideo}: Props) {
+export default function UniversalContainer({
+    className,
+    style,
+    contentClassName,
+    contentStyle,
+    children,
+    srcIMG,
+    srcVideo
+}: Props) {
     const containerClasses = [s.container, className].filter(Boolean).join(' ');
     const contentClasses = [s.content, contentClassName].filter(Boolean).join(' ');
     return (
-        <section className={containerClasses} style={style}>
+        <section
+            className={`${containerClasses}
+            ${(srcIMG || srcVideo) ? s.profile_gradient : s.default_gradient}`}
+            style={style}
+        >
             
-            <div className={s.background}>
+            <div className={`${s.background} ${(srcIMG || srcVideo) ? s.background_transition : ''}`}>
                 {(srcIMG && !srcVideo) && <img src={srcIMG} alt="Background Image" />}
                 {(srcVideo && !srcIMG) && <video src={srcVideo} autoPlay loop muted playsInline disablePictureInPicture></video>}
             </div>

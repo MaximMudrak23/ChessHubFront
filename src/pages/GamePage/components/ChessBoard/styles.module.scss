@@ -15,8 +15,8 @@
     .cell {
         position: relative;
 
-        &.white { background-image: url('/whiteCell.png'); }
-        &.black { background-image: url('/blackCell.png'); }
+        &.white { background-image: url('/all/whiteCell.png'); }
+        &.black { background-image: url('/all/blackCell.png'); }
         
         .rank, .file { 
             position: absolute;

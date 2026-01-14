@@ -10,15 +10,9 @@ export default function MainPage() {
             </UniversalContainer>
             <Button
                 text='Find Game'
-                radius={5}
-                fontSize='1.6rem'
-                width='375px'
-                height='75px'
-                background='#3F6730'
-                position='fixed'
-                right='32px'
-                bottom='32px'
-                isSearchButton
+                variant='txt'
+                animation='main_animation'
+                shape='main_shape'
                 onClick={()=>''}
             />
         </>

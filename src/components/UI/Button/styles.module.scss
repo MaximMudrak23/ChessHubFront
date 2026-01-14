@@ -1,35 +1,90 @@
 .button {
+    color: #FFF;
+    font-size: 1.2rem;
+    border: 0;
+}
+
+// maybe later add colors separately
+
+// shapes (layout + shape + colors (for now))
+.profile_shape {
+    width: 100px;
+    height: 48px;
+    background-color: rgba($color: #0F1011, $alpha: 0.5);
+    border-radius: 5px;
+}
+
+.game_shape {
+    width: 100px;
+    height: 48px;
+    background: linear-gradient(to bottom, #373633, #2C2B29);
+    box-shadow: 5px 3px 5px rgba($color: #000, $alpha: 0.5);
+    border-radius: 10px;
+}
+
+.main_shape {
+    width: 375px;
+    height: 75px;
+    background: linear-gradient(to bottom, #9FD05E, #45753C);
+    
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    
+    border-radius: 5px;
+    font-size: 1.6rem;
+
+    @media (max-width: 600px) {
+        width: 75%;
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
+
+.notfound_shape {
     position: relative;
-
     padding: 16px 24px;
-    transition: transform 0.25s ease, background-color 0.25s ease;
-    cursor: grab;
+    border: 0;
 
-    .cancel_searching {
-        width: 100%;
-        height: 100%;
-        background-color: rgba(141, 37, 37);
+    background-color: transparent;
+
+    p {
+        -webkit-background-clip: text;
+        background-image: linear-gradient(to bottom, #C9C5D7, #594D82);
         
-        border-radius: inherit;
+        color: transparent;
+        font-weight: 500;
 
+        transition: opacity 0.5s ease; //animation
+    }
+
+    img {
+        height: 50%;
+        
         position: absolute;
         inset: 0;
+        margin: auto;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        opacity: 0; //animation
+        transition: opacity 0.5s ease; //animation
+        user-select: none;
     }
 
-    &:active {
-        cursor: grabbing;
+    &:after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        
+        border-radius: 5px;
+        background: linear-gradient(to bottom, #C9C5D7, #594D82);
+
+        padding: 4px;
+        mask: linear-gradient(#000) content-box, linear-gradient(#000);
+        mask-composite: exclude;
     }
-}
 
-.animationClass:hover {
-    transform: translate(0, -5%);
-}
-
-.animationClass:active {
-    cursor: grabbing;
-    transform: translate(0, 0);
+    &:hover {
+        p { opacity: 0; }
+        img { opacity: 1; }
+    }
 }

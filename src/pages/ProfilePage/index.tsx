@@ -6,10 +6,10 @@ import ProfileAside from './components/ProfileAside'
 
 export default function ProfilePage() {
     return (
-        <UniversalContainer className={s.containerMain} contentClassName={s.content} srcVideo='/steam.webm'>
+        <UniversalContainer className={s.containerMain} contentClassName={s.content} srcVideo='/all/steam.webm'>
             <ProfileInfo
                 userElo={12000}
-                songIMG='/wholelotta.jpg' songName='Страгл'
+                songIMG='/all/wholelotta.jpg' songName='Страгл'
             />
             <div className={s.content_overview}>
                 <ProfileGallery />

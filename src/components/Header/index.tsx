@@ -22,10 +22,10 @@ export default function Header() {
                 <UserCard />
                 
                 <OptionsContainer className={s.header_options_container}>
-                    <Option img='/MarketIcon.svg' text='Market' variation='header' />
-                    <Option img='/SearchIcon.svg' text='Search' variation='header' />
-                    <Option img='/ProfileIcon.svg' text='Profile' variation='header' />
-                    <Option img='/MenuIcon.svg' text='Main' variation='header' />
+                    <Option img='/all/MarketIcon.svg' text='Market' variation='header' />
+                    <Option img='/all/SearchIcon.svg' text='Search' variation='header' />
+                    <Option img='/all/ProfileIcon.svg' text='Profile' variation='header' />
+                    <Option img='/all/MenuIcon.svg' text='Main' variation='header' />
                     <BurgerIcon onClick={()=>setIsOpen(x => !x)} />
                 </OptionsContainer>
             </header>

@@ -8,8 +8,9 @@
     
     isolation: isolate;
     z-index: 0;
-    
-    background-color: black;
+
+    &.profile_gradient {background-color: #000;}
+    &.default_gradient {background-color: #272623;}
 
     .content {
         max-width: 1080px;
@@ -22,6 +23,17 @@
         width: 100%;
         height: 100%;
         z-index: -1;
+
+        &.background_transition::after {
+            content: '';
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, #000, transparent);
+            
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
 
         img, video {
             width: 100%;

@@ -40,7 +40,7 @@ export default function GamePage() {
     // TESTING
 
     return (
-        <section className={s.game_page} style={{backgroundImage: `url('/game_background.webp')`}}>
+        <section className={s.game_page} style={{backgroundImage: `url('/all/game_background.webp')`}}>
             <ChessBoard
                 perspective='white'
                 position={position}
