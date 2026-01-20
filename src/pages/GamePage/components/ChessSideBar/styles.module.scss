@@ -1,0 +1,20 @@
+.chess_side_bar {
+    width: 465px;
+    height: 90vh;
+    background-color: rgba($color: #1A1817, $alpha: 1);
+    
+    position: relative;
+    top: 0;
+    bottom: 0;
+
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1325px) {
+        width: 85vmin;
+        height: 835px;
+        margin-bottom: 24px;
+    }
+}

@@ -1,5 +1,7 @@
 import s from './styles.module.scss'
 import ChessBoard from './components/ChessBoard'
+import ChessSideBar from './components/ChessSideBar'
+
 import { START_POSITION, type Position, type Square } from './components/ChessBoard/model'
 import { movePiece } from './components/ChessBoard/logic'
 import { useState } from 'react'
@@ -45,6 +47,9 @@ export default function GamePage() {
                 perspective='white'
                 position={position}
                 onSquareClick={handleSquareClick}
+            />
+            <ChessSideBar
+                
             />
         </section>
     )

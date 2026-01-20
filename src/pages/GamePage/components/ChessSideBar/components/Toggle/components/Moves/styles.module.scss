@@ -1,0 +1,26 @@
+.moves_table_test {
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+    gap: 12px;
+
+    .move_number, .move_white, .move_black {
+        aspect-ratio: 1/1;
+
+        font-size: 1.2rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img { max-height: 55%; }
+    }
+
+    &:nth-child(even) {
+        background-color: rgba($color: #FFF, $alpha: 0.4);
+    }
+    &:nth-child(odd) {
+        background-color: rgba($color: #FFF, $alpha: 0.2);
+    }
+}

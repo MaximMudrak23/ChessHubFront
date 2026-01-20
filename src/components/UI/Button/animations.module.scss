@@ -5,6 +5,12 @@
     &:hover { transform: translateY(-5px); }
 }
 
+.game_animation {
+    transition: filter 0.25s ease;
+
+    &:hover { filter: brightness(0.8); }
+}
+
 .notfound_animation {
     cursor: default;
     animation: flying 2.5s ease-in-out infinite;

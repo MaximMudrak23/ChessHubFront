@@ -1,8 +1,6 @@
 .chess_board {
     width: 85vmin;
     height: 85vmin;
-
-    margin-top: 24px;
     
     border: 2px solid #FFF;
     border-radius: 10px;
@@ -38,4 +36,6 @@
             &:active { cursor: grabbing; }
         }
     }
+
+    @media (max-width: 1325px) { margin-top: 24px; }
 }

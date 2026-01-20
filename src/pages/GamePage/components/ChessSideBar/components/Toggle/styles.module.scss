@@ -1,0 +1,17 @@
+.moves_chat {
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    
+    .button_folder {
+        display: flex;
+    }
+    .info_folder {
+        flex: 1;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar { width: 0; } // fix later
+    }
+}
