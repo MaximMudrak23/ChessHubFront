@@ -1,0 +1,16 @@
+.content {
+    flex: 1;
+    background-color: #1B1918;
+
+    padding: 0 24px;
+    padding-top: 48px; //del this and use string upper
+    font-size: 1.2rem;
+
+    word-break: break-all;
+
+    .find_cards_container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}

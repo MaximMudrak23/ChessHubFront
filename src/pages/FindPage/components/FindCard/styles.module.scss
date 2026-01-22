@@ -1,0 +1,44 @@
+.find_card {
+    width: 100%;
+    height: 120px;
+    background-color: #101010;
+
+    border-radius: 10px;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+
+    .user_pfp {
+        height: 75px;
+    }
+
+    .name_decription {
+        flex: 1;
+
+        padding: 0 12px;
+
+        .name { font-size: 1.4rem; }
+        .description { color: rgba($color: #FFF, $alpha: 0.5); }
+    }
+
+    button {
+        width: fit-content;
+        height: 48px;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+
+        padding: 0 12px;
+        
+        border-radius: 5px;
+        border: 0;
+        outline: 0;
+        
+        color: #FFF;
+        font-size: 1.2rem;
+
+        transition: background-color 0.25s ease;
+        cursor: pointer;
+        
+        &:hover { background-color: rgba($color: #FFF, $alpha: 0.2); }
+    }
+}
