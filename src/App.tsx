@@ -1,17 +1,21 @@
 import {Routes, Route} from 'react-router-dom'
 import Header from './components/Header'
+import WelcomePage from './pages/WelcomePage'
 import MainPage from './pages/MainPage'
 import FindPage from './pages/FindPage'
 import ProfilePage from './pages/ProfilePage'
 import GamePage from './pages/GamePage'
 import Page404 from './pages/Page404'
 
+// FIX IT, HEADER CANT BE ON WELCOMEPAGE !!!
+
 function App() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Routes>
-        <Route path='/' element={<MainPage />} />
+        <Route path='/' element={<WelcomePage />} />
+        <Route path='/main' element={<MainPage />} />
         <Route path='/profile/:id' element={<ProfilePage />} />
         <Route path='/game/:id' element={<GamePage />} />
         <Route path='/find' element={<FindPage />} />
