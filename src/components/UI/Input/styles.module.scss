@@ -1,0 +1,38 @@
+.welcome_shape {
+    width: 100%;
+    height: 64px;
+
+    display: flex;
+
+    label, input {
+        background-color: #212121;
+        
+        color: #FFF;
+        font-size: 1.2rem;
+
+        border: 0;
+        outline: 0;
+    }
+    label {
+        min-width: 125px;
+        flex: 1;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    input {
+        flex: 3;
+        
+        padding: 0 12px;
+        caret-color: #784DC4;
+        
+        &:focus { outline: 3px solid #784DC4; }
+        &:-webkit-autofill {
+            // пофиксить, что автофилл меняет стили, изучить это и пофиксить фул
+            -webkit-text-fill-color: #FFF;
+            transition: background-color 9999s ease-out 0s;
+            font-size: inherit;
+        }
+    }
+}
