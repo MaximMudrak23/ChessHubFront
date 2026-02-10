@@ -8,7 +8,7 @@ type SignUpData = {
 
 type Props = {
     data: SignUpData;
-    setData: React.Dispatch<React.SetStateAction<SignUpData>>
+    setData: React.Dispatch<React.SetStateAction<SignUpData>>;
 }
 
 export default function SignUp({data, setData}: Props) {

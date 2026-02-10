@@ -7,13 +7,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 export default function RightSide() {
     const [selectedOption, setSelectedOption] = useState<'signin' | 'signup'>('signin');
-    const [signInData,setSignInData] = useState({ stage: 1 as 1 | 2, login: '', password: '', key: '', username: '', email: '' });
+    const [signInData,setSignInData] = useState({ login: '', password: '', email: '', key: '' });
     const [signUpData,setSignUpData] = useState({ login: '', password: '' });
 
     return (
         <section className={s.right_side}>
             <Switch selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
-            <div className={s.content}>    
+            <div className={s.content}>
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={selectedOption}
