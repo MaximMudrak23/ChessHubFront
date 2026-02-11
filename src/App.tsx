@@ -3,6 +3,7 @@ import Header from './components/Header'
 import WelcomePage from './pages/WelcomePage'
 import MainPage from './pages/MainPage'
 import FindPage from './pages/FindPage'
+import OptionsPage from './pages/OptionsPage'
 import ProfilePage from './pages/ProfilePage'
 import GamePage from './pages/GamePage'
 import Page404 from './pages/Page404'
@@ -19,6 +20,7 @@ function App() {
         <Route path='/profile/:id' element={<ProfilePage />} />
         <Route path='/game/:id' element={<GamePage />} />
         <Route path='/find' element={<FindPage />} />
+        <Route path='/options' element={<OptionsPage />} />
         <Route path='*' element={<Page404 />} />
       </Routes>
     </>

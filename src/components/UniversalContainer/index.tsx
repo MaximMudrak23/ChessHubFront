@@ -33,8 +33,21 @@ export default function UniversalContainer({
         >
             
             <div className={`${s.background} ${(srcIMG || srcVideo) ? s.background_transition : ''}`}>
-                {(srcIMG && !srcVideo) && <img src={srcIMG} alt="Background Image" />}
-                {(srcVideo && !srcIMG) && <video src={srcVideo} autoPlay loop muted playsInline disablePictureInPicture></video>}
+                {(srcIMG && !srcVideo) &&
+                <img
+                    src={srcIMG}
+                    alt="Background Image"
+                />}
+                
+                {(srcVideo && !srcIMG) &&
+                <video
+                    src={srcVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    disablePictureInPicture
+                ></video>}
             </div>
 
             <div className={contentClasses} style={contentStyle}>
