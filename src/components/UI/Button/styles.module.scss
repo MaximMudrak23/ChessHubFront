@@ -154,3 +154,13 @@
     &:hover { background-color: rgba($color: #271F35, $alpha: 1); }
     & img { height: 36%; }
 }
+
+.find_shape {
+    width: fit-content;
+    height: 100%;
+    background-color: #2D6745;
+    
+    padding: 0 24px;
+    border-radius: 5px;
+    cursor: pointer;
+}

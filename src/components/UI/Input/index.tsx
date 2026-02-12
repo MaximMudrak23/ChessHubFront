@@ -1,4 +1,5 @@
 import s from './styles.module.scss'
+// пофиксить с айди, мне не ввсегда нужно отображать его сбоку
 
 type Type =
     | 'text'
@@ -10,12 +11,13 @@ type Type =
     | 'submit';
 
 type Shape =
-    | 'welcome_shape';
+    | 'welcome_shape'
+    | 'find_folder';
 
 type Props = {
     type: Type;
     shape: Shape;
-    id: string;
+    id?: string;
     placeholderText?: string;
 
     value: string;

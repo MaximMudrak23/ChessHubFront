@@ -4,7 +4,7 @@ import a from './animations.module.scss'
 // Позже сделать анимации получше, типо названия дать им нормальтные и сделать много дефолтных анимаций ну типо затухание, плавное переключение, вверх и вниз как на нотфаунде и все такое. ну и мб цвета отдельно добавить хз
 
 type Animation = 'main_animation' | 'notfound_animation' | 'game_animation';
-type Shape = 'profile_shape' | 'game_shape' | 'main_shape' | 'notfound_shape' | 'tab_shape' | 'welcome_shape' | 'back_shape';
+type Shape = 'profile_shape' | 'game_shape' | 'main_shape' | 'notfound_shape' | 'tab_shape' | 'welcome_shape' | 'back_shape' | 'find_shape';
 
 type Props = 
     | {

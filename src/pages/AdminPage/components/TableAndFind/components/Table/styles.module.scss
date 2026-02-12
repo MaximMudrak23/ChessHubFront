@@ -1,0 +1,19 @@
+.table {
+    width: 100%;
+
+    tr {
+        height: 36px;
+
+        img {width: 3px;}
+    }
+
+    thead tr th {
+        height: 24px;
+        font-size: 1rem;
+    }
+
+    tbody tr td {
+        font-size: 1rem;
+        text-align: center;
+    }
+}

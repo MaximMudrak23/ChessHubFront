@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage'
 import FindPage from './pages/FindPage'
 import OptionsPage from './pages/OptionsPage'
 import ProfilePage from './pages/ProfilePage'
+import AdminPage from './pages/AdminPage'
 import GamePage from './pages/GamePage'
 import Page404 from './pages/Page404'
 
@@ -13,7 +14,7 @@ import Page404 from './pages/Page404'
 function App() {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path='/' element={<WelcomePage />} />
         <Route path='/main' element={<MainPage />} />
@@ -21,6 +22,7 @@ function App() {
         <Route path='/game/:id' element={<GamePage />} />
         <Route path='/find' element={<FindPage />} />
         <Route path='/options' element={<OptionsPage />} />
+        <Route path='/admin' element={<AdminPage />} />
         <Route path='*' element={<Page404 />} />
       </Routes>
     </>
