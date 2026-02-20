@@ -4,6 +4,7 @@ import OptionsContainer from './components/OptionsContainer'
 import Option from './components/Option'
 import BurgerIcon from './components/BurgerIcon'
 import Aside from './components/Aside'
+import { globalState } from '../../../GLOBALSTATE'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
@@ -19,10 +20,9 @@ export default function Header() {
     return (
         <>
             <header className={s.header}>
-                <UserCard />
+                <UserCard username={globalState.name} avatar={globalState.avatarURL} avatarFrame={globalState.avatarFrameURL} elo={globalState.elo} />
                 
                 <OptionsContainer className={s.header_options_container}>
-                    <Option img='/all/MarketIcon.svg' text='Market' variation='header' />
                     <Option img='/all/SearchIcon.svg' text='Search' variation='header' />
                     <Option img='/all/ProfileIcon.svg' text='Profile' variation='header' />
                     <Option img='/all/MenuIcon.svg' text='Main' variation='header' />

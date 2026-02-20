@@ -14,28 +14,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
-  height: 100%;
-  /* overflow: auto; */
-}
+/* html, body {
+  min-height: 100%;
+  overflow-x: auto;
+} */
 
 #root {
-  min-width: fit-content;
   min-height: 100vh;
-  height: 100%;
-  
-  /* padding-top: 80px; THIS LOOKS LIKE HARDCODE DELETE THIS AND FIX THE PROBLEM */
-  padding-top: 80px;
-
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 button, input, textarea, select {
-  font-family: inherit;
+  font: inherit;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;

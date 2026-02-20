@@ -1,23 +1,23 @@
-.main_animation {
-    cursor: pointer;
-    transition: transform 0.25s ease;
+.animation {
+    &--main {
+        cursor: pointer;
+        transition: transform 0.25s ease;
 
-    &:hover { transform: translateY(-5px); }
-}
+        &:hover { transform: translateY(-5px); }
+    }
+    &--game {
+        transition: filter 0.25s ease;
 
-.game_animation {
-    transition: filter 0.25s ease;
+        &:hover { filter: brightness(0.8); }
+    }
+    &--error {
+        cursor: default;
+        animation: flying 2.5s ease-in-out infinite;
 
-    &:hover { filter: brightness(0.8); }
-}
-
-.notfound_animation {
-    cursor: default;
-    animation: flying 2.5s ease-in-out infinite;
-
-    @keyframes flying {
-        0%   { transform: translateY(0) };
-        50%  { transform: translateY(-6px) };
-        100% { transform: translateY(0) };
+        @keyframes flying {
+            0%   { transform: translateY(0) };
+            50%  { transform: translateY(-6px) };
+            100% { transform: translateY(0) };
+        }
     }
 }

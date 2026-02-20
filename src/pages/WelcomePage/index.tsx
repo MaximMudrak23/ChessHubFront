@@ -10,9 +10,10 @@ export default function WelcomePage() {
         return () => clearTimeout(timerID);
     },[])
     return (
-        <main className={s.page}>
+        <main className={s.main}>
             {showScreen && <SplashScreen />}
-            <WelcomeForm />
+            {/* {showScreen && <SplashScreen />} */}
+            {/* <WelcomeForm /> */}
         </main>
     )
 }

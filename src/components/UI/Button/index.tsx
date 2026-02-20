@@ -1,53 +1,36 @@
 import s from './styles.module.scss'
 import a from './animations.module.scss'
 
-// Позже сделать анимации получше, типо названия дать им нормальтные и сделать много дефолтных анимаций ну типо затухание, плавное переключение, вверх и вниз как на нотфаунде и все такое. ну и мб цвета отдельно добавить хз
+type Variant = 'green' | 'red' | 'black' | 'profile' | 'error';
+type Animation = 'game' | 'main' | 'error';
+type AdaptiveMode = 'floating';
 
-type Animation = 'main_animation' | 'notfound_animation' | 'game_animation';
-type Shape = 'profile_shape' | 'game_shape' | 'main_shape' | 'notfound_shape' | 'tab_shape' | 'welcome_shape' | 'back_shape' | 'find_shape';
+type Props = {
+    text?: string;
+    icon?: string;
 
-type Props = 
-    | {
-        variant: 'txt';
-        text: string;
-        shape: Shape;
-        animation?: Animation;
-        active?: boolean;
-        onClick: () => void;
-    }
-    | {
-        variant: 'img';
-        imgURL: string;
-        shape: Shape;
-        animation?: Animation;
-        active?: boolean;
-        onClick: () => void;
-    }
-    | {
-        variant: 'txtimg';
-        text: string;
-        imgURL: string;
-        shape: Shape;
-        animation?: Animation;
-        active?: boolean;
-        onClick: () => void;
-    }
+    variant: Variant;
+    animation?: Animation;
+    adaptiveMode?: AdaptiveMode;
+    styleProps?: React.CSSProperties;
+
+    onClick: () => void;
+}
 
 export default function Button(propsOBJ: Props) {
-    const def = s.button;
-    const shape = s[propsOBJ.shape];
-    const animation = propsOBJ.animation && a[propsOBJ.animation];
-    const active = propsOBJ.active ? s.active : s.unactive;
-    const classes = [ def, shape, animation, active ].filter(Boolean).join(' ');
-
     return (
         <button
-            className={classes}
-            disabled={active ? false : true}
+            className={[
+                s.button,
+                s[`button--${propsOBJ.variant}`],
+                propsOBJ.animation && a[`animation--${propsOBJ.animation}`],
+                propsOBJ.adaptiveMode === 'floating' && s.floating,
+            ].filter(Boolean).join(' ')}
+            style={propsOBJ.styleProps}
             onClick={propsOBJ.onClick}
         >
-            {(propsOBJ.variant === 'txt' || propsOBJ.variant === 'txtimg') && <p>{propsOBJ.text}</p>}
-            {(propsOBJ.variant === 'img' || propsOBJ.variant === 'txtimg') && <img src={propsOBJ.imgURL} alt="Game Icon" draggable='false' />}
+            {propsOBJ.text && <span>{propsOBJ.text}</span>}
+            {propsOBJ.icon && <img src={propsOBJ.icon} alt='Button Icon' />}
         </button>
     )
 }

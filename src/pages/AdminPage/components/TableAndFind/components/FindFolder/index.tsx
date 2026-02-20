@@ -1,6 +1,5 @@
 import s from './styles.module.scss'
 import Input from '../../../../../../components/UI/Input'
-import Button from '../../../../../../components/UI/Button'
 import { useState } from 'react'
 
 export default function FindFolder() {
@@ -15,12 +14,12 @@ export default function FindFolder() {
                 value={value}
                 onChangeX={(value) => setValue(value)}
             />
-            <Button
+            {/* <Button
                 variant='txt'
                 text='Find'
                 shape='find_shape'
                 onClick={()=>''}
-            />
+            /> */}
         </div>
     )
 }

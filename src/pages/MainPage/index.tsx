@@ -1,18 +1,19 @@
-import s from './styles.module.scss'
-import UniversalContainer from '../../components/UniversalContainer'
+import SteamContentWrapper from '../../components/SteamContentWrapper'
 import Button from '../../components/UI/Button'
 
 export default function MainPage() {
     return (
         <>
-            <UniversalContainer className={s.containerMain} contentClassName={s.content}>
-                <p>Unfortunately, I haven't figured out what to put on this page yet, so it's empty for now. 😢</p>
-            </UniversalContainer>
+            <SteamContentWrapper>
+                <p style={{textAlign: 'center', paddingTop: '48px', fontSize: '1.2rem'}}>Unfortunately, I haven't figured out what to put on this page yet, so it's empty for now. 😢</p>
+            </SteamContentWrapper>
             <Button
                 text='Find Game'
-                variant='txt'
-                animation='main_animation'
-                shape='main_shape'
+
+                variant='green'
+                animation='main'
+                adaptiveMode='floating'
+
                 onClick={()=>''}
             />
         </>

@@ -1,166 +1,59 @@
 .button {
+    position: relative;
+    border: 0;
+    
     color: #FFF;
     font-size: 1.2rem;
-    border: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 
     user-select: none;
+
+    &--green {
+        background: linear-gradient(to bottom, #9FD05E, #45753C);
+        border-radius: 5px;
+        
+        padding: 16px 24px;
+        font-size: 1.6rem;
+    }
+    &--red {
+        background: linear-gradient(to bottom, #99281D, #872424);
+    }
+    &--black {
+        background: linear-gradient(to bottom, #373633, #2C2B29);
+    }
+    &--profile {
+        background-color: rgba($color: #0F1011, $alpha: 0.5);
+    }
+    &--error {
+        background-color: transparent;
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(to bottom, #C9C5D7, #594D82);
+            border-radius: 5px;
+
+            padding: 4px;
+            mask: linear-gradient(#000) content-box, linear-gradient(#000);
+            mask-composite: exclude;
+        }
+    }
 }
 
-// shapes (layout + shape + colors (for now))
-.profile_shape {
-    width: 100px;
-    height: 48px;
-    background-color: rgba($color: #0F1011, $alpha: 0.5);
-    border-radius: 5px;
-}
+.floating {
+    width: 375px; // this back to inline styles like props
+    height: 75px; // this back to inline styles like props
 
-.game_shape {
-    width: 100px;
-    height: 48px;
-    background: linear-gradient(to bottom, #373633, #2C2B29);
-    box-shadow: 5px 3px 5px rgba($color: #000, $alpha: 0.5);
-    border-radius: 10px;
-}
-
-.main_shape {
-    width: 375px;
-    height: 75px;
-    background: linear-gradient(to bottom, #9FD05E, #45753C);
-    
     position: fixed;
-    bottom: 32px;
     right: 32px;
-    
-    border-radius: 5px;
-    font-size: 1.6rem;
+    bottom: 32px;
+    z-index: 9999;
 
     @media (max-width: 600px) {
         width: 75%;
         right: 50%;
         transform: translateX(50%);
     }
-}
-
-.notfound_shape {
-    position: relative;
-    padding: 16px 24px;
-    border: 0;
-
-    background-color: transparent;
-
-    p {
-        background-clip: text;
-        background-image: linear-gradient(to bottom, #C9C5D7, #594D82);
-        
-        color: transparent;
-        font-weight: 500;
-
-        transition: opacity 0.5s ease; //animation
-    }
-
-    img {
-        height: 50%;
-        
-        position: absolute;
-        inset: 0;
-        margin: auto;
-
-        opacity: 0; //animation
-        transition: opacity 0.5s ease; //animation
-        user-select: none;
-    }
-
-    &:after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        
-        border-radius: 5px;
-        background: linear-gradient(to bottom, #C9C5D7, #594D82);
-
-        padding: 4px;
-        mask: linear-gradient(#000) content-box, linear-gradient(#000);
-        mask-composite: exclude;
-    }
-
-    &:hover {
-        p { opacity: 0; }
-        img { opacity: 1; }
-    }
-}
-
-.tab_shape {
-    flex: 1;
-    height: 65px;
-    position: relative;
-    background-color: transparent;
-
-    img {
-        z-index: 9999;
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-
-        background: linear-gradient(to bottom, #373633, #2C2B29);
-        opacity: 0.24;
-        transition: opacity 0.5s ease; // animation
-    }
-
-    &.active::before { opacity: 1; }
-}
-
-.welcome_shape {
-    width: 100%;
-    height: 64px;
-    
-    color: #FFF;
-    font-size: 1.2rem;
-    border-radius: 5px;
-
-    transition: background-color 0.5s ease, border 0.5s ease;
-    
-    &.unactive {
-        background-color: transparent;
-        border: 3px solid #784DC4;
-    }
-    &.active {
-        background-color: #784DC4;
-        border: 3px solid transparent;
-        cursor: pointer;
-    }
-}
-
-.back_shape {
-    width: 145px;
-    height: 65px;
-    background-color: rgba($color: #271F35, $alpha: 0.5);
-
-    border-radius: 9999px;
-
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 8px;
-
-    transition: background-color 0.25s ease;
-    cursor: pointer;
-
-    &:hover { background-color: rgba($color: #271F35, $alpha: 1); }
-    & img { height: 36%; }
-}
-
-.find_shape {
-    width: fit-content;
-    height: 100%;
-    background-color: #2D6745;
-    
-    padding: 0 24px;
-    border-radius: 5px;
-    cursor: pointer;
 }

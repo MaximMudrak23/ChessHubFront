@@ -1,5 +1,4 @@
 import Input from '../../../../../../../../components/UI/Input';
-import Button from '../../../../../../../../components/UI/Button';
 
 // изактив пофиксить, запретить символы в ключе все кроме - и в пароле и логине тоже запретить символы все, ну мб в логине разрешить _ и .
 
@@ -47,13 +46,13 @@ export default function SignIn({data, setData}: Props) {
                 value={data.key}
                 onChangeX={(v) => setData(x => ({...x, key: v}))}
             />
-            <Button
+            {/* <Button
                 variant={'txt'}
                 text={'Welcome!'}
                 shape={'welcome_shape'}
                 active={isActive}
                 onClick={() => setData(x => ({...x, stage: 2}))}
-            />
+            /> */}
         </>
     )
 }

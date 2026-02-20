@@ -1,5 +1,11 @@
+/*
+    .splash_screen - это родитель, вставляет фотку, занимает все, что занял мейн с WelcomePage, флекс нужен для .quote_container, чтобы текст по центру стоял, бифор это анимация, просто красивый еффектик градиент, который двигается, будто бы луч.
+    .quote_container - релатив для бифора, бифор это черная рамка сзади текста, инсет -16, чтобы занять чуть больше, чем текст занимает.
+    .hands_container - абсолют и сотки с размерами это чтобы занять фул место, чтобы руки шли з углов екрана, позиционируется относительно сплеш скрина.
+*/
+
 .splash_screen {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
 
@@ -11,10 +17,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
+    animation: fadeOut 5s linear forwards;
     user-select: none;
-    $animation-time: 2.5s;
-    z-index: 9999;
+
+    @keyframes fadeOut {
+        0% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; }
+    }
 
     &::before {
         content: '';
@@ -27,71 +38,102 @@
         background-size: 200% 200%;
         background-position: 0% 50%;
 
-        animation: gradientMove $animation-time forwards;
-        
+        animation: gradientMove 4s forwards;
+
         @keyframes gradientMove {
             from { background-position: 0% 50%; }
             to   { background-position: 100% 50%; }
         }
     }
-
-    .quote_container {
-        width: 775px;
-        text-align: center;
-        animation: quoteOpacity calc($animation-time + 2s) forwards;
-
-        .quote {
-            position: relative;
-            font-size: 1.4rem;
-            font-weight: 500;
-
-            &::before {
-                content: '';
-                width: 100%;
-                
-                position: absolute;
-                inset: -40px;
-                
-                background: radial-gradient(circle, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 40%, transparent 100%);
-                z-index: -1;
-            }
-        }
-        .author {
-            font-size: 1.2rem;
-            font-weight: 200;
-        }
-
-        @keyframes quoteOpacity { from { opacity: 0; } to { opacity: 1; } }
-    }
-    
-    .hands {
-        .right_hand, .left_hand {
-            position: absolute;
-            
-            max-height: 300px;
-            min-height: 200px;
-            
-            height: 45vw;
-            @media (min-width: 625px) { height: 32vw; }
-        }
-        .right_hand { right: 0; animation: moveRight $animation-time forwards; }
-        .left_hand { left: 0; animation: moveLeft $animation-time forwards; }
-    
-        @keyframes moveRight {
-            from { top: calc(64px + 24px); opacity: 0; }
-            to { top: calc(64px - 24px); opacity: 1; }
-        }
-        @keyframes moveLeft {
-            from { bottom: calc(64px + 24px); opacity: 0; }
-            to { bottom: calc(64px - 24px); opacity: 1; }
-        }
-    }
-
-    animation: splashScreen 5s linear forwards;
 }
 
-@keyframes splashScreen {
-    0% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; }
+.quote_container {
+    position: relative;
+    text-align: center;
+
+    &::before {
+        content: '';
+        width: 100%;
+        
+        position: absolute;
+        inset: -16px;
+        
+        background: radial-gradient(circle, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 40%, transparent 100%);
+
+        animation: fadeIn 4s forwards;
+
+        @media (max-width: 385px) { inset: -4px; }
+    }
+
+    .quote, .author {
+        position: relative;
+        animation: fadeIn 2s forwards;
+    }
+    .quote {
+        font-size: clamp(0.4rem,2.5vh,5rem);
+
+        span {
+            color: #FFDEA9;
+            text-decoration: underline;
+        }
+    }
+    .author {
+        font-size: clamp(0.2rem,2vh,4.5rem);
+        font-weight: 300;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+.hands_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    overflow: hidden;
+    
+    & > img {
+        position: absolute;
+        height: clamp(50px, 32vh, 450px);
+    }
+
+    .left_hand {
+        left: 0;
+        animation: leftHandsAnimation 2s forwards;
+    }
+    .right_hand {
+        right: 0;
+        animation: rightHandsAnimation 2s forwards;
+    }
+    
+    @keyframes leftHandsAnimation {
+        from {
+            bottom: 1vh;
+            opacity: 0;
+        }
+        to {
+            bottom: 7vh;
+            opacity: 1;
+        }
+    }
+    @keyframes rightHandsAnimation {
+        from {
+            top: 1vh;
+            opacity: 0;
+        }
+        to {
+            top: 7vh;
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 1100px) {
+        & > img { height: clamp(50px, 24vh, 450px); }
+    }
+    @media (max-width: 385px) {
+        & > img { height: clamp(50px, 24vh, 165px); }
+    }
 }

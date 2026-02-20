@@ -1,0 +1,29 @@
+.steamContentWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    &:has(video), &:has(img) { background-color: #000; }
+}
+
+.content {
+    flex: 1;
+    max-width: 1080px;
+    background-color: rgba($color: #1B1918, $alpha: 1.0);
+    z-index: 1;
+}
+
+.background {
+    width: 100%;
+    height: calc(100vh - 80px);
+    position: absolute;
+    user-select: none;
+
+    video, img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        object-fit: cover;
+        border-bottom: 1px solid #20222F;
+    }
+}

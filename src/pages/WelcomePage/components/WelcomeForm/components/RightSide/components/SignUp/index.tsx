@@ -1,5 +1,4 @@
 import Input from '../../../../../../../../components/UI/Input'
-import Button from '../../../../../../../../components/UI/Button'
 
 type SignUpData = {
     login: string;
@@ -29,13 +28,13 @@ export default function SignUp({data, setData}: Props) {
                 value={data.password}
                 onChangeX={(v) => setData(x => ({...x, password: v}))}
             />
-            <Button
+            {/* <Button
                 variant='txt'
                 text='Welcome!'
                 shape='welcome_shape'
                 active={isActive}
                 onClick={()=>''}
-            />
+            /> */}
         </>
     )
 }

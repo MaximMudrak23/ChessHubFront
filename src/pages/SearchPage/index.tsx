@@ -4,7 +4,7 @@ import FindInput from './components/FindInput'
 import FindCard from './components/FindCard'
 import PageSlider from './components/PageSlider'
 
-export default function FindPage() {
+export default function SearchPage() {
     return (
         <>
             <UniversalContainer className={s.containerMain} contentClassName={s.content}>

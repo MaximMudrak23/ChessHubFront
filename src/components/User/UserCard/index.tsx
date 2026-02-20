@@ -3,13 +3,20 @@ import UserAvatar from '../UserAvatar'
 import UserName from '../UserName'
 import UserElo from '../UserElo'
 
-export default function UserCard() {
+type Props = {
+    username: string;
+    avatar: string;
+    avatarFrame: string;
+    elo: number;
+}
+
+export default function UserCard({username, avatar, avatarFrame, elo}: Props) {
     return (
         <section className={s.userCard}>
-            <UserAvatar userName='Recront' size={'64px'} frameURL='/all/steam2.png' />
+            <UserAvatar imgURL={avatar} userName={username} size={'64px'} frameURL={avatarFrame} />
             <div className={s.userInfoContainer}>
-                <UserName userName='Recront' />
-                <UserElo userElo={12000} style={{fontSize: '1.2rem', color: '#7C7C7C'}}/>
+                <UserName userName={username} />
+                <UserElo userElo={elo} style={{fontSize: '1.2rem', color: '#7C7C7C'}}/>
             </div>
         </section>
     )
