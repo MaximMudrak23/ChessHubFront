@@ -1,5 +1,6 @@
 import s from './styles.module.scss'
 import WelcomeForm from './components/WelcomeForm'
+import WelcomeForm2 from './components/WelcomeForm copy'
 import SplashScreen from './components/SplashScreen'
 import { useEffect, useState } from 'react'
 
@@ -12,8 +13,8 @@ export default function WelcomePage() {
     return (
         <main className={s.main}>
             {showScreen && <SplashScreen />}
-            {/* {showScreen && <SplashScreen />} */}
             {/* <WelcomeForm /> */}
+            <WelcomeForm2 />
         </main>
     )
 }

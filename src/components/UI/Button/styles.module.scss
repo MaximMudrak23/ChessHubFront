@@ -6,7 +6,7 @@
     font-size: 1.2rem;
     text-align: center;
 
-    user-select: none;
+    user-select: none; // del this if i cant select this by using tab
 
     &--green {
         background: linear-gradient(to bottom, #9FD05E, #45753C);

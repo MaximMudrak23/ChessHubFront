@@ -1,0 +1,41 @@
+.tabs_folder {
+    height: 75px;
+
+    display: flex;
+
+    & > button {
+        position: relative;
+        flex: 1;
+        background-color: transparent;
+
+        border: 0;
+        
+        color: #9498BB;
+        font-size: clamp(1.2rem, 1.4rem, 3rem);
+        font-weight: 400;
+        
+        transition: color 0.25s ease;
+        
+        &::before {
+            content: '';
+            width: 0;
+            height: 5px;
+            background: linear-gradient(to right, #804ACA, #5D3EBD);
+            
+            border-radius: 9999px;
+            
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            transition: width 0.5s ease;
+        }
+        
+        &[aria-selected='true'] {
+            color: #FFF;
+
+            &::before { width: 10ch; }
+        }
+    }
+}

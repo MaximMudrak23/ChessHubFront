@@ -1,58 +1,49 @@
-.welcome_shape {
-    width: 100%;
-    height: 64px;
+.inputBlock {
+    position: relative;
 
-    display: flex;
-
-    label, input {
-        background-color: #212121;
-        
-        color: #FFF;
-        font-size: 1.2rem;
-
-        border: 0;
-        outline: 0;
-    }
-    label {
-        min-width: 125px;
-        flex: 1;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    input {
-        flex: 3;
-        
-        padding: 0 12px;
-        caret-color: #784DC4;
-        
-        &:focus { outline: 3px solid #784DC4; }
-        &:-webkit-autofill {
-            // пофиксить, что автофилл меняет стили, изучить это и пофиксить фул
-            -webkit-text-fill-color: #FFF;
-            transition: background-color 9999s ease-out 0s;
-            font-size: inherit;
-        }
-    }
-}
-
-.find_folder {
-    width: 100%;
-    height: 100%;
-
-    input {
+    // Default input styles
+    & > input {
         width: 100%;
         height: 100%;
-        background-color: #404040;
 
-        font-size: 1.2rem;
         color: #FFF;
-        
-        padding: 0 16px;
-        border-radius: 9999px;
+        font-size: 1.2rem;
+        font-weight: 500;
 
+        padding-left: 12px;
         border: 0;
         outline: 0;
+
+        &::placeholder { color: #9498BB; }
+    }
+
+    // Variants styles
+    & > input.input--fluid-gradient {
+        background-color: #343A50;
+    }
+    &:has(input.input--fluid-gradient)::after { // probably replace because not all old browsers supports has
+        content: '';
+        width: 100%;
+        height: 4px;
+        background:
+        radial-gradient(circle, #462c94 30%, transparent 60%),
+        radial-gradient(circle, #7c3dce 30%, transparent 60%);
+
+        border-bottom-left-radius: 9999px;
+        border-bottom-right-radius: 9999px;
+
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+
+        background-size: 200% 100%;
+        background-repeat: no-repeat;
+        animation: fadeAnimation 10s infinite alternate ease-in-out;
+
+        @keyframes fadeAnimation {
+            0%   { background-position: 0% 50%, 100% 50%; }
+            50%  { background-position: 50% 50%, 50% 50%; }
+            100% { background-position: 100% 50%, 0% 50%; }
+        }
     }
 }

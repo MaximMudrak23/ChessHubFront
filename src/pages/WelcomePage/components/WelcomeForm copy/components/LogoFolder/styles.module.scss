@@ -1,0 +1,28 @@
+.logo_folder {
+    height: 100px;
+    background: linear-gradient(to right, #4D2B7B, rgba($color: #2F1E63, $alpha: 0.1));
+
+    padding: 0 16px;
+
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    user-select: none;
+
+    & > img {
+        height: 85%; // fix later
+    }
+
+    & > span {
+        font-size: clamp(1rem, 1.8rem, 2rem); // fix later
+        font-weight: 500;
+
+        background: linear-gradient(90deg, #FFF, #999);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}

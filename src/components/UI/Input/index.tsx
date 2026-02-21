@@ -1,40 +1,24 @@
+import { useState } from 'react'
 import s from './styles.module.scss'
-// пофиксить с айди, мне не ввсегда нужно отображать его сбоку
 
-type Type =
-    | 'text'
-    | 'email'
-    | 'password'
-    | 'number'
-    | 'checkbox'
-    | 'radio'
-    | 'submit';
-
-type Shape =
-    | 'welcome_shape'
-    | 'find_folder';
+type Variant = 'fluid-gradient';
 
 type Props = {
-    type: Type;
-    shape: Shape;
-    id?: string;
+    variant: Variant;
     placeholderText?: string;
-
-    value: string;
-    onChangeX: (value: string) => void;
+    styleProps?: React.CSSProperties;
 }
 
-export default function Input(propsOBJ: Props) {
-    const shape = s[propsOBJ.shape];
+export default function Input({variant, placeholderText, styleProps}: Props) {
+    const [value, setValue] = useState<string>('');
     return (
-        <div className={shape}>
-            <label htmlFor={propsOBJ.id}>{propsOBJ.id}</label>
+        <div className={s.inputBlock} style={styleProps}>
             <input
-                type={propsOBJ.type}
-                id={propsOBJ.id}
-                placeholder={propsOBJ.placeholderText ? propsOBJ.placeholderText : 'placeholder'}
-                value={propsOBJ.value}
-                onChange={(event) => propsOBJ.onChangeX(event.target.value)}
+                type="text"
+                className={s[`input--${variant}`]}
+                placeholder={placeholderText}
+                value={value}
+                onChange={(e)=>setValue(e.target.value)}
             />
         </div>
     )
