@@ -1,17 +1,21 @@
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 135deg;
+  inherits: false;
+}
+
 .main {
     flex: 1;
+    background: linear-gradient(var(--angle), #4C2A79, #000, #4C2A79);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: linear-gradient(135deg, #101625, #182848, #6a11cb, #0c2349);
-    background-size: 400% 400%;
-    animation: gradientAnimation 15s ease infinite;
+    animation: gradientMoving 8s infinite alternate ease-in-out;
 
-    @keyframes gradientAnimation {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
+    @keyframes gradientMoving {
+        from { --angle: 135deg; }
+        to   { --angle: 45deg; }
     }
 }

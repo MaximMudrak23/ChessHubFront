@@ -6,14 +6,17 @@
     font-size: 1.2rem;
     text-align: center;
 
-    user-select: none; // del this if i cant select this by using tab
+    transition: opacity 0.25s ease;
+    user-select: none;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
 
     &--green {
         background: linear-gradient(to bottom, #9FD05E, #45753C);
-        border-radius: 5px;
-        
-        padding: 16px 24px;
-        font-size: 1.6rem;
     }
     &--red {
         background: linear-gradient(to bottom, #99281D, #872424);
@@ -40,12 +43,12 @@
             mask-composite: exclude;
         }
     }
+    &--welcome {
+        background-color: #4C2A79;
+    }
 }
 
 .floating {
-    width: 375px; // this back to inline styles like props
-    height: 75px; // this back to inline styles like props
-
     position: fixed;
     right: 32px;
     bottom: 32px;

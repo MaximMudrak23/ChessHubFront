@@ -1,8 +1,8 @@
 import s from './styles.module.scss'
 import a from './animations.module.scss'
 
-type Variant = 'green' | 'red' | 'black' | 'profile' | 'error';
-type Animation = 'game' | 'main' | 'error';
+type Variant = 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome';
+type Animation = 'game' | 'main' | 'error' | 'mini-jump';
 type AdaptiveMode = 'floating';
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
     variant: Variant;
     animation?: Animation;
     adaptiveMode?: AdaptiveMode;
+    active?: boolean;
     styleProps?: React.CSSProperties;
 
     onClick: () => void;
@@ -24,8 +25,10 @@ export default function Button(propsOBJ: Props) {
                 s.button,
                 s[`button--${propsOBJ.variant}`],
                 propsOBJ.animation && a[`animation--${propsOBJ.animation}`],
+                propsOBJ.active === false && s.inactive,
                 propsOBJ.adaptiveMode === 'floating' && s.floating,
             ].filter(Boolean).join(' ')}
+            disabled={propsOBJ.active === false}
             style={propsOBJ.styleProps}
             onClick={propsOBJ.onClick}
         >

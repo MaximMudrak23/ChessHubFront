@@ -20,4 +20,12 @@
             100% { transform: translateY(0) };
         }
     }
+    &--mini-jump {
+        animation: mini-jump 0.25s ease-in-out forwards;
+
+        @keyframes mini-jump {
+            from {transform: translateY(20px);}
+            to {transform: translateY(0);}
+        }
+    }
 }

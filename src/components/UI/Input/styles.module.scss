@@ -1,5 +1,6 @@
 .inputBlock {
     position: relative;
+    user-select: none;
 
     // Default input styles
     & > input {
@@ -13,15 +14,50 @@
         padding-left: 12px;
         border: 0;
         outline: 0;
+    }
 
-        &::placeholder { color: #9498BB; }
+    .eyeIconBlock {
+        width: 64px;
+        height: inherit;
+        
+        position: absolute;
+        right: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img { height: 40%; }
+
+        &::after {
+            content: '';
+            width: 45px;
+            height: 3px;
+            background-color: #9498BB;
+
+            border-top: 1px solid #343A50;
+            
+            position: absolute;
+
+            transform: rotate(45deg);
+            transition: width 0.25s ease;
+        }
+
+        &.show::after {
+            width: 0;
+        }
     }
 
     // Variants styles
     & > input.input--fluid-gradient {
-        background-color: #343A50;
+        --radius: 2px;
+        border-radius: var(--radius) var(--radius) 0 0;
+        background-color: rgba($color: #343A50, $alpha: 0.5);
+
+        &::placeholder { color: #9498BB; }
     }
-    &:has(input.input--fluid-gradient)::after { // probably replace because not all old browsers supports has
+    &:has(input.input--fluid-gradient)::after {
+        // probably replace because not all old browsers supports has
         content: '';
         width: 100%;
         height: 4px;

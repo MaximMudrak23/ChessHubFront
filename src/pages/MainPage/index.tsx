@@ -9,11 +9,16 @@ export default function MainPage() {
             </SteamContentWrapper>
             <Button
                 text='Find Game'
-
                 variant='green'
                 animation='main'
                 adaptiveMode='floating'
-
+                styleProps={{
+                    width: '375px',
+                    height: '75px',
+                    borderRadius: '5px',
+                    padding: '16px 24px',
+                    fontSize: '1.6rem',
+                }}
                 onClick={()=>''}
             />
         </>
