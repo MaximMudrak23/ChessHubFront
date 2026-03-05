@@ -6,15 +6,13 @@
     font-size: 1.2rem;
     text-align: center;
 
-    transition: opacity 0.25s ease;
+    transition: opacity 0.25s ease, background-color 0.25s ease;
     user-select: none;
     cursor: pointer;
 
-    &:disabled {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
+    &:disabled { opacity: 0.5; pointer-events: none; }
+    img { display: block; }
+    
     &--green {
         background: linear-gradient(to bottom, #9FD05E, #45753C);
     }
@@ -22,10 +20,18 @@
         background: linear-gradient(to bottom, #99281D, #872424);
     }
     &--black {
-        background: linear-gradient(to bottom, #373633, #2C2B29);
+        background-color: #080808;
+
+        &:hover {background-color: rgba($color: #2e2e2e, $alpha: 0.5);}
     }
     &--profile {
         background-color: rgba($color: #0F1011, $alpha: 0.5);
+    }
+    &--welcome {
+        background-color: #4C2A79;
+    }
+    &--transparent {
+        background-color: transparent;
     }
     &--error {
         background-color: transparent;
@@ -42,9 +48,6 @@
             mask: linear-gradient(#000) content-box, linear-gradient(#000);
             mask-composite: exclude;
         }
-    }
-    &--welcome {
-        background-color: #4C2A79;
     }
 }
 

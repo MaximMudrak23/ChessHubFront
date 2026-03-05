@@ -1,7 +1,7 @@
 import s from './styles.module.scss'
 import a from './animations.module.scss'
 
-type Variant = 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome';
+type Variant = 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
 type Animation = 'game' | 'main' | 'error' | 'mini-jump';
 type AdaptiveMode = 'floating';
 
@@ -33,7 +33,7 @@ export default function Button(propsOBJ: Props) {
             onClick={propsOBJ.onClick}
         >
             {propsOBJ.text && <span>{propsOBJ.text}</span>}
-            {propsOBJ.icon && <img src={propsOBJ.icon} alt='Button Icon' />}
+            {propsOBJ.icon && <img src={propsOBJ.icon} alt='Button Icon' draggable={false} />}
         </button>
     )
 }

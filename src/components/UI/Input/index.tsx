@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import s from './styles.module.scss'
 
-type Variant = 'fluid-gradient';
+type Variant = 'fluid-gradient' | 'search';
 
 type Props = {
     value: string;
@@ -22,7 +22,7 @@ export default function Input(propsOBJ: Props) {
             </div>}
             <input
                 type={isShown ? 'text' : 'password'}
-                className={s[`input--${propsOBJ.variant}`]}
+                className={s[`${propsOBJ.variant}`]}
                 placeholder={propsOBJ.placeholderText}
                 value={propsOBJ.value}
                 onChange={(e)=>propsOBJ.onChangeHandler(e.target.value)}
