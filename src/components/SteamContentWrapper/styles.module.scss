@@ -1,10 +1,11 @@
 .steamContentWrapper {
     flex: 1;
+    min-width: fit-content;
+
     display: flex;
     justify-content: center;
 
-    &:has(.background img), 
-    &:has(.background video) {
+    &:has(.background img), &:has(.background video) {
         background-color: #000;
     }
 }
@@ -16,6 +17,9 @@
     background-color: rgba($color: #1B1918, $alpha: 1.0);
     
     z-index: 1;
+    
+    display: flex;
+    flex-direction: column;
 }
 
 .background {

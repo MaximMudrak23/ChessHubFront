@@ -1,0 +1,16 @@
+.board_folder {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    .preview_container { display: flex; }
+
+    .setting_row { padding: 0 24px; }
+}
+
+.buttons_container {
+    padding: 0 12px;
+
+    display: flex;
+    gap: 12px;
+}

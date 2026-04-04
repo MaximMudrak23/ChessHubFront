@@ -1,0 +1,76 @@
+.option {
+    position: relative; // for isActive line & glow
+    min-width: 125px;
+    width: 100%;
+    height: 64px;
+
+    color: #B7B7B7;
+    &.small { font-size: 1rem; }
+    &.medium { font-size: 1.25rem; }
+    &.high { font-size: 1.5rem; }
+
+    background-color: transparent;
+    border: 0;
+    outline-color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    transition: color 0.25s ease;
+    cursor: pointer;
+
+    img { height: 26px; }
+
+    &.active { // line & active text color
+        color: #FFF;
+
+        &::after { background-color: #FFF; }
+    }
+
+    &::after { // line
+        content: '';
+        position: absolute;
+
+        width: 0;
+        height: 0;
+        
+        transition: width 0.5s ease, height 0.5s ease;
+    }
+
+    &.vertical.active::after { // vertical line
+        right: 0;
+        bottom: auto;
+
+        width: 4px;
+        height: 100%;
+    }
+
+    &.horizontal.active::after { // horisontal line
+        right: auto;
+        bottom: 0;
+
+        width: 100%;
+        height: 4px;
+    }
+
+    &.glow { // isActive isGlow
+        &::before {
+            content: '';
+            position: absolute;
+            width: 0%;
+            
+            transition: width 0.25s ease;
+        }
+
+        &.active::before {
+            width: 100%;
+            height: 100%;
+
+            background-color: rgba($color: #31302D, $alpha: 0.5);
+        }
+
+        span, img { z-index: 1; }
+    }
+}

@@ -23,7 +23,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 button, input, textarea, select {

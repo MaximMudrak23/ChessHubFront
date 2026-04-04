@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import s from './styles.module.scss'
+import { useState } from 'react';
 
 type Variant = 'fluid-gradient' | 'search';
 

@@ -1,0 +1,30 @@
+.setting_row_container {
+    .setting_header {
+        padding: 12px;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .setting_title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: opacity 0.25s ease;
+
+            &.closed { opacity: 0.4; }
+        }
+    }
+
+    .setting_content {
+        position: relative;
+        padding: 12px;
+        transition: opacity 0.25s ease;
+
+        &.closed {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        p { font-size: 1.2rem; color: #B7B7B7; }
+    }
+}

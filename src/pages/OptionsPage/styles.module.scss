@@ -1,24 +1,26 @@
-.content {
-    flex: 1;
+.title {
+    height: 75px;
+    padding-left: 12px;
 
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 
-    .title {
-        height: 75px;
-        padding-left: 12px;
+    user-select: none;
 
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .main {
-        height: 100%;
-        background-color: #1B1918;
-        
+    h1 { display: inline; }
+}
+
+.content {
+    flex: 1;
+    background-color: #1B1918;
+    
+    padding-top: 36px;
+    
+    display: flex;
+
+    @media (min-width: 1081px) {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-
-        display: flex;
     }
-} 
+}

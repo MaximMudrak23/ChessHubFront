@@ -1,0 +1,130 @@
+.board_variations_container {
+    width: 50%;
+    aspect-ratio: 1 / 1;
+    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: min-content;
+
+    gap: 12px;
+    padding: 12px;
+    padding-bottom: 64px;
+
+    scrollbar-gutter: stable;
+    overflow: auto;
+
+    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar-track {
+        background-color: #383733;
+        border-radius: 9999px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba($color: #ADABAB, $alpha: 0.8);
+        border-radius: 9999px;
+        border: 1px solid transparent;
+        background-clip: padding-box;
+    }
+
+    .variation_item_wrapper {
+        position: relative;
+        background-color: red;
+        
+        img {
+            width: 100%;
+            position: absolute;
+            z-index: 9999;
+        }
+
+        .cell {
+            width: 100%;
+            display: block;
+            position: relative;
+            aspect-ratio: 1 / 1;
+            min-width: 0;
+            
+            border-radius: 5px;
+            border: 0;
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            box-shadow: 0 0 0 0px transparent;
+            outline: 4px solid transparent;
+            
+            transition: box-shadow 0.25s ease, outline-offset 0.1s ease, outline-color 0.2s ease;
+
+            cursor: pointer;
+
+            &.selected {
+                box-shadow: 0 0 0 4px #70c253;
+                pointer-events: none;
+
+                &:before { opacity: 0.5; }
+            }
+
+            &:focus-visible {
+                outline: 2px solid #FFF; 
+                outline-offset: 6px;
+            }
+
+            &::before {
+                content: '';
+                background-color: #000000;
+                
+                opacity: 0;
+                border-radius: inherit;
+
+                position: absolute;
+                inset: 0;
+
+                transition: opacity 0.25s ease;
+            }
+
+            &::after {
+                content: attr(data-tooltip);
+                background-color: rgba($color: #000000, $alpha: 0.8);
+                
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translate(-50%, 0);
+                
+                color: #FFF;
+                font-size: clamp(0.6rem, 0.4rem + 0.5vw, 1.2rem);
+                white-space: nowrap;
+                padding: 2px 4px;
+                
+                opacity: 0;
+                visibility: hidden;
+                
+                z-index: 1;
+                pointer-events: none;
+                transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+            }
+
+            &:hover:not(.selected) {
+                box-shadow: 0 0 0 4px #FFF;
+
+                &::after {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: translate(-50%, 10px);
+                }
+            }
+
+            &:nth-child(4n - 3) {
+                &::after { left: 0; transform: translate(0, 0); }
+                &:hover::after { transform: translate(0, 10px); }
+            }
+            &:nth-child(4n) {
+                &::after { left: auto; right: 0; transform: translate(0, 0); }
+                &:hover::after { transform: translate(0, 10px); }
+            }
+        }
+    }
+}
+
+// nth childs needs to be refactored because its i think not 100% adaptive (use @media probably) and ofc read all of this code.
