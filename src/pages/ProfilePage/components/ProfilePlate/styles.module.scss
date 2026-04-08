@@ -1,0 +1,64 @@
+.profile_plate {
+    background-color: rgba($color: #0F1011, $alpha: 0.5);
+    font-size: 1.2rem;
+    user-select: none;
+
+    .elo_container, .song_container {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .elo_container {
+        gap: 4px;
+        
+        .elo_label { font-weight: 500; }
+        .elo_label, .text_label { color: #B7B7B7; }
+    }
+
+    .song_container {
+        position: relative;
+        padding: 0 12px;
+        gap: 8px;
+
+        & > img {
+            --img-size: 45px;
+            height: var(--img-size);
+            width: var(--img-size);
+
+            border-radius: 50%;
+            box-shadow: 0 0 0 0px #FFF;
+
+            flex-shrink: 0;
+            transition: box-shadow 0.25s ease;
+            animation: songCoverFlipping 16s linear infinite normal;
+
+            &:hover { box-shadow: 0 0 0 2px #FFF; }
+
+            @keyframes songCoverFlipping {
+                from { transform: rotate(0); }
+                to { transform: rotate(360deg); }
+            }
+        }
+
+        .song_effect {
+            position: absolute;
+            height: 100%;
+
+            top: -24px;
+            left: 10px;
+            z-index: 9999;
+
+            pointer-events: none;
+        }
+
+        .text_label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

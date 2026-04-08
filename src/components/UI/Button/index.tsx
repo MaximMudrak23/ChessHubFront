@@ -1,8 +1,9 @@
 import s from './styles.module.scss'
 import a from './animations.module.scss'
+import clsx from 'clsx';
 
-type Variant = 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
-type Animation = 'game' | 'main' | 'error' | 'mini-jump';
+type Variant = 'none' | 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
+type Animation = 'game' | 'main' | 'error' | 'mini-jump' | 'white-hover';
 type AdaptiveMode = 'floating';
 
 type Props = {
@@ -21,13 +22,13 @@ type Props = {
 export default function Button(propsOBJ: Props) {
     return (
         <button
-            className={[
+            className={clsx(
                 s.button,
                 s[`button--${propsOBJ.variant}`],
                 propsOBJ.animation && a[`animation--${propsOBJ.animation}`],
                 propsOBJ.active === false && s.inactive,
-                propsOBJ.adaptiveMode === 'floating' && s.floating,
-            ].filter(Boolean).join(' ')}
+                propsOBJ.adaptiveMode === 'floating' && s.floating
+            )}
             disabled={propsOBJ.active === false}
             style={propsOBJ.styleProps}
             onClick={propsOBJ.onClick}

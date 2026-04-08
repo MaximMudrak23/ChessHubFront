@@ -1,6 +1,7 @@
 import s from './styles.module.scss'
-import UserAvatarFrame from "../UserAvatarFrame"
 import defaultPFP from './defaultPFP.png';
+import clsx from 'clsx';
+import type { style } from 'framer-motion/client';
 
 type Props = {
     userName: string;
@@ -11,9 +12,8 @@ type Props = {
 }
 
 export default function UserAvatar({userName, size, imgURL, frameURL, className}: Props) {
-    const classes = [s.userAvatarContainer, className].filter(Boolean).join(' ');
     return (
-        <div className={classes}>
+        <div className={clsx(s.userAvatarContainer, className)} style={{maxWidth: size, maxHeight: size}}>
             <img
                 className={s.userAvatar}
                 src={imgURL ? imgURL : defaultPFP}
@@ -21,7 +21,7 @@ export default function UserAvatar({userName, size, imgURL, frameURL, className}
                 draggable={false}
                 style={{width: `${size}`, height: `${size}`}}
             />
-            {frameURL && <UserAvatarFrame userName={userName} frameURL={frameURL} />}
+            {frameURL && <img className={s.userAvatarFrame} src={frameURL} alt={`${userName} Avatar Frame`} />}
         </div>
     )
 }

@@ -1,4 +1,6 @@
 .steamContentWrapper {
+    position: relative;
+    
     flex: 1;
     min-width: fit-content;
 
@@ -15,7 +17,8 @@
     max-width: 1080px;
     min-width: 0;
     background-color: rgba($color: #1B1918, $alpha: 1.0);
-    
+    // probably extract this into separate prop
+
     z-index: 1;
     
     display: flex;
@@ -35,6 +38,5 @@
         height: 100%;
         position: absolute;
         object-fit: cover;
-        border-bottom: 1px solid #20222F;
     }
 }

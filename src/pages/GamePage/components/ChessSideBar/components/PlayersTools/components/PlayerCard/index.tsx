@@ -1,7 +1,6 @@
 import s from './styles.module.scss'
 import UserAvatar from '../../../../../../../../components/User/UserAvatar'
 import UserName from '../../../../../../../../components/User/UserName'
-import UserElo from '../../../../../../../../components/User/UserElo'
 
 export default function PlayerCard() {
     return (
@@ -9,7 +8,7 @@ export default function PlayerCard() {
             <UserAvatar userName={'Recront'} size={'75px'} />
             <div className={s.info}>
                 <UserName userName='Recront' Icons={['/all/RED BULL.svg']} />
-                <UserElo userElo={1325} style={{fontSize: '1.2rem'}} />
+                {/* <UserElo userElo={1325} style={{fontSize: '1.2rem'}} /> */}
             </div>
         </div>
     )
