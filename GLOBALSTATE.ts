@@ -9,5 +9,7 @@ export const globalState = {
     avatarFrameURL: '/steam/steam2.png',
     profileBackground: '/steam/steam.webm',
     profileSongName: "U waren't here, but I really miss you",
-    profileSongAvatar: '/all/i2.png'
+    profileSongAvatar: '/all/i2.png',
+    status: 'Online',
+    friends: ['zxc','zxc1'],
 }

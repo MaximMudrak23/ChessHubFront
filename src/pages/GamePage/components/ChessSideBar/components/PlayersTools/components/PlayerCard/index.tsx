@@ -7,7 +7,7 @@ export default function PlayerCard() {
         <div className={s.player_card}>
             <UserAvatar userName={'Recront'} size={'75px'} />
             <div className={s.info}>
-                <UserName userName='Recront' Icons={['/all/RED BULL.svg']} />
+                {/* <UserName userName='Recront' Icons={['/all/RED BULL.svg']} /> */}
                 {/* <UserElo userElo={1325} style={{fontSize: '1.2rem'}} /> */}
             </div>
         </div>

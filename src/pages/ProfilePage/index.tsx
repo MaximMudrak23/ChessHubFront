@@ -7,72 +7,75 @@ import ProfilePlate from './components/ProfilePlate'
 
 import { globalState } from '../../../GLOBALSTATE'
 
-export default function ProfilePage() {
-    function getButtonObj(isMyProfile: boolean, isFriend: boolean) {
-        if (isMyProfile) return {
-            text: 'Edit Profile',
-            isActive: true,
-            onClick: ()=>{console.log('zxc1')}
-        };
-        if (isFriend) return {
-            text: "Delete from friendlist",
-            isActive: true,
-            onClick: ()=>{console.log('zxc2')}
-        }; else return {
-            text: "Add Friend",
-            isActive: true,
-            onClick: ()=>{console.log('zxc3')}
-        }
-    }
+function getButtonObj(isMyProfile: boolean, isFriend: boolean) {
+    if (isMyProfile) return {
+        text: 'Edit Profile',
+        isActive: true,
+        onClick: ()=>{console.log('Edit')}
+    };
 
-    const result = getButtonObj(true, true);
+    if (isFriend) return {
+        text: "Delete from friendlist",
+        isActive: true,
+        onClick: ()=>{console.log('Delete')}
+    };
+    
+    return {
+        text: "Add Friend",
+        isActive: true,
+        onClick: ()=>{console.log('Add')}
+    }
+}
+
+export default function ProfilePage() {
+    const result = getButtonObj(false, true);
 
     return (
-        <SteamContentWrapper
-            srcVideo={globalState.profileBackground}
-            styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
-        >
-            <header className={s.profile_header}>
-                {/* <div className={s.light} /> */}
-                <UserAvatar
-                    userName='Recront'
-                    size='200px'
-                    imgURL={globalState.avatarURL}
-                    frameURL={globalState.avatarFrameURL}
-                />
-                <div className={s.user_info}>
-                    <UserName
-                        userName={globalState.name}
-                        Icons={globalState.userIcons}
-                        variation='profile'
+        <>
+            {/* <div className={s.you_sure}>u sure u want to delete globalstate.thisguy user name from friend list?</div> */}
+            <SteamContentWrapper
+                srcVideo={globalState.profileBackground}
+                styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
+            >
+                <header className={s.profile_header}>
+                    <UserAvatar
+                        userName={`${globalState.name} Avatar`}
+                        size='200px'
+                        imgURL={globalState.avatarURL}
+                        frameURL={globalState.avatarFrameURL}
                     />
-                    <div className={s.description_wrapper}>
-                        <p>{globalState.description}</p>
+
+                    <div className={s.user_info}>
+                        <UserName
+                            userName={globalState.name}
+                            Icons={globalState.userIcons}
+                            variation='profile'
+                        />
+                        <div className={s.description_wrapper}>
+                            <p>{globalState.description}</p>
+                        </div>
                     </div>
-                </div>
-                <div className={s.user_buttons}>
-                    <ProfilePlate
-                        isElo
-                        text={`${globalState.elo}`}
-                    />
-                    <ProfilePlate
-                        isSong
-                        text={globalState.profileSongName}
-                        imgURL={globalState.profileSongAvatar}
-                    />
-                    <Button
-                        text={result.text}
-                        active={result.isActive}
-                        variant='profile'
-                        animation='white-hover'
-                        onClick={result.onClick}
-                    />
-                </div>
-            </header>
-            <section className={s.profile_content}>
-                <div className={s.main}></div>
-                <div className={s.side}></div>
-            </section>
-        </SteamContentWrapper>
+
+                    <div className={s.user_buttons}>
+                        <ProfilePlate
+                            isElo
+                            text={`${globalState.elo}`}
+                        />
+                        <ProfilePlate
+                            isSong
+                            text={globalState.profileSongName}
+                            imgURL={globalState.profileSongAvatar}
+                        />
+                        <Button
+                            text={result.text}
+                            active={result.isActive}
+                            variant='profile'
+                            animation='white-hover'
+                            onClick={result.onClick}
+                        />
+                    </div>
+                </header>
+            </SteamContentWrapper>
+        </>
     )
 }

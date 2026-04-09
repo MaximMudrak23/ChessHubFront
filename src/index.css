@@ -14,10 +14,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* html, body {
+html, body {
   min-height: 100%;
   overflow-x: auto;
-} */
+}
 
 #root {
   min-height: 100vh;

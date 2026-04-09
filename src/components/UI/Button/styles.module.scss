@@ -8,7 +8,7 @@
 
     transition: opacity 0.25s ease, background-color 0.25s ease;
     user-select: none;
-    cursor: pointer;
+    // cursor: pointer;
 
     &:disabled { opacity: 0.5; pointer-events: none; }
     img { display: block; }
