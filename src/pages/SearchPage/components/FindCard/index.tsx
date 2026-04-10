@@ -11,7 +11,7 @@ type Props = {
 export default function FindCard({imgURL, username, isFriend, description}: Props) {
     return (
         <div className={s.find_card}>
-            <img src={imgURL} alt={`${username} PFP`} />
+            <img src={imgURL} alt={`${username} Avatar`} draggable={false} />
             <div className={s.text_info}>
                 <p className={s.username}>{username}</p>
                 <p className={s.description}>{description}</p>

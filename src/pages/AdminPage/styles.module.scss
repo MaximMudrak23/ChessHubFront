@@ -1,5 +1,20 @@
 .admin_page {
     flex: 1;
     display: flex;
-    overflow: hidden;
+
+    .main {
+        flex: 1;
+
+        .header {
+            background-color: #1A1917;
+            width: 100%;
+            height: 64px;
+            
+            display: flex;
+            gap: 4px;
+        }
+        .cards_container {
+            
+        }
+    }
 }

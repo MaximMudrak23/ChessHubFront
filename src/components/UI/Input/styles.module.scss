@@ -1,97 +1,59 @@
-// Rules:
-// - No sizes (only for pseudo elements)
-// - No flex or other displays
-// - Only colors for anything
-// - Animations can be
-
-.inputBlock {
+.inputContainer {
     position: relative;
-    user-select: none;
 
-    // Default input styles
-    & > input {
-        width: 100%;
-        height: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+}
 
+.input {
+    width: 100%;
+    height: 100%;
+
+    padding-left: 12px;
+
+    border: 0;
+    outline: 0;
+
+    border-radius: inherit;
+
+    &:disabled { opacity: 0.5; pointer-events: none; }
+
+    &--grey {
+        background-color: #323232;
         color: #FFF;
-        font-size: 1.2rem;
-        font-weight: 500;
 
-        padding-left: 12px;
-        border: 0;
-        outline: 0;
+        &::placeholder {color: #929292;}
     }
+}
 
-    .eyeIconBlock {
-        width: 64px;
-        height: inherit;
+.eyeIconBlock {
+    width: 64px;
+    height: inherit;
+    
+    position: absolute;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img { height: 40%; }
+
+    &::after {
+        content: '';
+        width: 45px;
+        height: 3px;
+        background-color: #9498BB;
+
+        border-top: 1px solid #343A50;
         
         position: absolute;
-        right: 0;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img { height: 40%; }
-
-        &::after {
-            content: '';
-            width: 45px;
-            height: 3px;
-            background-color: #9498BB;
-
-            border-top: 1px solid #343A50;
-            
-            position: absolute;
-
-            transform: rotate(45deg);
-            transition: width 0.25s ease;
-        }
-
-        &.show::after {
-            width: 0;
-        }
+        transform: rotate(45deg);
+        transition: width 0.25s ease;
     }
 
-    // Variants styles
-    & > input.fluid-gradient {
-        --radius: 2px;
-        border-radius: var(--radius) var(--radius) 0 0;
-        background-color: rgba($color: #343A50, $alpha: 0.5);
-
-        &::placeholder { color: #9498BB; }
-    }
-    &:has(input.fluid-gradient)::after {
-        // probably replace because not all old browsers supports has
-        content: '';
-        width: 100%;
-        height: 4px;
-        background:
-        radial-gradient(circle, #462c94 30%, transparent 60%),
-        radial-gradient(circle, #7c3dce 30%, transparent 60%);
-
-        border-bottom-left-radius: 9999px;
-        border-bottom-right-radius: 9999px;
-
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-
-        background-size: 200% 100%;
-        background-repeat: no-repeat;
-        animation: fadeAnimation 10s infinite alternate ease-in-out;
-
-        @keyframes fadeAnimation {
-            0%   { background-position: 0% 50%, 100% 50%; }
-            50%  { background-position: 50% 50%, 50% 50%; }
-            100% { background-position: 100% 50%, 0% 50%; }
-        }
-    }
-
-    & > input.search {
-        background-color: #414141;
-        border-radius: 10px;
-        &::placeholder { color: #929292; }
+    &.show::after {
+        width: 0;
     }
 }

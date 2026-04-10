@@ -1,25 +1,23 @@
 import s from './styles.module.scss'
-import Option from '../../../../components/UI/Option';
+import Option from '../../UI/Option';
 
-type Props = {
-    selectedFolder: number;
-    setSelectedFolder: React.Dispatch<React.SetStateAction<number>>;
+type Options = {
+    name: string;
+    imgURL?: string;
 }
 
-const OPTIONS = [
-    {name: 'Board & Figures'},
-    {name: 'Game Process'},
-    {name: 'Profile'},
-    {name: 'Account'},
-    {name: 'Languages'},
-    {name: 'Labs', imgURL:'/all/labs.svg'},
-];
+type Props = {
+    OptionsArr: Options[];
+    selectedFolder: number;
+    setSelectedFolder: React.Dispatch<React.SetStateAction<number>>;
+    styleProps?: React.CSSProperties;
+}
 
-export default function OptionsContainer({selectedFolder, setSelectedFolder}: Props) {
+export default function OptionsContainer({OptionsArr, selectedFolder, setSelectedFolder, styleProps}: Props) {
     return (
-        <section className={s.options_container}>
+        <section className={s.options_container} style={styleProps}>
             {
-                OPTIONS.map((option, index) => (
+                OptionsArr.map((option, index) => (
                     <Option
                         key={option.name}
                         name={option.name}

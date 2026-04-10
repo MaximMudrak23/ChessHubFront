@@ -1,0 +1,27 @@
+.animation {
+    &--fluid-gradient::after {
+        content: '';
+        width: 100%;
+        height: 4px;
+        background:
+        radial-gradient(circle, #462c94 30%, transparent 60%),
+        radial-gradient(circle, #7c3dce 30%, transparent 60%);
+
+        border-bottom-left-radius: 9999px;
+        border-bottom-right-radius: 9999px;
+
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+
+        background-size: 200% 100%;
+        background-repeat: no-repeat;
+        animation: fadeAnimation 10s infinite alternate ease-in-out;
+
+        @keyframes fadeAnimation {
+            0%   { background-position: 0% 50%, 100% 50%; }
+            50%  { background-position: 50% 50%, 50% 50%; }
+            100% { background-position: 100% 50%, 0% 50%; }
+        }
+    }
+}

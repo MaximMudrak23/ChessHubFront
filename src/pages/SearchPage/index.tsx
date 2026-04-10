@@ -26,29 +26,29 @@ export default function SearchPage() {
         return () => clearTimeout(timer);
     }, [value]);
 
-    // useEffect(() => {
-    //     if (debouncedValue === '') {
-    //         setCards([]);
-    //         return;
-    //     }
+    useEffect(() => {
+        if (debouncedValue === '') {
+            setCards([]);
+            return;
+        }
 
-    //     setIsLoading(true);
+        setIsLoading(true);
 
-    //     setTimeout(() => {
-    //         const mockData: CardType[] = [
-    //             { ImgURL: '/all/recront.jpg', username: 'Recront', isFriend: true }
-    //         ];
+        setTimeout(() => {
+            const mockData: CardType[] = [
+                { ImgURL: '/all/recront.jpg', username: 'Recront', isFriend: true }
+            ];
             
-    //         if (debouncedValue.toLowerCase().includes('rec')) {
-    //             setCards(mockData);
-    //         } else {
-    //             setCards([]);
-    //         }
+            if (debouncedValue.toLowerCase().includes('rec')) {
+                setCards(mockData);
+            } else {
+                setCards([]);
+            }
             
-    //         setIsLoading(false);
-    //     }, 22500);
+            setIsLoading(false);
+        }, 5000);
 
-    // }, [debouncedValue, currentPage]);
+    }, [debouncedValue, currentPage]);
 
     return (  
         <SteamContentWrapper styleProps={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px'}}>

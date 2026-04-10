@@ -27,19 +27,23 @@ export default function InputsFolder({selectedTab}: Props) {
                         transition={{duration: 0.3}}
                     >
                         <Input
+                            id='signin-login'
+                            variant='grey'
+                            animation='fluid-gradient'
+                            placeholderText='Login'
                             value={signIn.login}
                             onChangeHandler={v => setSignIn(x => ({...x, login: v}))}
-                            variant='fluid-gradient'
-                            placeholderText='Login'
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
+                            id='signin-password'
                             value={signIn.password}
                             onChangeHandler={v => setSignIn(x => ({...x, password: v}))}
-                            variant='fluid-gradient'
+                            variant='grey'
+                            animation='fluid-gradient'
                             placeholderText='Password'
                             isHidden
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Button
                             text='WELCOME BACK'
@@ -61,33 +65,41 @@ export default function InputsFolder({selectedTab}: Props) {
                         transition={{duration: 0.3}}
                     >
                         <Input
+                            id='signup-login'
                             value={signUp.login}
                             onChangeHandler={v => setSignUp(x => ({...x, login: v}))}
-                            variant='fluid-gradient'
+                            variant='grey'
+                            animation='fluid-gradient'
                             placeholderText='Login'
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
+                            id='signup-password'
                             value={signUp.password}
                             onChangeHandler={v => setSignUp(x => ({...x, password: v}))}
-                            variant='fluid-gradient'
+                            variant='grey'
+                            animation='fluid-gradient'
                             placeholderText='Password'
                             isHidden
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
+                            id='signup-mail'
                             value={signUp.mail}
                             onChangeHandler={v => setSignUp(x => ({...x, mail: v}))}
-                            variant='fluid-gradient'
+                            variant='grey'
+                            animation='fluid-gradient'
                             placeholderText='Mail'
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
+                            id='signup-key'
                             value={signUp.key}
                             onChangeHandler={v => setSignUp(x => ({...x, key: v}))}
-                            variant='fluid-gradient'
+                            variant='grey'
+                            animation='fluid-gradient'
                             placeholderText='Key'
-                            styleProps={{ width: '75%', height: '64px' }}
+                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Button
                             text='REGISTER'

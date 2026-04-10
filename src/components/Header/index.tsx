@@ -20,7 +20,12 @@ export default function Header() {
     return (
         <>
             <header className={s.header}>
-                <UserCard username={globalState.name} avatar={globalState.avatarURL} avatarFrame={globalState.avatarFrameURL} elo={globalState.elo} />
+                <UserCard
+                    username={globalState.name}
+                    avatar={globalState.avatarURL}
+                    avatarFrame={globalState.avatarFrameURL}
+                    elo={globalState.elo}
+                />
                 
                 <OptionsContainer className={s.header_options_container}>
                     <Option img='/all/SearchIcon.svg' text='Search' variation='header' />

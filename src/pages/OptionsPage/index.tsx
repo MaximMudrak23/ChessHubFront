@@ -1,8 +1,17 @@
 import s from './styles.module.scss'
+import { useState } from 'react'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import EventScreen from './components/EventScreen';
-import OptionsContainer from './components/OptionsContainer';
-import { useState } from 'react'
+import OptionsContainer from '../../components/Modules/OptionsContainer';
+
+const OPTIONS = [
+    {name: 'Board & Figures'},
+    {name: 'Game Process'},
+    {name: 'Profile'},
+    {name: 'Account'},
+    {name: 'Languages'},
+    {name: 'Labs', imgURL:'/all/labs.svg'},
+];
 
 export default function OptionsPage() {
     const [selectedFolder,setSelectedFolder] = useState(0);
@@ -15,7 +24,7 @@ export default function OptionsPage() {
             </div>
 
             <div className={s.content}>
-                <OptionsContainer selectedFolder={selectedFolder} setSelectedFolder={setSelectedFolder} />
+                <OptionsContainer OptionsArr={OPTIONS} selectedFolder={selectedFolder} setSelectedFolder={setSelectedFolder} />
                 <EventScreen selectedFolder={selectedFolder} />
             </div>
         </SteamContentWrapper>
