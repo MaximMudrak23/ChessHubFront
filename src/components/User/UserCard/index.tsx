@@ -2,6 +2,8 @@ import s from './styles.module.scss'
 import UserAvatar from '../UserAvatar'
 import UserName from '../UserName'
 
+import { globalState } from '../../../../GLOBALSTATE'
+
 type Props = {
     username: string;
     avatar: string;
@@ -25,7 +27,7 @@ export default function UserCard({username, avatar, avatarFrame, elo}: Props) {
                 className={s.usercard_name}
                 Icons={['/all/RED BULL.svg']}
             />
-            <p className={s.usercard_role}>Admin</p>
+            <p className={s.usercard_role}>{globalState.role.charAt(0).toUpperCase()+globalState.role.slice(1)}</p>
         </section>
     )
 }

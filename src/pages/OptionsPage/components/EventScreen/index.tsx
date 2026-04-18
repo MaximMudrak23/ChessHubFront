@@ -1,5 +1,4 @@
 import s from './styles.module.scss'
-import Error from './components/Error';
 import BoardAndFigures from './components/BoardAndFigures';
 
 interface ConfigFolder {
@@ -22,7 +21,7 @@ const FOLDERS: Record<number, ConfigFolder> = {
 
 export default function EventScreen({selectedFolder}: {selectedFolder: number}) {
     const config = FOLDERS[selectedFolder];
-    if (!config) return <Error />
+    if (!config) return <p className={s.error}>This option in development ⚙️</p>
 
     return (
         <section className={s.event_screen}>

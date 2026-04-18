@@ -12,4 +12,5 @@ export const globalState = {
     profileSongAvatar: '/all/i2.png',
     status: 'Online',
     friends: ['zxc','zxc1'],
+    role: 'admin',
 }

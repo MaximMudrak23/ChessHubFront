@@ -1,50 +1,79 @@
 import s from './styles.module.scss'
-import { useState } from 'react'
-import Input from '../../components/UI/Input'
-import Button from '../../components/UI/Button'
 import OptionsContainer from '../../components/Modules/OptionsContainer'
+import Button from '../../components/UI/Button'
+import Input from '../../components/UI/Input'
+import Card from './components/Card'
+import { useState } from 'react'
 
-const OPTIONS = [ {name: 'Users'}, {name: 'Keys'} ]
-const BUTTONS = [ {name: 'Find'}, {name: 'Create'}, {name: 'Filter'} ]
+const folders = [
+    {
+        folderName: 'Users',
+        placeholderText: 'Find user...',
+        buttons: [
+            { text: 'Find', onClick: () => {} },
+            { text: 'Create', onClick: () => {} },
+        ]
+    },
+    {
+        folderName: 'Keys',
+        placeholderText: 'Find key...',
+        buttons: [
+            { text: 'Find', onClick: () => {} },
+            { text: 'Create', onClick: () => {} },
+        ]
+    }
+];
 
 export default function AdminPage() {
-    const [selectedFolder, setSelectedFolder] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
     const [inputValue, setInputValue] = useState('');
 
     return (
-        <section className={s.admin_page}>
+        <section className={s.page}>
             <OptionsContainer
-                OptionsArr={OPTIONS}
-                selectedFolder={selectedFolder}
-                setSelectedFolder={setSelectedFolder}
-                styleProps={{backgroundColor: '#1A1817'}}
+                options={folders.map(folder => ({name: folder.folderName}))}
+                activeIndex={activeIndex}
+                onSelect={setActiveIndex}
+                styleProps={{ backgroundColor: '#1A1817' }}
             />
 
-            <div className={s.main}>
+            <div className={s.content_area}>
                 <header className={s.header}>
                     <Input
-                        id='search-button'
                         value={inputValue}
                         onChangeHandler={setInputValue}
-                        variant='grey'
-                        placeholderText='Search...'
-                        styleProps={{flex: '1'}}
+                        id={'admin-input'}
+                        variant={'grey'}
+                        placeholderText={folders[activeIndex].placeholderText}
+                        className={s.input}
                     />
-                    {BUTTONS.map(obj => (
-                        <Button
-                            text={obj.name}
-                            variant='black'
-                            animation='game'
-                            onClick={()=>''}
-                            styleProps={{
-                                width:'200px',
-                                borderRadius: '5px'
-                            }}
-                        />))
-                    }
+                    
+                    <div className={s.buttons}>
+                        {folders[activeIndex].buttons.map(btn => (
+                            <Button
+                                key={btn.text}
+                                text={btn.text}
+                                variant='green'
+                                onClick={btn.onClick}
+                                className={s.button}
+                            />
+                        ))}
+                    </div>
                 </header>
-                <div className={s.cards_container}>
 
+                <div className={s.cards}>
+                    <Card
+                        imgURL={'/all/i1.png'}
+                        frameURL={'/steam/steam2.png'}
+                        username={'Recront'}
+                        regDate={'17/04/2026'}
+                        id={1}
+                        login={'zxcloginasd'}
+                        mail={'zxcasdmail@gmail.com'}
+                        role={'User'}
+                        lastSeen={'Online'}
+                        isBanned={false} 
+                    />
                 </div>
             </div>
         </section>

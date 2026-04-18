@@ -1,7 +1,6 @@
 import s from './styles.module.scss'
 import { useState } from 'react';
 import Option from '../../../../../../components/UI/Option'
-import Error from '../Error';
 import Board from './folders/Board';
 import Figures from './folders/Figures';
 import Background from './folders/Background';
@@ -35,7 +34,7 @@ export default function BoardAndFigures() {
             </div>
             
             <div className={s.selected_option_content}>
-                {ActiveFolder ? <ActiveFolder /> : <Error />}
+                {ActiveFolder ? <ActiveFolder /> : <p className={s.error}>This option in development ⚙️</p>}
                 {/* ДОДЕЛАТЬ ВСЕ ФОЛДЕРЫ И КОМПОНЕНТЫ ИХ И ВСЕ */}
             </div>
         </section>

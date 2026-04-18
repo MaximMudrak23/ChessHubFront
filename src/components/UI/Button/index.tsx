@@ -14,6 +14,8 @@ type Props = {
     animation?: Animation;
     adaptiveMode?: AdaptiveMode;
     active?: boolean;
+
+    className?: string;
     styleProps?: React.CSSProperties;
 
     onClick: () => void;
@@ -23,6 +25,7 @@ export default function Button(propsOBJ: Props) {
     return (
         <button
             className={clsx(
+                propsOBJ.className,
                 s.button,
                 s[`button--${propsOBJ.variant}`],
                 propsOBJ.animation && a[`animation--${propsOBJ.animation}`],

@@ -1,35 +1,35 @@
 import s from './styles.module.scss'
 import Option from '../../UI/Option';
 
-type Options = {
+type OptionItem = {
     name: string;
     imgURL?: string;
 }
 
 type Props = {
-    OptionsArr: Options[];
-    selectedFolder: number;
-    setSelectedFolder: React.Dispatch<React.SetStateAction<number>>;
+    options: OptionItem[];
+    activeIndex: number;
+    onSelect: (index: number) => void;
     styleProps?: React.CSSProperties;
 }
 
-export default function OptionsContainer({OptionsArr, selectedFolder, setSelectedFolder, styleProps}: Props) {
+export default function OptionsContainer(props: Props) {
     return (
-        <section className={s.options_container} style={styleProps}>
+        <div className={s.options_container} style={props.styleProps}>
             {
-                OptionsArr.map((option, index) => (
+                props.options.map((option, index) => (
                     <Option
                         key={option.name}
                         name={option.name}
                         imgURL={option.imgURL}
-                        isActive={selectedFolder === index}
+                        isActive={props.activeIndex === index}
                         isGlow
                         fontSize={'high'}
                         lineAxis={'vertical'}
-                        onClick={()=>setSelectedFolder(index)}
+                        onClick={()=>props.onSelect(index)}
                     />
                 ))
             }
-        </section>
+        </div>
     )
 }
