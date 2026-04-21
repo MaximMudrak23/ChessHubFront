@@ -1,8 +1,8 @@
 import s from './styles.module.scss'
 
-export default function Chat() {
+export default function SidePannel() {
     return (
-        <div className={s.chat}>
+        <div className={s.zxc}>
             
         </div>
     )

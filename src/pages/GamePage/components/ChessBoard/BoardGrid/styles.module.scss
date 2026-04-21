@@ -1,0 +1,50 @@
+.board_grid {
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(var(--board-size), 1fr);
+    grid-template-rows: repeat(var(--board-size), 1fr);
+
+    .cell {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        &[data-col='0']::before {
+            content: attr(data-rank);
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        &[data-row='7']::after {
+            content: attr(data-file);
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+    }
+
+    .lightCell {
+        background-image: var(--board-light-square);
+
+        &[data-col='0']::before, &[data-row='7']::after {
+            opacity: 0.8;
+            color: var(--board-light-letters-color);
+        }
+    }
+
+    .darkCell {
+        background-image: var(--board-dark-square);
+
+        &[data-col='0']::before, &[data-row='7']::after {
+            opacity: 0.8;
+            color: var(--board-dark-letters-color);
+        }
+    }
+}

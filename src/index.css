@@ -6,7 +6,12 @@
   font-weight: 400;
 
   color: white;
-  background-color: #272623;
+  /* background-color: #272623; */
+  
+  background-image: url('/Board%20Variations/bases.jpg');
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

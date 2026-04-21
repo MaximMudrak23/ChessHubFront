@@ -1,48 +1,59 @@
 import s from './styles.module.scss'
-import { CHARS, BOARD_SIZE, type Position, type Square } from './model';
+import BoardGrid from "./BoardGrid"
+import ChessPieces from './ChessPieces'
+import { useState } from 'react';
 
-type Props = {
-    perspective?: 'white' | 'black';
-    position: Position;
-    onSquareClick: (square: Square) => void
+const initialPieces = [
+    { id: 'br1', piece: 'br', square: 'a8' },
+    { id: 'bn1', piece: 'bn', square: 'b8' },
+    { id: 'bb1', piece: 'bb', square: 'c8' },
+    { id: 'bq1', piece: 'bq', square: 'd8' },
+    { id: 'bk1', piece: 'bk', square: 'e8' },
+    { id: 'bb2', piece: 'bb', square: 'f8' },
+    { id: 'bn2', piece: 'bn', square: 'g8' },
+    { id: 'br2', piece: 'br', square: 'h8' },
+
+    { id: 'bp1', piece: 'bp', square: 'a7' },
+    { id: 'bp2', piece: 'bp', square: 'b7' },
+    { id: 'bp3', piece: 'bp', square: 'c7' },
+    { id: 'bp4', piece: 'bp', square: 'd7' },
+    { id: 'bp5', piece: 'bp', square: 'e7' },
+    { id: 'bp6', piece: 'bp', square: 'f7' },
+    { id: 'bp7', piece: 'bp', square: 'g7' },
+    { id: 'bp8', piece: 'bp', square: 'h7' },
+
+    { id: 'wr1', piece: 'wr', square: 'a1' },
+    { id: 'wn1', piece: 'wn', square: 'b1' },
+    { id: 'wb1', piece: 'wb', square: 'c1' },
+    { id: 'wq1', piece: 'wq', square: 'd1' },
+    { id: 'wk1', piece: 'wk', square: 'e1' },
+    { id: 'wb2', piece: 'wb', square: 'f1' },
+    { id: 'wn2', piece: 'wn', square: 'g1' },
+    { id: 'wr2', piece: 'wr', square: 'h1' },
+
+    { id: 'wp1', piece: 'wp', square: 'a2' },
+    { id: 'wp2', piece: 'wp', square: 'b2' },
+    { id: 'wp3', piece: 'wp', square: 'c2' },
+    { id: 'wp4', piece: 'wp', square: 'd2' },
+    { id: 'wp5', piece: 'wp', square: 'e2' },
+    { id: 'wp6', piece: 'wp', square: 'f2' },
+    { id: 'wp7', piece: 'wp', square: 'g2' },
+    { id: 'wp8', piece: 'wp', square: 'h2' },
+];
+
+export type PieceType = {
+    id: string;
+    piece: string;
+    square: string;
 };
 
-export default function ChessBoard({perspective = 'white', position, onSquareClick}: Props) {
+export default function ChessBoard() {
+    const [pieces, setPieces] = useState<PieceType[]>(initialPieces);
+
     return (
-        <div
-            className={s.chess_board}
-            style={{'--size': BOARD_SIZE} as React.CSSProperties}
-        >
-            {
-                Array.from({length: (BOARD_SIZE*BOARD_SIZE)}, (_, key) => {
-                    const rows = Math.floor(key / BOARD_SIZE);
-                    const colums = key % BOARD_SIZE;
-                    const isWhite = (rows + colums) % 2 === 0;
-                    const whitePerspective = perspective === 'white';
-
-                    const fIndex = whitePerspective ? colums : (BOARD_SIZE-1)-colums;
-                    const file = CHARS[fIndex];
-                    const rank = whitePerspective ? (BOARD_SIZE-rows) : (rows+1);
-                    const square = `${file}${rank}` as keyof Position;
-
-                    const showFile = rows === BOARD_SIZE - 1;
-                    const showRank = colums === 0;
-
-                    const piece = position[square];
-                    
-                    return (
-                        <div
-                            className={`${s.cell} ${isWhite ? s.white : s.black}`}
-                            key={square}
-                            onClick={()=>onSquareClick(square)}
-                        >
-                            {showRank && <span className={`${s.rank} ${isWhite ? s.even : ''}`}>{rank}</span>}
-                            {showFile && <span className={`${s.file} ${isWhite ? s.even : ''}`}>{file}</span>}
-                            {piece && <img draggable={false} src={`/chessPieces/${piece}.png`} alt={piece} />}
-                        </div>
-                    )
-                }) 
-            }
+        <div className={s.chess_board}>
+            <BoardGrid />
+            <ChessPieces pieces={pieces} />
         </div>
     )
 }

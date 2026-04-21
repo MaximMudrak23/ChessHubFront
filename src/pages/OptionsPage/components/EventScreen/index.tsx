@@ -8,15 +8,15 @@ interface ConfigFolder {
 }
 
 const FOLDERS: Record<number, ConfigFolder> = {
-  0: {
-    title: 'Board & Figures',
-    description: 'How will your chess look like?',
-    Component: BoardAndFigures,
-  },
-  1: {
-    title: 'Game Process',
-    description: 'In good hands very useful things',
-  },
+//   0: {
+//     title: 'Board & Figures',
+//     description: 'How will your chess look like?',
+//     Component: BoardAndFigures,
+//   },
+//   1: {
+//     title: 'Game Process',
+//     description: 'In good hands very useful things',
+//   },
 };
 
 export default function EventScreen({selectedFolder}: {selectedFolder: number}) {

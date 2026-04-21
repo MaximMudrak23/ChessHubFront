@@ -24,7 +24,7 @@ export default function OptionsPage() {
             </div>
 
             <div className={s.content}>
-                <OptionsContainer OptionsArr={OPTIONS} selectedFolder={selectedFolder} setSelectedFolder={setSelectedFolder} />
+                <OptionsContainer options={OPTIONS} activeIndex={selectedFolder} onSelect={setSelectedFolder} />
                 <EventScreen selectedFolder={selectedFolder} />
             </div>
         </SteamContentWrapper>

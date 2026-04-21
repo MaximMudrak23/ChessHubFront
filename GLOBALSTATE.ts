@@ -13,4 +13,10 @@ export const globalState = {
     status: 'Online',
     friends: ['zxc','zxc1'],
     role: 'admin',
+    boardTheme: {
+        lightSquare: 'url(/Board%20Variations/whiteSquare.png)',
+        darkSquare: 'url(/Board%20Variations/blackSquare.png)',
+        lightLetters: '#74A0B5',
+        darkLetters: '#FFFFFF',
+    }
 }

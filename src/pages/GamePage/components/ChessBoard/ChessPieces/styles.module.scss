@@ -1,0 +1,13 @@
+.chess_pieces {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.piece {
+    position: absolute;
+    pointer-events: auto;
+    user-select: none;
+    object-fit: contain;
+    cursor: grab;
+}
