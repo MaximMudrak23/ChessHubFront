@@ -2,32 +2,51 @@ import s from './styles.module.scss'
 import UserAvatar from '../UserAvatar'
 import UserName from '../UserName'
 
-import { globalState } from '../../../../GLOBALSTATE'
+type Props = 
+    | {
+        imgURL?: string;
+        frameURL?: string;
+        userName: string;
+        userIcons?: string[];
+        userRole: string;
+        variation: 'header';
+    }
+    | {
+        imgURL?: string;
+        frameURL?: string;
+        userName: string;
+        userIcons?: string[];
+        userElo: number;
+        variation: 'card';
+    }
 
-type Props = {
-    username: string;
-    avatar: string;
-    avatarFrame: string;
-    elo: number;
-}
-
-export default function UserCard({username, avatar, avatarFrame, elo}: Props) {
+export default function UserCard(props: Props) {
     return (
         <section className={s.userCard}>
             <UserAvatar
-                imgURL={avatar}
-                userName={username}
-                size={'64px'}
-                frameURL={avatarFrame}
+                imgURL={props.imgURL}
+                userName={props.userName}
+                size={64}
+                frameURL={props.frameURL}
                 className={s.usercard_avatar}
             />
             <UserName
-                userName={username}
+                userName={props.userName}
                 variation='card'
                 className={s.usercard_name}
-                Icons={['/all/RED BULL.svg']}
+                Icons={props.userIcons}
             />
-            <p className={s.usercard_role}>{globalState.role.charAt(0).toUpperCase()+globalState.role.slice(1)}</p>
+            
+            {props.variation === 'card' &&
+                <div className={s.elo_folder}>
+                    <span>{props.userElo} elo</span>
+                </div>
+            }
+            {props.variation === 'header' &&
+                <p className={s.usercard_role}>
+                    <span>{props.userRole}</span>
+                </p>
+            }
         </section>
     )
 }

@@ -1,20 +1,26 @@
 .userName {
-    // height: fit-content;
+    min-width: 0;
+    padding: 8px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
     
-    display: inline-flex;
-    gap: 12px;
-    
+    overflow: hidden;
     cursor: default;
+
+    span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-shrink: 1;
+    }
 
     img {
         width: auto;
         height: 1.6rem;
-    }
-
-    span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     &--profile { font-size: 1.6rem; font-weight: 500; }

@@ -2,7 +2,7 @@
 
 export const globalState = {
     name: 'Recront',
-    userIcons: [],
+    userIcons: ['/all/RED BULL.svg'],
     description: 'Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile',
     elo: 2672,
     avatarURL: '/steam/steamgif.gif',
@@ -10,9 +10,7 @@ export const globalState = {
     profileBackground: '/steam/steam.webm',
     profileSongName: "U waren't here, but I really miss you",
     profileSongAvatar: '/all/i2.png',
-    status: 'Online',
-    friends: ['zxc','zxc1'],
-    role: 'admin',
+    role: 'Admin',
     boardTheme: {
         lightSquare: 'url(/Board%20Variations/whiteSquare.png)',
         darkSquare: 'url(/Board%20Variations/blackSquare.png)',

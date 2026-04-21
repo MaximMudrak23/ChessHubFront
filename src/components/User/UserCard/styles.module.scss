@@ -1,14 +1,21 @@
 .userCard {
     padding: 0 12px;
-
+    
     display: grid;
-    grid-template-columns: 64px 1fr;
     grid-template-rows: repeat(2, 32px);
+    &:has(.elo_folder) {
+        width: 100%;
+        grid-template-columns: 64px 1fr 128px;
+    }
+    &:not(:has(.elo_folder)) {
+        grid-template-columns: 64px 1fr;
+    }
     
     .usercard_avatar {
         grid-column: 1 / 2;
         grid-row: 1 / 3;
     }
+    
     .usercard_name {
         grid-column: 2 / 3;
         grid-row: 1 / 2;
@@ -18,8 +25,8 @@
 
         display: flex;
         align-items: center;
-        justify-content: center;
     }
+
     .usercard_role {
         grid-column: 2 / 3;
         grid-row: 2 / 3;
@@ -27,7 +34,25 @@
         margin-top: -5px;
         padding-left: 6px;
 
-        font-weight: 300;
-        color: #7C7C7C;
+        span {
+            font-weight: 300;
+            color: #7C7C7C;
+        }
+    }
+
+    .elo_folder {
+        width: 100%;
+        grid-column: 3 / 4;
+        grid-row: 1 / 3;
+        background-color: rgba($color: #2F2E2E, $alpha: 0.8);
+        
+        border-radius: 10px;
+        
+        font-size: 1.1rem;
+        font-weight: 500;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

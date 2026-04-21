@@ -21,10 +21,12 @@ export default function Header() {
         <>
             <header className={s.header}>
                 <UserCard
-                    username={globalState.name}
-                    avatar={globalState.avatarURL}
-                    avatarFrame={globalState.avatarFrameURL}
-                    elo={globalState.elo}
+                    userName={globalState.name}
+                    imgURL={globalState.avatarURL}
+                    frameURL={globalState.avatarFrameURL}
+                    userRole={globalState.role}
+                    userIcons={globalState.userIcons}
+                    variation={'header'}
                 />
                 
                 <OptionsContainer className={s.header_options_container}>

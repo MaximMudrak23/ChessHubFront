@@ -1,0 +1,31 @@
+.move_row {
+    width: 100%;
+    min-height: 45px;
+    background-color: rgba($color: #000, $alpha: 0.5);
+
+    font-size: 1.1rem;
+    font-weight: 500;
+
+    display: grid;
+    grid-template-columns: 0.32fr repeat(2, 1fr);
+
+    .moveNumber, .moveSquare {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        user-select: none;
+    }
+
+    .moveNumber {
+        border-right: 1px solid rgba($color: #FFF, $alpha: 0.5);
+    }
+
+    .moveSquare {
+        transition: background-color 0.25s ease;
+        &:hover { background-color: rgba($color: #FFF, $alpha: 0.2); }
+    }
+}
