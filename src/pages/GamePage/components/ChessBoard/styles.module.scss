@@ -1,4 +1,7 @@
 .chess_board {
+    min-width: 350px; // adaptive
+    min-height: 350px; // adaptive
+
     --size: 85vmin;
     width: var(--size);
     height: var(--size);
