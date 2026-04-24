@@ -1,48 +1,23 @@
 import s from './styles.module.scss'
 import Button from '../../../../components/UI/Button'
 import UserCard from '../../../../components/User/UserCard';
-import MoveRow from './components/MoveRow';
+import MoveRow from './MoveRow';
+import type { Players, Move } from './utils/items.types';
 
-// зарефакторить потом, переделать сортировку и в целом пройтись по коду и стилям и причесать все
-// потом все в пропсы сайдпанели вынести, игроков и так далее, чтоб не засорять внутри
-
-const buttonsFolderItems = [
+const actionButtons = [
     {icon: '/all/ar1.svg', onClick: () => {}},
     {icon: '/all/ar2.svg', onClick: () => {}},
     {icon: '/all/flag.svg', onClick: () => {}},
+    {icon: '/all/draw.svg', onClick: () => {}},
 ];
 
-const usersFolderItems = [
-    {
-        side: 'white',
-        isCurrentUser: false,
-        imgURL: '/special/ygritte.jpg',
-        frameURL: '/steam/steam2.png',
-        userName: "Snow's Mirror",
-        userElo: 2000,
-        userIcons: ['/all/RED BULL.svg']
-    },
-    {
-        side: 'black',
-        isCurrentUser: true,
-        imgURL: '/special/ygritte.png',
-        frameURL: '/steam/steam2.png',
-        userName: 'Snow',
-        userElo: 2000,
-        userIcons: ['/all/RED BULL.svg']
-    },
-];
+type Props = {
+    players: Players;
+    moves?: Move[];
+}
 
-const movesFolderItems = [
-    {whiteMove: 'e4', blackMove: 'e5'},
-    {whiteMove: 'd4', blackMove: 'cxd4'},
-    {whiteMove: 'a4'},
-];
-
-export default function SidePanel() {
-    const opponent = usersFolderItems.find(user => !user.isCurrentUser)!;
-    const currentUser = usersFolderItems.find(user => user.isCurrentUser)!;
-    const orderedUsers = [opponent, currentUser];
+export default function SidePanel({players, moves}: Props) {
+    const orderedUsers = players.black.isCurrentUser ? [players.white, players.black] : [players.black, players.white];
 
     return (
         <div className={s.side_panel}>
@@ -63,7 +38,7 @@ export default function SidePanel() {
             <div className={s.moves_folder}>
                 <div className={s.title}> <img src="/all/chess.svg" alt="Moves Folder Title Icon" draggable={false} /> </div>
                 <div className={s.moves}>
-                    {movesFolderItems.map(({whiteMove, blackMove}, i) => (
+                    {moves && moves.map(({whiteMove, blackMove}, i) => (
                         <MoveRow
                             key={i}
                             moveNumber={i+1}
@@ -75,7 +50,7 @@ export default function SidePanel() {
             </div>
 
             <div className={s.buttons_folder}>
-                {buttonsFolderItems.map(({icon, onClick}, i) => (
+                {actionButtons.map(({icon, onClick}, i) => (
                     <Button
                         key={i}
                         icon={icon}

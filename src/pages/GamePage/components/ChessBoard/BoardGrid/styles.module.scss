@@ -30,6 +30,11 @@
         }
     }
 
+    .selected {
+        box-shadow: inset 0 0 0 9999px rgba(139, 221, 237, 0.6);
+        filter: brightness(0.9);
+    }
+
     .lightCell {
         background-image: var(--board-light-square);
 

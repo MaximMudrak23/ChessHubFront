@@ -1,32 +1,18 @@
 import s from './styles.module.scss'
-import { type PieceType } from '../index'
+import type { PieceType, Perspective } from '../utils/chess.types';
+import { cellSize, squareToPosition  } from '../utils/board';
 
 type Props = {
     pieces: PieceType[];
+    perspective: Perspective;
+    selectPiece: (pieceID: string) => void;
 }
 
-const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-const boardSize = files.length;
-const cellSize = 100 / boardSize;
-
-function squareToPosition(square: string) {
-    const file = square[0];
-    const rank = Number(square[1]);
-
-    const col = files.indexOf(file);
-    const row = boardSize - rank;
-
-    return {
-        left: col * cellSize,
-        top: row * cellSize,
-    };
-}
-
-export default function ChessPieces({ pieces }: Props) {
+export default function ChessPieces(props: Props) {
     return (
         <div className={s.chess_pieces}>
-            {pieces.map(({ id, piece, square }) => {
-                const { left, top } = squareToPosition(square);
+            {props.pieces.map(({ id, piece, square }) => {
+                const { left, top } = squareToPosition(square, props.perspective);
 
                 return (
                     <img
@@ -35,6 +21,7 @@ export default function ChessPieces({ pieces }: Props) {
                         alt={`${piece} on ${square}`}
                         draggable={false}
                         className={s.piece}
+                        onClick={() => props.selectPiece(id)}
                         style={{
                             width: `${cellSize}%`,
                             height: `${cellSize}%`,

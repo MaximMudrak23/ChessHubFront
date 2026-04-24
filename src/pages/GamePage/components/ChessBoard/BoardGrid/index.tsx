@@ -1,26 +1,46 @@
 import s from './styles.module.scss'
+import type { Perspective, File, Square } from '../utils/chess.types';
+import { boardSize, coordsToSquare } from '../utils/board';
+import type { PieceType } from '../utils/chess.types';
 import { globalState } from '../../../../../../GLOBALSTATE';
+import clsx from 'clsx';
 
-const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-const boardSize = files.length;
+type Props = {
+    perspective: Perspective;
+    selectedPieceID: string | null;
+    pieces: PieceType[];
+    onSquareClick: (square: Square) => void;
+};
 
-export default function BoardGrid() {
+export default function BoardGrid(props: Props) {
     const cells = [];
+    const selectedPiece = props.pieces.find(p => p.id === props.selectedPieceID);
+    const selectedSquare = selectedPiece?.square;
 
     for (let row = 0; row < boardSize; row++) {
         for (let col = 0; col < boardSize; col++) {
-            const file = files[col];
-            const rank = boardSize - row;
-            const square = `${file}${rank}`;
+            const realRow = props.perspective === 'black'
+                ? boardSize - 1 - row
+                : row;
+
+            const realCol = props.perspective === 'black'
+                ? boardSize - 1 - col
+                : col;
+
+            const square = coordsToSquare(realRow, realCol);
+
+            const file = square[0] as File;
+            const rank = square[1];
+
             const isLight = (row + col) % 2 === 0;
 
-            cells.push({ square, isLight, file, rank, row, col })
+            cells.push({ square, isLight, file, rank, row, col });
         }
     }
 
     return (
         <div
-            className={s.board_grid}
+            className={clsx(s.board_grid)}
             style={{
                 '--board-size': boardSize,
                 '--board-light-letters-color': globalState.boardTheme.lightLetters,
@@ -32,13 +52,17 @@ export default function BoardGrid() {
             {cells.map(({ square, isLight, file, rank, row, col }) => (
                 <div
                     key={square}
-                    className={`${s.cell} ${isLight ? s.lightCell : s.darkCell}`}
+                    className={clsx(
+                        s.cell,
+                        isLight ? s.lightCell : s.darkCell,
+                        square === selectedSquare && s.selected
+                    )}
                     data-square={square}
                     data-rank={rank}
                     data-file={file}
                     data-row={row}
                     data-col={col}
-                    onClick={()=>console.log(square)}
+                    onClick={() => props.onSquareClick(square)}
                 />
             ))}
         </div>
