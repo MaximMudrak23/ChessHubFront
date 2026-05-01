@@ -1,4 +1,4 @@
-import type { Player, Move, Players } from "../types/game.types";
+import type { Player, Players } from "../types/game.types";
 
 export const whitePlayer: Player = {
     side: 'white',
@@ -20,8 +20,3 @@ export const players: Players = {
     white: whitePlayer,
     black: blackPlayer,
 }
-
-export const moves: Move[] = [
-    {whiteMove: 'e4', blackMove: 'e5'},
-    {whiteMove: 'e4'},
-];

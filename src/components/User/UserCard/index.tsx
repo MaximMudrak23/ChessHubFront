@@ -1,28 +1,30 @@
 import s from './styles.module.scss'
 import UserAvatar from '../UserAvatar'
 import UserName from '../UserName'
+import clsx from 'clsx';
 
 type Props = 
     | {
+        variation: 'header';
         imgURL?: string;
         frameURL?: string;
         userName: string;
         userIcons?: string[];
         userRole: string;
-        variation: 'header';
     }
     | {
+        variation: 'card';
         imgURL?: string;
         frameURL?: string;
         userName: string;
         userIcons?: string[];
         userElo: number;
-        variation: 'card';
+        isActive?: boolean;
     }
 
 export default function UserCard(props: Props) {
     return (
-        <section className={s.userCard}>
+        <section className={clsx(s.userCard, props.variation === 'card' && props.isActive && s.active)}>
             <UserAvatar
                 imgURL={props.imgURL}
                 userName={props.userName}

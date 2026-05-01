@@ -4,6 +4,7 @@ import UserCard from '../../../../components/User/UserCard';
 import MoveRow from './components/MoveRow';
 import type { Players, Side, Move } from '../../utils/types/game.types';
 import { getSortedUsers } from './utils/getSortedUsers';
+import { useEffect, useRef } from 'react';
 
 const actionButtons = [
     {icon: '/all/ar1.svg', onClick: () => {}},
@@ -16,10 +17,17 @@ type Props = {
     players: Players;
     perspective: Side;
     moves?: Move[];
+    currentTurn: Side;
 }
 
-export default function SidePanel({players, perspective, moves = []}: Props) {
-    const sortedUsers = getSortedUsers(players, perspective);
+export default function SidePanel(props: Props) {
+    const sortedUsers = getSortedUsers(props.players, props.perspective);
+    const movesRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        const el = movesRef.current;
+        if (!el) return;
+        el.scrollTo({top: el.scrollHeight, behavior: 'smooth'});
+    }, [props.moves?.length]);
 
     return (
         <div className={s.side_panel}>
@@ -33,14 +41,15 @@ export default function SidePanel({players, perspective, moves = []}: Props) {
                         userIcons={user.userIcons}
                         userElo={user.userElo}
                         variation={'card'}
+                        isActive={user.side === props.currentTurn}
                     />
                 ))}
             </div>
 
             <div className={s.moves_folder}>
                 <div className={s.title}> <img src="/all/chess.svg" alt="Moves Folder Title Icon" draggable={false} /> </div>
-                <div className={s.moves}>
-                    {moves.map(({whiteMove, blackMove}, i) => (
+                <div className={s.moves} ref={movesRef}>
+                    {props.moves && props.moves.map(({whiteMove, blackMove}, i) => (
                         <MoveRow
                             key={i}
                             moveNumber={i+1}

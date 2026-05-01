@@ -28,6 +28,36 @@
             font-size: 1rem;
             font-weight: 600;
         }
+
+        .available {
+            --size: 32%;
+
+            width: var(--size);
+            height: var(--size);
+            background-color: rgba($color: #000, $alpha: 0.32);
+
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        .capture {
+            --size: 100%;
+
+            width: var(--size);
+            height: var(--size);
+            
+            border: 4px solid rgba($color: #000, $alpha: 0.2);
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
     }
 
     .selected {

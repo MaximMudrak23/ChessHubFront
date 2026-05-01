@@ -9,6 +9,7 @@ import clsx from 'clsx';
 type Props = {
     perspective: Side;
     selectedPieceID: string | null;
+    availableMoves: { square: Square; type: 'move' | 'capture' }[];
     pieces: PieceType[];
     onSquareClick: (square: Square) => void;
 };
@@ -20,13 +21,9 @@ export default function BoardGrid(props: Props) {
 
     for (let row = 0; row < boardSize; row++) {
         for (let col = 0; col < boardSize; col++) {
-            const realRow = props.perspective === 'black'
-                ? boardSize - 1 - row
-                : row;
+            const realRow = props.perspective === 'black' ? boardSize - 1 - row : row;
 
-            const realCol = props.perspective === 'black'
-                ? boardSize - 1 - col
-                : col;
+            const realCol = props.perspective === 'black' ? boardSize - 1 - col : col;
 
             const square = coordsToSquare(realRow, realCol);
 
@@ -41,7 +38,7 @@ export default function BoardGrid(props: Props) {
 
     return (
         <div
-            className={clsx(s.board_grid)}
+            className={s.board_grid}
             style={{
                 '--board-size': boardSize,
                 '--board-light-letters-color': globalState.boardTheme.lightLetters,
@@ -50,22 +47,24 @@ export default function BoardGrid(props: Props) {
                 '--board-dark-square': globalState.boardTheme.darkSquare,
             } as React.CSSProperties}
         >
-            {cells.map(({ square, isLight, file, rank, row, col }) => (
-                <div
+            {cells.map(({ square, isLight, file, rank, row, col }) => {
+                const move = props.availableMoves.find(m => m.square === square);
+
+                return <div
                     key={square}
-                    className={clsx(
-                        s.cell,
-                        isLight ? s.lightCell : s.darkCell,
-                        square === selectedSquare && s.selected
-                    )}
+                    className={clsx(s.cell, isLight ? s.lightCell : s.darkCell, square === selectedSquare && s.selected)}
                     data-square={square}
                     data-rank={rank}
                     data-file={file}
                     data-row={row}
                     data-col={col}
                     onClick={() => props.onSquareClick(square)}
-                />
-            ))}
+                >
+                    <span
+                        className={clsx(move?.type === 'move' && s.available, move?.type === 'capture' && s.capture)}
+                    />
+                </div>
+            })}
         </div>
     )
 }
