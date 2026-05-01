@@ -32,7 +32,6 @@ export default function ProfilePage() {
 
     return (
         <>
-            {/* <div className={s.you_sure}>u sure u want to delete globalstate.thisguy user name from friend list?</div> */}
             <SteamContentWrapper
                 srcVideo={globalState.profileBackground}
                 styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
@@ -40,7 +39,7 @@ export default function ProfilePage() {
                 <header className={s.profile_header}>
                     <UserAvatar
                         userName={`${globalState.name} Avatar`}
-                        size='200px'
+                        size={200}
                         imgURL={globalState.avatarURL}
                         frameURL={globalState.avatarFrameURL}
                     />

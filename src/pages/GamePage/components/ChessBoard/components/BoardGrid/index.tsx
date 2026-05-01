@@ -1,12 +1,13 @@
 import s from './styles.module.scss'
-import type { Perspective, File, Square } from '../utils/chess.types';
-import { boardSize, coordsToSquare } from '../utils/board';
-import type { PieceType } from '../utils/chess.types';
-import { globalState } from '../../../../../../GLOBALSTATE';
+import type { File, Square } from '../../utils/types/chess.types';
+import { boardSize, coordsToSquare } from '../../utils/lib/board';
+import type { PieceType } from '../../utils/types/chess.types';
+import type { Side } from '../../../../utils/types/game.types';
+import { globalState } from '../../../../../../../GLOBALSTATE';
 import clsx from 'clsx';
 
 type Props = {
-    perspective: Perspective;
+    perspective: Side;
     selectedPieceID: string | null;
     pieces: PieceType[];
     onSquareClick: (square: Square) => void;

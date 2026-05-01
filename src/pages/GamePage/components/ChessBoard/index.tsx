@@ -1,20 +1,21 @@
 import s from './styles.module.scss'
-import BoardGrid from "./BoardGrid"
-import ChessPieces from './ChessPieces'
+import BoardGrid from './components/BoardGrid'
+import ChessPieces from './components/ChessPieces'
 import useChessBoard from './hooks/useChessBoard'
-import type { Perspective } from './utils/chess.types'
+import type { Side } from '../../utils/types/game.types'
 
 type Props = {
-    perspective?: Perspective;
+    perspective: Side;
+    currentUserSide: Side | null;
 }
 
-export default function ChessBoard({perspective = 'white'}: Props) {
+export default function ChessBoard({currentUserSide, perspective}: Props) {
     const {
         pieces,
         selectedPieceID,
         selectPiece,
         movePiece,
-    } = useChessBoard();
+    } = useChessBoard(currentUserSide);
     return (
         <div className={s.chess_board}>
             <BoardGrid

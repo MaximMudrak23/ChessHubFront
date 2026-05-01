@@ -2,7 +2,7 @@
 
 export const globalState = {
     name: 'Recront',
-    userIcons: ['/all/RED BULL.svg'],
+    userIcons: [/*'/all/RED BULL.svg'*/],
     description: 'Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile Welcome to my profile',
     elo: 2672,
     avatarURL: '/steam/steamgif.gif',

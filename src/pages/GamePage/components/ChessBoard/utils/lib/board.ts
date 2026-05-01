@@ -1,4 +1,5 @@
-import type { File, Perspective, Square } from "./chess.types";
+import type { File, Square } from "../types/chess.types";
+import type { Side } from "../../../../utils/types/game.types";
 
 export const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 export const boardSize = files.length;
@@ -21,7 +22,7 @@ export function coordsToSquare(row: number, col: number): Square {
     return `${file}${rank}` as Square;
 }
 
-export function squareToPosition(square: Square, perspective: Perspective = 'white') {
+export function squareToPosition(square: Square, perspective: Side = 'white') {
     let { row, col } = squareToCoords(square);
 
     if (perspective === 'black') {

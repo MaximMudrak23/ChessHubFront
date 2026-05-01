@@ -12,19 +12,6 @@
     }
 }
 
-.content {
-    flex: 1;
-    max-width: 1080px;
-    min-width: 0;
-    background-color: rgba($color: #1B1918, $alpha: 1.0);
-    // probably extract this into separate prop
-
-    z-index: 1;
-    
-    display: flex;
-    flex-direction: column;
-}
-
 .background {
     width: 100%;
     height: calc(100vh - 80px);
@@ -39,4 +26,17 @@
         position: absolute;
         object-fit: cover;
     }
+}
+
+.content {
+    flex: 1;
+    max-width: 1080px;
+    min-width: 0;
+    background-color: rgba($color: #1B1918, $alpha: 1);
+    // probably extract this into separate prop
+
+    z-index: 1;
+    
+    display: flex;
+    flex-direction: column;
 }

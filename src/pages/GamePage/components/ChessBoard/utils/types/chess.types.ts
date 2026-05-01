@@ -10,8 +10,6 @@ export type PieceCode = `${Color}${PieceName}`;
 
 export type Square = `${File}${Rank}`;
 
-export type Perspective = 'white' | 'black';
-
 export type PieceType = {
     id: string;
     piece: PieceCode;

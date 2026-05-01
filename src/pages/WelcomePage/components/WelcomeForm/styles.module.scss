@@ -1,12 +1,11 @@
 .welcome_form {
-    width: 100vw;
-    height: 100vh;
+    flex: 1;
     max-width: 1275px;
     max-height: 775px;
     background-color: rgba($color: #181818, $alpha: 0.75);
 
     border-radius: clamp(0px,2vh,24px); // fix later
-    margin: 0 24px;
+    margin: 24px;
     
     display: flex;
     flex-direction: column;

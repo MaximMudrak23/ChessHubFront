@@ -1,8 +1,9 @@
 import s from './styles.module.scss'
 import Button from '../../../../components/UI/Button'
 import UserCard from '../../../../components/User/UserCard';
-import MoveRow from './MoveRow';
-import type { Players, Move } from './utils/items.types';
+import MoveRow from './components/MoveRow';
+import type { Players, Side, Move } from '../../utils/types/game.types';
+import { getSortedUsers } from './utils/getSortedUsers';
 
 const actionButtons = [
     {icon: '/all/ar1.svg', onClick: () => {}},
@@ -13,18 +14,19 @@ const actionButtons = [
 
 type Props = {
     players: Players;
+    perspective: Side;
     moves?: Move[];
 }
 
-export default function SidePanel({players, moves}: Props) {
-    const orderedUsers = players.black.isCurrentUser ? [players.white, players.black] : [players.black, players.white];
+export default function SidePanel({players, perspective, moves = []}: Props) {
+    const sortedUsers = getSortedUsers(players, perspective);
 
     return (
         <div className={s.side_panel}>
             <div className={s.users_folder}>
-                {orderedUsers.map(user => (
+                {sortedUsers.map(user => (
                     <UserCard
-                        key={user.userName}
+                        key={user.side}
                         imgURL={user.imgURL}
                         frameURL={user.frameURL}
                         userName={user.userName}
@@ -38,7 +40,7 @@ export default function SidePanel({players, moves}: Props) {
             <div className={s.moves_folder}>
                 <div className={s.title}> <img src="/all/chess.svg" alt="Moves Folder Title Icon" draggable={false} /> </div>
                 <div className={s.moves}>
-                    {moves && moves.map(({whiteMove, blackMove}, i) => (
+                    {moves.map(({whiteMove, blackMove}, i) => (
                         <MoveRow
                             key={i}
                             moveNumber={i+1}

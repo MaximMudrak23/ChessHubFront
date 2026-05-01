@@ -1,10 +1,11 @@
 import s from './styles.module.scss'
-import type { PieceType, Perspective } from '../utils/chess.types';
-import { cellSize, squareToPosition  } from '../utils/board';
+import type { PieceType } from '../../utils/types/chess.types';
+import type { Side } from '../../../../utils/types/game.types';
+import { cellSize, squareToPosition  } from '../../utils/lib/board';
 
 type Props = {
     pieces: PieceType[];
-    perspective: Perspective;
+    perspective: Side;
     selectPiece: (pieceID: string) => void;
 }
 
