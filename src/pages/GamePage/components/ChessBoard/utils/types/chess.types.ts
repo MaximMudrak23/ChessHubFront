@@ -10,8 +10,11 @@ export type PieceCode = `${Color}${PieceName}`;
 
 export type Square = `${File}${Rank}`;
 
+export type GameStatus = 'playing' | 'stalemate' | 'checkmate';
+
 export type PieceType = {
     id: string;
     piece: PieceCode;
     square: Square;
+    hasMoved?: boolean;
 };

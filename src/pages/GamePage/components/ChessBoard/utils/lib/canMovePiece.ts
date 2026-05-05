@@ -17,7 +17,7 @@ export function canMovePiece(piece: PieceType, pieces: PieceType[], targetSquare
     if (pieceName === 'r') return canMoveRook(piece, pieces, targetSquare);
     if (pieceName === 'n') return canMoveKnight(piece, targetSquare);
     if (pieceName === 'b') return canMoveBishop(piece, pieces, targetSquare)
-    if (pieceName === 'k') return canMoveKing(piece, targetSquare);
+    if (pieceName === 'k') return canMoveKing(piece, pieces, targetSquare);
     if (pieceName === 'q') return canMoveQueen(piece, pieces, targetSquare);;
     
     return false;

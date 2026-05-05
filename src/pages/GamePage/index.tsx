@@ -11,15 +11,7 @@ export default function GamePage() {
     const currentUserSide = currentUser?.side ?? null;
     const perspective = currentUser?.side ?? 'white';
     const [currentTurn, setCurrentTurn] = useState<Side>('white');
-    const [moves, setMoves] = useState<Move[]>([
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-        {whiteMove: '', blackMove: ''},
-    ]);
+    const [moves, setMoves] = useState<Move[]>([]);
 
     return (
         <section className={s.game_page}>
