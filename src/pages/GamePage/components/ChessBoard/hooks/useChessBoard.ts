@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Side, Move } from "../../../utils/types/game.types";
 import type { Square, GameStatus } from "../utils/types/chess.types";
 import { initialPieces } from "../utils/data/initialPieces";
@@ -9,6 +9,7 @@ import { createMoveLabel } from "../utils/lib/createMoveLabel";
 import { isMoveSafe } from "../utils/lib/isMoveSafe";
 import { isKingInCheck } from '../utils/lib/isKingInCheck';
 import { hasLegalMoves } from "../utils/lib/hasLegalMoves";
+import { playSound } from "../utils/lib/playSound";
 
 // useChessBoard, обязан просто управлять кликами и дергать за функции как ниточки в зависимости от того, на что мы кликнули
 
@@ -17,6 +18,10 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
     const [lastMove, setLastMove] = useState<{from: Square, to: Square} | null>(null);
     const [markedSquares, setMarkedSquares] = useState<Square[]>([]);
+
+    function clearSelection() {
+        setSelectedPieceID(null);
+    }
 
     function selectPiece(pieceID: string) {
         if (gameStatus !== 'playing') return;
@@ -38,19 +43,25 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         movePiece(targetPiece.square);
     }
 
-    function movePiece(targetSquare: Square) {
-        if (gameStatus !== 'playing') return;
-        if (!selectedPieceID) return;
+    function movePiece(targetSquare: Square): boolean {
+        if (gameStatus !== 'playing') return false;
+        if (!selectedPieceID) return false;
 
         const movingPieceID = selectedPieceID;
 
         const selectedPiece = getPieceById(pieces, movingPieceID);
-        if (!selectedPiece) return;
+        if (!selectedPiece) return false;
 
         const fromSquare = selectedPiece.square;
 
-        if (!canMovePiece(selectedPiece, pieces, targetSquare)) return;
-        if (!isMoveSafe(selectedPiece, pieces, targetSquare)) return;
+        if (!canMovePiece(selectedPiece, pieces, targetSquare)) {
+            playSound('illegal');
+            return false;
+        }
+        if (!isMoveSafe(selectedPiece, pieces, targetSquare)) {
+            playSound('illegal');
+            return false;
+        }
         
         const targetPiece = getPieceBySquare(pieces, targetSquare);
 
@@ -63,14 +74,20 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         if (targetPiece) {
             const targetSide = getPieceSide(targetPiece);
 
-            if (targetSide === getPieceSide(selectedPiece)) return;
+            if (targetSide === getPieceSide(selectedPiece)) {
+                playSound('illegal');
+                return false;
+            }
 
             setPieces(cur => cur.filter(p => p.id !== targetPiece.id).map(p => p.id === movingPieceID ? { ...p, square: targetSquare, piece: promotedPiece ?? p.piece, hasMoved: true } : p));
+            playSound(promotedPiece ? 'promote' : 'capture');
+
             setLastMove({ from: fromSquare, to: targetSquare });
             addMove(moveLabel);
             setSelectedPieceID(null);
             setCurrentTurn(cur => cur === 'white' ? 'black' : 'white');
-            return;
+
+            return true;
         }
 
         setPieces(cur => cur.map(p => {
@@ -88,10 +105,14 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
 
             return p;
         }));
+        playSound(isCastling ? 'castle' : promotedPiece ? 'promote' : 'move-self');
+
         setLastMove({ from: fromSquare, to: targetSquare });
         addMove(moveLabel);
         setSelectedPieceID(null);
         setCurrentTurn(cur => cur === 'white' ? 'black' : 'white');
+
+        return true;
     }
 
     function addMove(newMove: string) {
@@ -126,9 +147,35 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
 
     const selectedPiece = selectedPieceID ? getPieceById(pieces, selectedPieceID) : null;
     const availableMoves = selectedPiece ? getAvailableMoves(selectedPiece, pieces) : [];
+    
     const isCheck = isKingInCheck(pieces, currentTurn);
     const hasMoves = hasLegalMoves(pieces, currentTurn);
     const gameStatus: GameStatus = isCheck && !hasMoves ? 'checkmate' : !isCheck && !hasMoves ? 'stalemate' : 'playing';
+
+    const prevCheckRef = useRef(false);
+    useEffect(() => {
+        if (isCheck && !prevCheckRef.current && gameStatus === 'playing') {
+            playSound('move-check');
+        }
+
+        prevCheckRef.current = isCheck;
+    }, [isCheck, gameStatus]);
+
+    const prevGameStatus = useRef<GameStatus>('playing');
+    useEffect(() => {
+        if (
+            (gameStatus === 'checkmate' || gameStatus === 'stalemate') &&
+            prevGameStatus.current === 'playing'
+        ) {
+            playSound('game-end');
+        }
+
+        prevGameStatus.current = gameStatus;
+    }, [gameStatus]);
+
+    // useEffect(() => {
+    //     playSound('game-start');
+    // }, []);
 
     return {
         pieces,
@@ -140,8 +187,10 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         currentTurn,
         lastMove,
         markedSquares,
+        setMarkedSquares,
         toggleMarkedSquare,
         isCheck,
         gameStatus,
+        clearSelection,
     };
 }

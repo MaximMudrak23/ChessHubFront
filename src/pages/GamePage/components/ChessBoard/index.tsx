@@ -5,6 +5,7 @@ import GameResult from './components/GameResult'
 import useChessBoard from './hooks/useChessBoard'
 import type { Side, Move } from '../../utils/types/game.types'
 import type { Square } from './utils/types/chess.types'
+import { useState, useEffect, useRef } from 'react';
 
 type Props = {
     perspective: Side;
@@ -23,9 +24,11 @@ export default function ChessBoard(props: Props) {
         availableMoves,
         lastMove,
         markedSquares,
+        setMarkedSquares,
         toggleMarkedSquare,
         isCheck,
         gameStatus,
+        clearSelection,
     } = useChessBoard(props.currentUserSide, props.currentTurn, props.setCurrentTurn, props.setMoves);
     
     function handleSquareClick(e: React.MouseEvent, square: Square) {
@@ -34,14 +37,31 @@ export default function ChessBoard(props: Props) {
             toggleMarkedSquare(square);
             return;
         }
-        movePiece(square);
+        
+        const moved = movePiece(square);
+        if (!moved) { clearSelection(); }
     }
     
     const isGameEnded = gameStatus === 'stalemate' || gameStatus === 'checkmate';
     const winnerSide = gameStatus === 'checkmate' ? props.currentTurn === 'white' ? 'black' : 'white' : null;
 
+    const boardRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        function handleDocumentClick(e: MouseEvent) {
+            if (!boardRef.current) return;
+
+            if (!boardRef.current.contains(e.target as Node)) {
+                clearSelection();
+                setMarkedSquares([]);
+            }
+        }
+
+        document.addEventListener('click', handleDocumentClick);
+        return () => { document.removeEventListener('click', handleDocumentClick); };
+    }, [clearSelection]);
+
     return (
-        <div className={s.chess_board}>
+        <div className={s.chess_board} ref={boardRef}>
             <GameResult
                 isGameEnded={isGameEnded}
                 gameStatus={gameStatus}

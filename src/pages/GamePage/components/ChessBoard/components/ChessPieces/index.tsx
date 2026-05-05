@@ -20,7 +20,6 @@ export default function ChessPieces(props: Props) {
             props.onSquareClick(e, square);
             return;
         }
-
         props.selectPiece(id);
     }
 
