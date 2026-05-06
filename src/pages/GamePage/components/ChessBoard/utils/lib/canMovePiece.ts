@@ -8,12 +8,17 @@ import { canMovePawn } from './moveRules/canMovePawn';
 
 // Возвращает тру если так можно ходить и фолс если незя
 
-export function canMovePiece(piece: PieceType, pieces: PieceType[], targetSquare: Square) {
+export function canMovePiece(
+    piece: PieceType,
+    pieces: PieceType[],
+    targetSquare: Square,
+    lastMove?: { piece: string; from: Square; to: Square } | null
+) {
     if (piece.square === targetSquare) return false;
     
     const pieceName = piece.piece[1];
 
-    if (pieceName === 'p') return canMovePawn(piece, pieces, targetSquare);
+    if (pieceName === 'p') return canMovePawn(piece, pieces, targetSquare, lastMove);
     if (pieceName === 'r') return canMoveRook(piece, pieces, targetSquare);
     if (pieceName === 'n') return canMoveKnight(piece, targetSquare);
     if (pieceName === 'b') return canMoveBishop(piece, pieces, targetSquare)
