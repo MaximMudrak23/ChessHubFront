@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { Side, Move } from "../../../utils/types/game.types";
-import type { Square, GameStatus } from "../utils/types/chess.types";
+import type { Square, GameStatus, PieceType, PieceCode } from "../utils/types/chess.types";
 import { initialPieces } from "../utils/data/initialPieces";
 import { getPieceSide, getPieceById, getPieceBySquare } from "../utils/lib/getPiece";
 import { canMovePiece } from "../utils/lib/canMovePiece";
@@ -16,7 +16,7 @@ import { playSound } from "../utils/lib/playSound";
 export default function useChessBoard(currentUserSide: Side | null, currentTurn: Side, setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>, setMoves: React.Dispatch<React.SetStateAction<Move[]>>) {
     const [pieces, setPieces] = useState(initialPieces);
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
-    const [lastMove, setLastMove] = useState<{ piece: string; from: Square; to: Square; } | null>(null);
+    const [lastMove, setLastMove] = useState<{ piece: PieceCode; from: Square; to: Square; } | null>(null);
     const [markedSquares, setMarkedSquares] = useState<Square[]>([]);
 
     function clearSelection() {
@@ -51,7 +51,8 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         const selectedPiece = getPieceById(pieces, movingPieceID);
         if (!selectedPiece) return false;
 
-        const fromSquare = selectedPiece.square;
+        const movePieceData: PieceType = selectedPiece;
+        const fromSquare = movePieceData.square;
 
         if (!canMovePiece(selectedPiece, pieces, targetSquare, lastMove)) {
             playSound('illegal');
@@ -68,10 +69,51 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         const enPassantCapturedSquare = isEnPassant ? `${targetSquare[0]}${fromSquare[1]}` as Square : null;
 
         const isCapture = Boolean(targetPiece);
-        const moveLabel = createMoveLabel(selectedPiece, targetSquare, isCapture);
         const promotedPiece = getPromotedPiece(selectedPiece, targetSquare);
 
         const isCastling = selectedPiece.piece[1] === 'k' && Math.abs(targetSquare.charCodeAt(0) - fromSquare.charCodeAt(0)) === 2;
+
+        function getNextPieces(cur: PieceType[]) {
+            return cur
+                .filter(p => p.id !== targetPiece?.id)
+                .filter(p => p.square !== enPassantCapturedSquare)
+                .map(p => {
+                    if (p.id === movingPieceID) {
+                        return {
+                            ...p,
+                            square: targetSquare,
+                            piece: (promotedPiece ?? p.piece) as PieceCode,
+                            hasMoved: true,
+                        };
+                    }
+
+                    if (isCastling) {
+                        if (targetSquare === 'g1' && p.square === 'h1') return { ...p, square: 'f1' as Square, hasMoved: true };
+                        if (targetSquare === 'g8' && p.square === 'h8') return { ...p, square: 'f8' as Square, hasMoved: true };
+                        if (targetSquare === 'c1' && p.square === 'a1') return { ...p, square: 'd1' as Square, hasMoved: true };
+                        if (targetSquare === 'c8' && p.square === 'a8') return { ...p, square: 'd8' as Square, hasMoved: true };
+                    }
+
+                    return p;
+                });
+        }
+
+        function getMoveLabel(nextPieces: PieceType[]) {
+            const nextTurn = currentTurn === 'white' ? 'black' : 'white';
+            const givesCheck = isKingInCheck(nextPieces, nextTurn);
+            const isMate = givesCheck && !hasLegalMoves(nextPieces, nextTurn);
+
+            return createMoveLabel({
+                piece: movePieceData,
+                pieces,
+                targetSquare,
+                isCapture: isCapture || isEnPassant,
+                isCastling,
+                promotedPiece,
+                isCheck: givesCheck,
+                isCheckmate: isMate,
+            });
+        }
 
         if (targetPiece) {
             const targetSide = getPieceSide(targetPiece);
@@ -81,7 +123,10 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
                 return false;
             }
 
-            setPieces(cur => cur.filter(p => p.id !== targetPiece.id).map(p => p.id === movingPieceID ? { ...p, square: targetSquare, piece: promotedPiece ?? p.piece, hasMoved: true } : p));
+            const nextPieces = getNextPieces(pieces);
+            const moveLabel = getMoveLabel(nextPieces);
+
+            setPieces(nextPieces);
             playSound(promotedPiece ? 'promote' : 'capture');
 
             setLastMove({
@@ -96,21 +141,10 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
             return true;
         }
 
-        setPieces(cur => cur.filter(p => p.square !== enPassantCapturedSquare).map(p => {
-            if (p.id === movingPieceID) {
-                return { ...p, square: targetSquare, piece: promotedPiece ?? p.piece, hasMoved: true };
-            }
+        const nextPieces = getNextPieces(pieces);
+        const moveLabel = getMoveLabel(nextPieces);
 
-            if (isCastling) {
-                if (targetSquare === 'g1' && p.square === 'h1') return { ...p, square: 'f1', hasMoved: true };
-                if (targetSquare === 'g8' && p.square === 'h8') return { ...p, square: 'f8', hasMoved: true };
-
-                if (targetSquare === 'c1' && p.square === 'a1') return { ...p, square: 'd1', hasMoved: true };
-                if (targetSquare === 'c8' && p.square === 'a8') return { ...p, square: 'd8', hasMoved: true };
-            }
-
-            return p;
-        }));
+        setPieces(nextPieces);
         playSound(isCastling ? 'castle' : promotedPiece ? 'promote' : isEnPassant ? 'capture' : 'move-self');
 
         setLastMove({
@@ -143,7 +177,7 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         setMarkedSquares(cur => cur.includes(square) ? cur.filter(s => s !== square) : [...cur, square]);
     }
 
-    function getPromotedPiece(piece: typeof selectedPiece, targetSquare: Square) {
+    function getPromotedPiece(piece: PieceType | null, targetSquare: Square): PieceCode | null {
         if (!piece) return null;
         if (piece.piece[1] !== 'p') return null;
 

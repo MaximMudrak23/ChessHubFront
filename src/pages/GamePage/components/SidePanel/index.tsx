@@ -1,17 +1,9 @@
 import s from './styles.module.scss'
-import Button from '../../../../components/UI/Button'
 import UserCard from '../../../../components/User/UserCard';
 import MoveRow from './components/MoveRow';
 import type { Players, Side, Move } from '../../utils/types/game.types';
 import { getSortedUsers } from './utils/getSortedUsers';
 import { useEffect, useRef } from 'react';
-
-const actionButtons = [
-    {icon: '/all/ar1.svg', onClick: () => {}},
-    {icon: '/all/ar2.svg', onClick: () => {}},
-    {icon: '/all/flag.svg', onClick: () => {}},
-    {icon: '/all/draw.svg', onClick: () => {}},
-];
 
 type Props = {
     players: Players;
@@ -58,18 +50,6 @@ export default function SidePanel(props: Props) {
                         />
                     ))}
                 </div>
-            </div>
-
-            <div className={s.buttons_folder}>
-                {actionButtons.map(({icon, onClick}, i) => (
-                    <Button
-                        key={i}
-                        icon={icon}
-                        variant={'black'}
-                        onClick={onClick}
-                        className={s.button}
-                    />
-                ))}
             </div>
         </div>
     )
