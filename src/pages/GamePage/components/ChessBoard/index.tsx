@@ -5,7 +5,7 @@ import GameResult from './components/GameResult'
 import useChessBoard from './hooks/useChessBoard'
 import type { Side, Move } from '../../utils/types/game.types'
 import type { Square } from './utils/types/chess.types'
-import { useState, useEffect, useRef } from 'react';
+import {useEffect, useRef, useState } from 'react';
 
 type Props = {
     perspective: Side;
@@ -60,8 +60,43 @@ export default function ChessBoard(props: Props) {
         return () => { document.removeEventListener('click', handleDocumentClick); };
     }, [clearSelection]);
 
+    const [hoveredSquare, setHoveredSquare] = useState<Square | null>(null);
+    const hoveredSquareRef = useRef<Square | null>(null);
+    function handleBoardMouseMove(e: React.MouseEvent) {
+        if (!boardRef.current) return;
+
+        const rect = boardRef.current.getBoundingClientRect();
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const size = rect.width / 8;
+
+        const col = Math.floor(x / size);
+        const row = Math.floor(y / size);
+
+        if (col < 0 || col >= 8 || row < 0 || row >= 8) {
+            hoveredSquareRef.current = null;
+            setHoveredSquare(null);
+            return;
+        }
+
+        const realCol = props.perspective === 'black' ? 7 - col : col;
+        const realRow = props.perspective === 'black' ? 7 - row : row;
+
+        const square = `${'abcdefgh'[realCol]}${8 - realRow}` as Square;
+
+        hoveredSquareRef.current = square;
+        setHoveredSquare(square);
+    }
+
+    function handleBoardMouseLeave() {
+        hoveredSquareRef.current = null;
+        setHoveredSquare(null);
+    }
+
     return (
-        <div className={s.chess_board} ref={boardRef}>
+        <div className={s.chess_board} ref={boardRef} onMouseMove={handleBoardMouseMove} onMouseLeave={handleBoardMouseLeave}>
             <GameResult
                 isGameEnded={isGameEnded}
                 gameStatus={gameStatus}
@@ -75,6 +110,7 @@ export default function ChessBoard(props: Props) {
                 markedSquares={markedSquares}
                 pieces={pieces}
                 onSquareClick={handleSquareClick}
+                hoveredSquare={hoveredSquare}
             />
             <ChessPieces
                 pieces={pieces}
@@ -83,6 +119,9 @@ export default function ChessBoard(props: Props) {
                 onSquareClick={handleSquareClick}
                 isCheck={isCheck}
                 currentTurn={props.currentTurn}
+                movePiece={movePiece}
+                hoveredSquareRef={hoveredSquareRef}
+                currentUserSide={props.currentUserSide}
             />
         </div>
     )

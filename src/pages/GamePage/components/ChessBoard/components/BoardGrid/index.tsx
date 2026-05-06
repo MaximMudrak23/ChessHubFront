@@ -14,6 +14,7 @@ type Props = {
     markedSquares: Square[];
     pieces: PieceType[];
     onSquareClick: (e: React.MouseEvent, square: Square) => void;
+    hoveredSquare: Square | null;
 };
 
 export default function BoardGrid(props: Props) {
@@ -54,7 +55,7 @@ export default function BoardGrid(props: Props) {
 
                 return <div
                     key={square}
-                    className={clsx(s.cell, isLight ? s.lightCell : s.darkCell, square === selectedSquare && s.selected, (props.lastMove?.from === square || props.lastMove?.to === square) && s.lastMove, props.markedSquares.includes(square) && s.marked)}
+                    className={clsx(s.cell, isLight ? s.lightCell : s.darkCell, square === selectedSquare && s.selected, (props.lastMove?.from === square || props.lastMove?.to === square) && s.lastMove, props.markedSquares.includes(square) && s.marked, square === props.hoveredSquare && s.hovered)}
                     data-square={square}
                     data-rank={rank}
                     data-file={file}

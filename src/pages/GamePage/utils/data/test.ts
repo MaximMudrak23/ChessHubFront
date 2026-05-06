@@ -2,7 +2,7 @@ import type { Player, Players } from "../types/game.types";
 
 export const whitePlayer: Player = {
     side: 'white',
-    isCurrentUser: false,
+    isCurrentUser: true,
     imgURL: '/special/ygritte.jpg',
     frameURL: '/steam/steam2.png',
     userName: "Snow's Mirror",
@@ -10,7 +10,7 @@ export const whitePlayer: Player = {
 };
 export const blackPlayer: Player = {
     side: 'black',
-    isCurrentUser: true,
+    isCurrentUser: false,
     imgURL: '/special/ygritte.png',
     frameURL: '/steam/steam2.png',
     userName: 'Snow',

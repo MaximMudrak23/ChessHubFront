@@ -32,8 +32,7 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
 
         const targetSide = getPieceSide(targetPiece);
 
-        // if (targetSide === currentUserSide) {
-        if (targetSide) {
+        if (targetSide === currentUserSide) {
             if (targetSide !== currentTurn) return;
             
             setSelectedPieceID(pieceID);
@@ -43,11 +42,11 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         movePiece(targetPiece.square);
     }
 
-    function movePiece(targetSquare: Square): boolean {
+    function movePiece(targetSquare: Square, pieceID = selectedPieceID): boolean {
         if (gameStatus !== 'playing') return false;
-        if (!selectedPieceID) return false;
+        if (!pieceID) return false;
 
-        const movingPieceID = selectedPieceID;
+        const movingPieceID = pieceID;
 
         const selectedPiece = getPieceById(pieces, movingPieceID);
         if (!selectedPiece) return false;
