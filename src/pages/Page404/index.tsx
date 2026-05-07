@@ -2,7 +2,8 @@ import s from './styles.module.scss'
 import Space from './components/Space'
 import Planet from './components/Planet'
 import Text from './components/Text'
-import House from './House.svg'
+import Button from '@/components/UI/Button'
+import { SVG } from '@/constants/paths'
 
 export default function Page404() {
     return (
@@ -10,14 +11,14 @@ export default function Page404() {
             <Space />
             <Planet />
             <Text />
-            {/* <Button
+            <Button
                 text={'Go Home'}
-                imgURL={House}
-                variant={'txtimg'}
-                shape={'notfound_shape'}
-                animation={'notfound_animation'}
+                icon={SVG.house}
+                variant={'error'}
+                animation={'error'}
+                className={s.button}
                 onClick={()=>''} 
-            /> */}
+            />
         </main>
     )
 }

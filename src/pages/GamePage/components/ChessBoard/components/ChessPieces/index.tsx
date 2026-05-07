@@ -4,6 +4,7 @@ import type { Side } from '../../../../utils/types/game.types';
 import { cellSize, squareToPosition } from '../../utils/lib/board';
 import { getPieceSide } from '../../utils/lib/getPiece';
 import { useState } from 'react';
+import { CHESS_PIECES } from '@/constants/paths';
 import clsx from 'clsx';
 
 type Props = {
@@ -108,7 +109,7 @@ export default function ChessPieces(props: Props) {
                 return (
                     <img
                         key={id}
-                        src={`/chessPieces/${piece}.png`}
+                        src={CHESS_PIECES.default[piece]}
                         alt={`${piece} on ${square}`}
                         draggable={false}
                         className={clsx(s.piece, isCheckedKing && s.check, noTransitionID === id && s.noTransition)}

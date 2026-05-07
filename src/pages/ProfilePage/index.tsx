@@ -4,31 +4,14 @@ import UserAvatar from '../../components/User/UserAvatar'
 import UserName from '../../components/User/UserName'
 import Button from '../../components/UI/Button'
 import ProfilePlate from './components/ProfilePlate'
+import { useParams } from 'react-router-dom'
 
 import { globalState } from '../../../GLOBALSTATE'
 
-function getButtonObj(isMyProfile: boolean, isFriend: boolean) {
-    if (isMyProfile) return {
-        text: 'Edit Profile',
-        isActive: true,
-        onClick: ()=>{console.log('Edit')}
-    };
-
-    if (isFriend) return {
-        text: "Delete from friendlist",
-        isActive: true,
-        onClick: ()=>{console.log('Delete')}
-    };
-    
-    return {
-        text: "Add Friend",
-        isActive: true,
-        onClick: ()=>{console.log('Add')}
-    }
-}
 
 export default function ProfilePage() {
-    const result = getButtonObj(false, true);
+    const { id } = useParams();
+    const isMyProfile =  id === globalState.id; 
 
     return (
         <>
@@ -65,13 +48,13 @@ export default function ProfilePage() {
                             text={globalState.profileSongName}
                             imgURL={globalState.profileSongAvatar}
                         />
-                        <Button
-                            text={result.text}
-                            active={result.isActive}
+                        {isMyProfile && <Button
+                            text={'Edit Profile'}
+                            active={true}
                             variant='profile'
                             animation='white-hover'
-                            onClick={result.onClick}
-                        />
+                            onClick={() => console.log('Edit')}
+                        />}
                     </div>
                 </header>
             </SteamContentWrapper>

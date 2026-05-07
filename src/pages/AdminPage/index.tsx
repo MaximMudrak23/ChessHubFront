@@ -62,7 +62,7 @@ export default function AdminPage() {
                 </header>
 
                 <div className={s.cards}>
-                    <Card
+                    {/* <Card
                         imgURL={'/all/i1.png'}
                         frameURL={'/steam/steam2.png'}
                         username={'Recront'}
@@ -73,7 +73,7 @@ export default function AdminPage() {
                         role={'User'}
                         lastSeen={'Online'}
                         isBanned={false} 
-                    />
+                    /> */}
                 </div>
             </div>
         </section>

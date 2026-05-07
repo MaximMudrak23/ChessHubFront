@@ -4,6 +4,7 @@ import MoveRow from './components/MoveRow';
 import type { Players, Side, Move } from '../../utils/types/game.types';
 import { getSortedUsers } from './utils/getSortedUsers';
 import { useEffect, useRef } from 'react';
+import { SVG } from '@/constants/paths';
 
 type Props = {
     players: Players;
@@ -39,7 +40,9 @@ export default function SidePanel(props: Props) {
             </div>
 
             <div className={s.moves_folder}>
-                <div className={s.title}> <img src="/all/chess.svg" alt="Moves Folder Title Icon" draggable={false} /> </div>
+                <div className={s.title}>
+                    <img src={SVG.chessboard} alt="Moves Folder Title Icon" draggable={false} />
+                </div>
                 <div className={s.moves} ref={movesRef}>
                     {props.moves && props.moves.map(({whiteMove, blackMove}, i) => (
                         <MoveRow

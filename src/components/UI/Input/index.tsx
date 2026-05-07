@@ -1,6 +1,7 @@
 import s from './styles.module.scss'
 import a from './animations.module.scss'
 import { useState } from 'react';
+import { SVG } from '@/constants/paths';
 import clsx from 'clsx';
 
 type Variant = 'grey';
@@ -37,10 +38,7 @@ export default function Input(propsOBJ: Props) {
                 className={`${s.eyeIconBlock} ${isPasswordVisible && s.show}`}
                 onClick={() => setIsPasswordVisible(x => !x)}
             >
-                <img
-                    src="/all/eye.svg"
-                    alt="(Show | Hide) Password"
-                />
+                <img src={SVG.eye} alt="(Show | Hide) Password" />
             </div>}
 
             <input

@@ -6,6 +6,7 @@ import BurgerIcon from './components/BurgerIcon'
 import Aside from './components/Aside'
 import { globalState } from '../../../GLOBALSTATE'
 import { useEffect, useState } from 'react'
+import { SVG } from '@/constants/paths'
 
 export default function Header() {
     const [isOpen,setIsOpen] = useState<boolean>(false);
@@ -30,9 +31,9 @@ export default function Header() {
                 />
                 
                 <OptionsContainer className={s.header_options_container}>
-                    <Option img='/all/SearchIcon.svg' text='Search' variation='header' />
-                    <Option img='/all/ProfileIcon.svg' text='Profile' variation='header' />
-                    <Option img='/all/MenuIcon.svg' text='Main' variation='header' />
+                    <Option img={SVG.searchIcon} text='Search' variation='header' />
+                    <Option img={SVG.profileIcon} text='Profile' variation='header' />
+                    <Option img={SVG.menuIcon} text='Main' variation='header' />
                     <BurgerIcon onClick={()=>setIsOpen(x => !x)} />
                 </OptionsContainer>
             </header>

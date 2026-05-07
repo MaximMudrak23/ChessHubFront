@@ -29,11 +29,11 @@
     }
 
     .user_buttons {
-        padding: 0 12px;
+        padding: 12px;
         
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 12px;
 
         & > * {

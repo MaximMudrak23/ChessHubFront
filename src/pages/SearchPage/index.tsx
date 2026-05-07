@@ -53,9 +53,10 @@ export default function SearchPage() {
     return (  
         <SteamContentWrapper styleProps={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px'}}>
             <Input
+                id='search-input'
                 value={value}
                 onChangeHandler={v =>setValue(v)}
-                variant='search'
+                variant='grey'
                 placeholderText='Who you want to find?'
                 styleProps={{
                     width: '85%',

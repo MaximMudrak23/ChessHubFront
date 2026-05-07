@@ -3,6 +3,7 @@ import { useState } from 'react'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import EventScreen from './components/EventScreen';
 import OptionsContainer from '../../components/Modules/OptionsContainer';
+import { SVG } from '@/constants/paths';
 
 const OPTIONS = [
     {name: 'Board & Figures'},
@@ -10,7 +11,7 @@ const OPTIONS = [
     {name: 'Profile'},
     {name: 'Account'},
     {name: 'Languages'},
-    {name: 'Labs', imgURL:'/all/labs.svg'},
+    {name: 'Labs', imgURL: SVG.labsIcon},
 ];
 
 export default function OptionsPage() {
@@ -19,7 +20,7 @@ export default function OptionsPage() {
     return (
         <SteamContentWrapper styleProps={{backgroundColor: 'transparent'}}>
             <div className={s.title}>
-                <img src="/all/gear.svg" alt="Gear" draggable={false} />
+                <img src={SVG.gear} alt="Gear" draggable={false} />
                 <h1>Options</h1>
             </div>
 
