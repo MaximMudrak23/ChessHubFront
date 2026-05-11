@@ -2,6 +2,7 @@ import s from './styles.module.scss'
 import UserAvatar from '../UserAvatar'
 import UserName from '../UserName'
 import clsx from 'clsx';
+import type { IconType } from '@/types/user.types'
 
 type Props = 
     | {
@@ -9,7 +10,7 @@ type Props =
         imgURL?: string;
         frameURL?: string;
         userName: string;
-        userIcons?: string[];
+        userIcons?: IconType[];
         userRole: string;
     }
     | {
@@ -17,7 +18,7 @@ type Props =
         imgURL?: string;
         frameURL?: string;
         userName: string;
-        userIcons?: string[];
+        userIcons?: IconType[];
         userElo: number;
         isActive?: boolean;
     }

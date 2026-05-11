@@ -4,7 +4,7 @@ import { SVG, AVATAR_FRAMES, PROFILE_BACKGROUNDS, BOARDS, BACKGROUNDS } from "@/
 export const globalState = {
     id: 'USER1',
     name: 'Recront',
-    userIcons: [SVG.checkmark],
+    userIcons: [{title: 'Developer', iconURL: SVG.checkmark}],
     description: 'Welcome to my profile',
     elo: 2000,
     avatarURL: '/other/steamgif.gif',

@@ -1,3 +1,5 @@
+import type { IconType } from '@/types/user.types'
+
 export type Side = 'white' | 'black';
 
 export type Player = {
@@ -7,7 +9,7 @@ export type Player = {
     frameURL?: string;
     userName: string;
     userElo: number;
-    userIcons?: string[];
+    userIcons?: IconType[];
 };
 
 export type Players = {
