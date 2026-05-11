@@ -18,7 +18,7 @@ export default function Page404() {
                 text={'Go Home'}
                 icon={SVG.house}
                 variant={'error'}
-                animation={['hover-icon', 'flying']}
+                animation={['hover-icon', 'floating']}
                 className={s.button}
                 onClick={() => navigate('/main')} 
             />

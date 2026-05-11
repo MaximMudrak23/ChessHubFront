@@ -48,16 +48,3 @@
         }
     }
 }
-
-.floating {
-    position: fixed;
-    right: 32px;
-    bottom: 32px;
-    z-index: 9999;
-
-    @media (max-width: 600px) {
-        width: 75%;
-        right: 50%;
-        transform: translateX(50%);
-    }
-}

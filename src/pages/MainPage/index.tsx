@@ -1,3 +1,4 @@
+import s from './styles.module.scss'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import Button from '../../components/UI/Button'
 
@@ -11,14 +12,7 @@ export default function MainPage() {
                 text='Find Game'
                 variant='green'
                 animation='main'
-                adaptiveMode='floating'
-                styleProps={{
-                    width: '375px',
-                    height: '75px',
-                    borderRadius: '5px',
-                    padding: '16px 24px',
-                    fontSize: '1.6rem',
-                }}
+                className={s.floating}
                 onClick={()=>''}
             />
         </>

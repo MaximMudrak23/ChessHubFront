@@ -3,8 +3,7 @@ import a from './animations.module.scss'
 import clsx from 'clsx';
 
 type Variant = 'none' | 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
-type Animation = 'game' | 'main' | 'flying' | 'mini-jump' | 'white-hover'| 'hover-icon';
-type AdaptiveMode = 'floating';
+type Animation = 'game' | 'main' | 'floating' | 'mini-jump' | 'white-hover'| 'hover-icon';
 
 type Props = {
     text?: string;
@@ -12,7 +11,6 @@ type Props = {
 
     variant: Variant;
     animation?: Animation | Animation[];
-    adaptiveMode?: AdaptiveMode;
     active?: boolean;
 
     className?: string;
@@ -32,7 +30,6 @@ export default function Button(propsOBJ: Props) {
                 s[`button--${propsOBJ.variant}`],
                 animations.map(anim => a[`animation--${anim}`]),
                 propsOBJ.active === false && s.inactive,
-                propsOBJ.adaptiveMode === 'floating' && s.floating
             )}
             disabled={propsOBJ.active === false}
             style={propsOBJ.styleProps}

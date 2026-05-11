@@ -1,0 +1,19 @@
+.floating {
+    width: 375px;
+    height: 75px;
+
+    border-radius: 5px;
+    padding: 16px 24px;
+    font-size: 1.6rem;
+
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+    z-index: 9998;
+
+    @media (max-width: 600px) {
+        width: 75%;
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
