@@ -2,19 +2,39 @@ import s from './styles.module.scss'
 import Option from '../Option';
 import OptionsContainer from '../OptionsContainer';
 import CloseIcon from '../CloseIcon';
-import { SVG } from '@/constants/paths';
+import { useHeaderOptions } from '../../hooks/useHeaderOptions';
 
-export default function Aside({isOpen, setIsOpen}: {isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
+type Props = {
+    isOpen: boolean,
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+export default function Aside(props: Props) {
+    const options = useHeaderOptions();
+
     return (
         <>
-            <div className={`${s.aside_background} ${isOpen ? s.bc_open : ''}`} onClick={()=>setIsOpen(x => !x)} />
+            <div className={`${s.aside_background} ${props.isOpen ? s.bc_open : ''}`} onClick={()=>props.setIsOpen(x => !x)} />
             
-            <aside className={`${s.aside} ${isOpen ? s.open : ''}`}>
+            <aside
+                className={`${s.aside} ${props.isOpen ? s.open : ''}`}
+                inert={!props.isOpen ? true : undefined}
+            >
                 <OptionsContainer className={s.aside_options_container}>
-                    <div className={s.close_icon}><CloseIcon onClick={()=>setIsOpen(x => !x)} /></div>
-                    <Option img={SVG.searchIcon} text='Search' variation='aside' />
-                    <Option img={SVG.profileIcon} text='Profile' variation='aside' />
-                    <Option img={SVG.menuIcon} text='Menu' variation='aside' />
+                    <div className={s.close_icon}>
+                        <CloseIcon
+                            onClick={() => props.setIsOpen(x => !x)}
+                        />
+                    </div>
+                    {options.map(o => (
+                        <Option
+                            key={o.text}
+                            img={o.img}
+                            text={o.text}
+                            variation='aside'
+                            onClick={o.onClick}
+                        />
+                    ))}
                 </OptionsContainer>
             </aside>
         </>

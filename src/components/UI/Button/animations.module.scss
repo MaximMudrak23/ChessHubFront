@@ -10,7 +10,7 @@
 
         &:hover { filter: brightness(0.8); }
     }
-    &--error {
+    &--flying {
         cursor: default;
         animation: flying 2.5s ease-in-out infinite;
 
@@ -34,6 +34,29 @@
 
         &:hover {
             box-shadow: 0 0 0 2px #FFF;
+        }
+    }
+    &--hover-icon {
+        --opacity-time: 0.32s;
+        position: relative;
+
+        &:hover {
+            span { opacity: 1; }
+            img { opacity: 0; }
+        }
+
+        span {
+            transition: opacity var(--opacity-time) ease;
+            opacity: 0;
+        }
+        img {
+            transition: opacity var(--opacity-time) ease;
+            opacity: 1;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
         }
     }
 }

@@ -4,8 +4,11 @@ import Planet from './components/Planet'
 import Text from './components/Text'
 import Button from '@/components/UI/Button'
 import { SVG } from '@/constants/paths'
+import { useNavigate } from 'react-router-dom'
 
 export default function Page404() {
+    const navigate = useNavigate();
+
     return (
         <main className={s.page__404}>
             <Space />
@@ -15,9 +18,9 @@ export default function Page404() {
                 text={'Go Home'}
                 icon={SVG.house}
                 variant={'error'}
-                animation={'error'}
+                animation={['hover-icon', 'flying']}
                 className={s.button}
-                onClick={()=>''} 
+                onClick={() => navigate('/main')} 
             />
         </main>
     )

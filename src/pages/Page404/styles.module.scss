@@ -10,9 +10,8 @@
     justify-content: center;
 }
 
-// temp fix
 .button {
-    padding: 12px;
+    padding: 16px;
 
     font-weight: 500;
 
@@ -20,4 +19,14 @@
     align-items: center;
     flex-direction: row-reverse;
     gap: 8px;
+
+    cursor: pointer;
+
+    img { height: 65%; }
+    span {
+        background: linear-gradient(to bottom, #C9C5D7, #594D82);
+        
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 }

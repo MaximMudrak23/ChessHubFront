@@ -4,34 +4,35 @@ type Props = {
     img: string;
     text?: string;
     variation: 'header' | 'aside';
+    onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function Option({img, text, variation}: Props) {
-    const classVariation = variation === 'header' ? s.option_header : s.option_aside;
+export default function Option(props: Props) {
+    const classVariation = props.variation === 'header' ? s.option_header : s.option_aside;
     return (
-       <div className={`${s.option_wrapper} ${classVariation}`}>
-            {variation === 'header' && 
+       <button className={`${s.option_wrapper} ${classVariation}`} onClick={props.onClick}>
+            {props.variation === 'header' && 
                 <>
                     <img
                         style={{width: '36px', height: '36px'}}
-                        src={img}
+                        src={props.img}
                         alt="Header Option"
                         draggable={false}
                     />
-                    {text && <p>{text}</p>}
+                    {props.text && <p>{props.text}</p>}
                 </>
             }
-            {variation === 'aside' && 
+            {props.variation === 'aside' && 
                 <>
                     <img
                         style={{width: '36px', height: '36px'}}
-                        src={img}
+                        src={props.img}
                         alt="Aside Option"
                         draggable={false}
                     />
-                    {text && <p>{text}</p>}
+                    {props.text && <p>{props.text}</p>}
                 </>
             }
-        </div>
+        </button>
     )
 }

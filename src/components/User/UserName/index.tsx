@@ -79,7 +79,11 @@ export default function UserName(props: Props) {
             </span>
 
             {props.Icons?.slice(0, visibleIconsCount).map((icon, i) => (
-                <img key={i} src={icon} alt="" />
+                <img
+                    key={i}
+                    src={icon}
+                    alt={`Icon ${i}`}
+                />
             ))}
         </div>
     )

@@ -4,20 +4,22 @@ import OptionsContainer from './components/OptionsContainer'
 import Option from './components/Option'
 import BurgerIcon from './components/BurgerIcon'
 import Aside from './components/Aside'
-import { globalState } from '../../../GLOBALSTATE'
 import { useEffect, useState } from 'react'
-import { SVG } from '@/constants/paths'
+import { useHeaderOptions } from './hooks/useHeaderOptions'
+
+import { globalState } from '../../../GLOBALSTATE'
 
 export default function Header() {
     const [isOpen,setIsOpen] = useState<boolean>(false);
-    
     const [width,setWidth] = useState(window.innerWidth);
+    const options = useHeaderOptions();
+    
     useEffect(()=>{
         const onResise = function() {setWidth(window.innerWidth)};
         window.addEventListener('resize', onResise);
         if (width > 760) {setIsOpen(false)};
         return () => window.removeEventListener('resize', onResise);
-    });
+    }, []);
     return (
         <>
             <header className={s.header}>
@@ -31,13 +33,26 @@ export default function Header() {
                 />
                 
                 <OptionsContainer className={s.header_options_container}>
-                    <Option img={SVG.searchIcon} text='Search' variation='header' />
-                    <Option img={SVG.profileIcon} text='Profile' variation='header' />
-                    <Option img={SVG.menuIcon} text='Main' variation='header' />
-                    <BurgerIcon onClick={()=>setIsOpen(x => !x)} />
+                    {options.map(o => (
+                        <Option
+                            key={o.text}
+                            img={o.img}
+                            text={o.text}
+                            variation='header'
+                            onClick={o.onClick}
+                        />
+                    ))}
+                    <BurgerIcon
+                        isOpen={isOpen}
+                        onClick={()=>setIsOpen(x => !x)}
+                    />
                 </OptionsContainer>
             </header>
-            <Aside isOpen={isOpen} setIsOpen={setIsOpen} />
+
+            <Aside
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+            />
         </>
     )
 }

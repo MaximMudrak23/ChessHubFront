@@ -1,5 +1,8 @@
 .option_wrapper {
     position: relative;
+
+    border: 0;
+    background-color: transparent;
 }
 
 .option_header {
@@ -21,7 +24,7 @@
         pointer-events: none;
     }
 
-    &:hover {
+    &:hover, &:focus-visible {
         p {
             opacity: 1;
             top: 175%;

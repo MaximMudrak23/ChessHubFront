@@ -67,7 +67,8 @@ export const SVG = {
     menuIcon: '/svg/menu-icon.svg',
     more: '/svg/more.svg',
     optionIcon: '/svg/option-icon.svg',
-    profileIcon: '/svg/profile-icon.svg',
+    profileIcon: '/svg/user-profile.svg',
     rightArrow: '/svg/right-arrow.svg',
-    searchIcon: '/svg/search-icon.svg',
+    searchIcon: '/svg/user-search.svg',
+    logoutIcon: '/svg/user-logout.svg',
 };

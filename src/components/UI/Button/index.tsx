@@ -3,7 +3,7 @@ import a from './animations.module.scss'
 import clsx from 'clsx';
 
 type Variant = 'none' | 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
-type Animation = 'game' | 'main' | 'error' | 'mini-jump' | 'white-hover';
+type Animation = 'game' | 'main' | 'flying' | 'mini-jump' | 'white-hover'| 'hover-icon';
 type AdaptiveMode = 'floating';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     icon?: string;
 
     variant: Variant;
-    animation?: Animation;
+    animation?: Animation | Animation[];
     adaptiveMode?: AdaptiveMode;
     active?: boolean;
 
@@ -22,13 +22,15 @@ type Props = {
 }
 
 export default function Button(propsOBJ: Props) {
+    const animations = Array.isArray(propsOBJ.animation) ? propsOBJ.animation : propsOBJ.animation ? [propsOBJ.animation] : [];
+
     return (
         <button
             className={clsx(
                 propsOBJ.className,
                 s.button,
                 s[`button--${propsOBJ.variant}`],
-                propsOBJ.animation && a[`animation--${propsOBJ.animation}`],
+                animations.map(anim => a[`animation--${anim}`]),
                 propsOBJ.active === false && s.inactive,
                 propsOBJ.adaptiveMode === 'floating' && s.floating
             )}

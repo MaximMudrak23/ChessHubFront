@@ -12,6 +12,7 @@ import { globalState } from '../../../GLOBALSTATE'
 export default function ProfilePage() {
     const { id } = useParams();
     const isMyProfile =  id === globalState.id; 
+    const hasSong = globalState.profileSongAvatar && globalState.profileSongName;
 
     return (
         <>
@@ -43,11 +44,11 @@ export default function ProfilePage() {
                             isElo
                             text={`${globalState.elo}`}
                         />
-                        <ProfilePlate
+                        {hasSong && <ProfilePlate
                             isSong
                             text={globalState.profileSongName}
                             imgURL={globalState.profileSongAvatar}
-                        />
+                        />}
                         {isMyProfile && <Button
                             text={'Edit Profile'}
                             active={true}
