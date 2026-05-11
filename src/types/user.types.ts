@@ -2,6 +2,10 @@ export type IconType = { title: string; iconURL: string; }
 export type BoardTheme = 'water'
 export type MenuBackground = 'default' | 'red-bull' | 'wood';
 export type UserRole = 'user' | 'admin';
+export type ProfileBackground = {
+    type: 'image' | 'video';
+    url: string;
+}
 export type ProfileSong = {
     songAvatar: string;
     songName: string;
@@ -18,8 +22,13 @@ export type User = {
     description?: string;
     avatarURL?: string
     avatarFrameURL?: string;
-    profileBackgroundURL?: string;
+    profileBackground?: ProfileBackground;
     profileSong?: ProfileSong;
     boardTheme: BoardTheme;
     menuBackground: MenuBackground;
+}
+
+export type AuthResponse = {
+    user: User;
+    token: string;
 }

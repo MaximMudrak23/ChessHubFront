@@ -1,14 +1,12 @@
 import s from './styles.module.scss'
 
-type defaultProps = {
+type Props = {
     children?: React.ReactNode;
     styleProps?: React.CSSProperties;
-}
 
-type Props = 
-    | defaultProps & {srcIMG: string; srcVideo?: never;}
-    | defaultProps & {srcIMG?: never; srcVideo: string;}
-    | defaultProps & {srcIMG?: never; srcVideo?: never;}
+    srcIMG?: string;
+    srcVideo?: string;
+}
 
 export default function SteamContentWrapper({children, styleProps, srcIMG, srcVideo}: Props) {
     return (

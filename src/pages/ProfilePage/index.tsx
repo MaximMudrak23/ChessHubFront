@@ -5,56 +5,59 @@ import UserName from '../../components/User/UserName'
 import Button from '../../components/UI/Button'
 import ProfilePlate from './components/ProfilePlate'
 import { useParams } from 'react-router-dom'
-
-import { globalState } from '../../../GLOBALSTATE'
+import { useUserStore } from '@/store/userStore'
 
 
 export default function ProfilePage() {
+    const user = useUserStore(s => s.user)!;
+    const bg = user.profileBackground;
+
     const { id } = useParams();
-    const isMyProfile =  id === globalState.id; 
-    const hasSong = globalState.profileSongAvatar && globalState.profileSongName;
+    const isMyProfile =  id === user.id;
+    const hasSong = user.profileSong;
 
     return (
         <>
             <SteamContentWrapper
-                srcVideo={globalState.profileBackground}
+                srcIMG={bg?.type === 'image' ? bg.url : undefined}
+                srcVideo={bg?.type === 'video' ? bg.url : undefined}
                 styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
             >
                 <header className={s.profile_header}>
                     <UserAvatar
-                        userName={`${globalState.name} Avatar`}
+                        userName={`${user.name} Avatar`}
                         size={200}
-                        imgURL={globalState.avatarURL}
-                        frameURL={globalState.avatarFrameURL}
+                        imgURL={user.avatarURL}
+                        frameURL={user.avatarFrameURL}
                     />
 
                     <div className={s.user_info}>
                         <UserName
-                            userName={globalState.name}
-                            Icons={globalState.userIcons}
+                            userName={user.name}
+                            Icons={user.userIcons}
                             variation='profile'
                         />
                         <div className={s.description_wrapper}>
-                            <p>{globalState.description}</p>
+                            <p>{user.description}</p>
                         </div>
                     </div>
 
                     <div className={s.user_buttons}>
                         <ProfilePlate
                             isElo
-                            text={`${globalState.elo}`}
+                            text={`${user.elo}`}
                         />
                         {hasSong && <ProfilePlate
                             isSong
-                            text={globalState.profileSongName}
-                            imgURL={globalState.profileSongAvatar}
+                            text={user.profileSong!.songName}
+                            imgURL={user.profileSong!.songAvatar}
                         />}
                         {isMyProfile && <Button
                             text={'Edit Profile'}
                             active={true}
                             variant='profile'
                             animation='white-hover'
-                            onClick={() => console.log('Edit')}
+                            onClick={() => alert('Unfortunately now its not work')}
                         />}
                     </div>
                 </header>

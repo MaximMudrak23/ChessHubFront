@@ -1,9 +1,12 @@
 import s from './styles.module.scss'
 import Input from '../../../../../../components/UI/Input'
 import Button from '../../../../../../components/UI/Button'
-import type { SelectedTab } from '../../index'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '@/store/userStore'
+import { mockUser } from '@/mock/mockUser'
+import type { SelectedTab } from '../../index'
 
 type Props = { selectedTab: SelectedTab; }
 type SignIn = {login: string; password: string}
@@ -14,6 +17,15 @@ export default function InputsFolder({selectedTab}: Props) {
     const [signUp,setSignUp] = useState<SignUp>({login: '', password: '', mail: '', key: ''})
     const signInButton = !Object.values(signIn).some(v => v.trim() === '');
     const signUpButton = !Object.values(signUp).some(v => v.trim() === '');
+    
+    const setAuth = useUserStore(s => s.setAuth);
+    const navigate = useNavigate();
+
+    function handleAuth() {
+        setAuth(mockUser, 'fake-token');
+        console.log(useUserStore.getState());
+        navigate('/main');
+    }
 
     return (
         <div className={s.inputs_folder}>
@@ -51,7 +63,7 @@ export default function InputsFolder({selectedTab}: Props) {
                             animation='mini-jump'
                             active={signInButton}
                             styleProps={{ width: '75%', height: '64px', borderRadius: '10px' }}
-                            onClick={()=>''}
+                            onClick={handleAuth}
                         />
                     </motion.div>
                 }
@@ -107,7 +119,7 @@ export default function InputsFolder({selectedTab}: Props) {
                             animation='mini-jump'
                             active={signUpButton}
                             styleProps={{ width: '75%', height: '64px', borderRadius: '10px' }}
-                            onClick={()=>''}
+                            onClick={handleAuth}
                         />
                     </motion.div>
                 }

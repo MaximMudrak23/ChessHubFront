@@ -6,10 +6,11 @@ import BurgerIcon from './components/BurgerIcon'
 import Aside from './components/Aside'
 import { useEffect, useState } from 'react'
 import { useHeaderOptions } from './hooks/useHeaderOptions'
-
-import { globalState } from '../../../GLOBALSTATE'
+import { useUserStore } from '@/store/userStore'
 
 export default function Header() {
+    const user = useUserStore(s => s.user);
+
     const [isOpen,setIsOpen] = useState<boolean>(false);
     const [width,setWidth] = useState(window.innerWidth);
     const options = useHeaderOptions();
@@ -24,11 +25,11 @@ export default function Header() {
         <>
             <header className={s.header}>
                 <UserCard
-                    userName={globalState.name}
-                    imgURL={globalState.avatarURL}
-                    frameURL={globalState.avatarFrameURL}
-                    userRole={globalState.role}
-                    userIcons={globalState.userIcons}
+                    userName={user?.name ?? 'Guest'}
+                    imgURL={user?.avatarURL}
+                    frameURL={user?.avatarFrameURL}
+                    userRole={user?.role ?? 'user'}
+                    userIcons={user?.userIcons}
                     variation={'header'}
                 />
                 
