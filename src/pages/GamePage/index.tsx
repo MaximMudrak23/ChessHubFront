@@ -1,36 +1,25 @@
 import s from './styles.module.scss'
 import ChessBoard from './components/ChessBoard'
 import SidePanel from './components/SidePanel'
-import { getCurrentUser } from './utils/lib/getCurrentUser'
-import { useState } from 'react'
-import type { Side, Move } from './utils/types/game.types'
-import type { Player, Players } from './utils/types/game.types'
-
-const player1: Player = {
-    side: 'white',
-    isCurrentUser: true,
-    userName: 'TAB ON ME',
-    userElo: 2000,
-    userIcons: [{title: 'Developer', iconURL: '/svg/checkmark.svg'}],
-}
-const player2: Player = {
-    side: 'black',
-    isCurrentUser: false,
-    userName: 'long long long long long long long long',
-    userElo: 2000,
-    userIcons: [{title: 'Developer', iconURL: '/svg/checkmark.svg'}],
-}
-const players: Players = {
-    white: player1,
-    black: player2,
-}
+import { useUserStore } from '@/store/userStore'
+import { useGameStore } from '@/store/gameStore'
 
 export default function GamePage() {
-    const currentUser = getCurrentUser(players);
-    const currentUserSide = currentUser?.side ?? null;
-    const perspective = currentUser?.side ?? 'white';
-    const [currentTurn, setCurrentTurn] = useState<Side>('white');
-    const [moves, setMoves] = useState<Move[]>([]);
+    const user = useUserStore(s => s.user);
+    const players = useGameStore(s => s.players);
+    const currentTurn = useGameStore(s => s.currentTurn);
+    const setCurrentTurn = useGameStore(s => s.setCurrentTurn);
+    const moves = useGameStore(s => s.moves);
+    const setMoves = useGameStore(s => s.setMoves);
+
+    if (!user || !players) return null;
+
+    const currentPlayer = Object.values(players).find(
+        p => p.userId === user.id
+    );
+
+    const currentUserSide = currentPlayer?.side ?? null;
+    const perspective = currentPlayer?.side ?? 'white';
 
     return (
         <section className={s.game_page}>

@@ -4,7 +4,7 @@ export type Side = 'white' | 'black';
 
 export type Player = {
     side: Side;
-    isCurrentUser: boolean;
+    userId: string;
     imgURL?: string;
     frameURL?: string;
     userName: string;
