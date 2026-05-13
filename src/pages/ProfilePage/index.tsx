@@ -9,12 +9,15 @@ import { useUserStore } from '@/store/userStore'
 
 
 export default function ProfilePage() {
-    const user = useUserStore(s => s.user)!;
+    const user = useUserStore(s => s.user);
+
+    if (!user) return null;
+
     const bg = user.profileBackground;
 
     const { id } = useParams();
     const isMyProfile =  id === user.id;
-    const hasSong = user.profileSong;
+    const hasSong = Boolean(user.profileSong?.songURL) && Boolean(user.profileSong?.songName) && Boolean(user.profileSong?.songAvatar);
 
     return (
         <>

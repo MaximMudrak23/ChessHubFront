@@ -35,6 +35,7 @@ export function useHeaderOptions() {
             text: 'Logout',
             onClick: () => {
                 logout();
+                localStorage.removeItem('token');
                 navigate('/');
             },
         },

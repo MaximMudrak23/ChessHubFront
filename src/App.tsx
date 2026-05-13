@@ -1,5 +1,6 @@
 import {Routes, Route} from 'react-router-dom'
 import LayoutWithHeader from './components/LayoutWithHeader'
+import AuthLoader from './components/AuthLoader'
 
 import WelcomePage from './pages/WelcomePage'
 import MainPage from './pages/MainPage'
@@ -13,6 +14,8 @@ import Page404 from './pages/Page404'
 function App() {
   return (
     <>
+      <AuthLoader />
+
       <Routes>
         <Route path='/' element={<WelcomePage />} />
 
