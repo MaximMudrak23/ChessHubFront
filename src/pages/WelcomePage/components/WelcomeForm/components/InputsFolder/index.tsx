@@ -9,12 +9,12 @@ import { mockUser } from '@/mock/mockUser'
 import type { SelectedTab } from '../../index'
 
 type Props = { selectedTab: SelectedTab; }
-type SignIn = {login: string; password: string}
-type SignUp = {login: string; password: string; mail: string; key: string;}
+type SignIn = {email: string; password: string}
+type SignUp = {email: string; password: string; key: string;}
 
 export default function InputsFolder({selectedTab}: Props) {
-    const [signIn,setSignIn] = useState<SignIn>({login: '', password: ''})
-    const [signUp,setSignUp] = useState<SignUp>({login: '', password: '', mail: '', key: ''})
+    const [signIn,setSignIn] = useState<SignIn>({email: '', password: ''})
+    const [signUp,setSignUp] = useState<SignUp>({email: '', password: '', key: ''})
     const signInButton = !Object.values(signIn).some(v => v.trim() === '');
     const signUpButton = !Object.values(signUp).some(v => v.trim() === '');
     
@@ -42,8 +42,8 @@ export default function InputsFolder({selectedTab}: Props) {
                             id='signin-login'
                             variant='grey'
                             animation='fluid-gradient'
-                            placeholderText='Login'
-                            value={signIn.login}
+                            placeholderText='Email'
+                            value={signIn.email}
                             onChangeHandler={v => setSignIn(x => ({...x, login: v}))}
                             styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
@@ -78,11 +78,11 @@ export default function InputsFolder({selectedTab}: Props) {
                     >
                         <Input
                             id='signup-login'
-                            value={signUp.login}
+                            value={signUp.email}
                             onChangeHandler={v => setSignUp(x => ({...x, login: v}))}
                             variant='grey'
                             animation='fluid-gradient'
-                            placeholderText='Login'
+                            placeholderText='Email'
                             styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
@@ -93,15 +93,6 @@ export default function InputsFolder({selectedTab}: Props) {
                             animation='fluid-gradient'
                             placeholderText='Password'
                             isHidden
-                            styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
-                        />
-                        <Input
-                            id='signup-mail'
-                            value={signUp.mail}
-                            onChangeHandler={v => setSignUp(x => ({...x, mail: v}))}
-                            variant='grey'
-                            animation='fluid-gradient'
-                            placeholderText='Mail'
                             styleProps={{ width: '75%', height: '64px', borderRadius: '5px 5px 0 0' }}
                         />
                         <Input
