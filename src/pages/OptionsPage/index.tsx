@@ -7,7 +7,7 @@ const OPTIONS_PAGE_OPTIONS = [
     {
         optionName: 'Game Process',
         title: 'Game Process',
-        description: 'Change your nickname and description',
+        description: ['Change your nickname and description'],
         // Component: GeneralProfileEdit,
     },
 ];

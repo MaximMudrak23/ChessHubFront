@@ -6,7 +6,7 @@ type OptionsType = {
     optionName: string;
     optionIconURL?: string;
     title: string;
-    description?: string;
+    description?: string[];
     Component?: React.ElementType;
 }
 
@@ -16,7 +16,7 @@ type Props = {
 
 export default function OptionsScreen({options}: Props) {
     const [selectedIndex, setSelectedIndex] = useState(0);
-    
+
     const config = options[selectedIndex];
 
     return (
@@ -30,7 +30,11 @@ export default function OptionsScreen({options}: Props) {
             <section className={s.event_screen}>
                 <div className={s.title}>
                     <h1>{config.title}</h1>
-                    <p className={s.description}>{config.description}</p>
+                    <p className={s.description}>
+                        {config.description?.map(text => (
+                            <p key={text}>{text}</p>
+                        ))}
+                    </p>
                 </div>
 
                 {config.Component ? <config.Component /> : <p className={s.error}>This option is in development ⚙️</p>}

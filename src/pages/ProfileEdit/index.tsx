@@ -1,29 +1,35 @@
 import s from './styles.module.scss'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import OptionsScreen from '@/components/Modules/OptionsScreen';
+
+import GeneralOption from './components/GeneralOption';
+
 import { SVG } from '@/constants/paths';
 
 const PROFILE_EDIT_OPTIONS = [
     {
         optionName: 'General',
-        title: 'General',
-        description: 'Change your nickname and description',
-        // Component: GeneralProfileEdit,
+        title: 'About',
+        description: [
+            'Set your profile name and details here.',
+            'Your name and avatar represent you throughout ChessHub. and must be appropriate for all audiences. Please be polite.',
+        ],
+        Component: GeneralOption,
     },
     {
         optionName: 'Avatar',
         title: 'Avatar',
-        description: 'Change your avatar and frame',
+        description: ['Change your avatar and frame'],
     },
     {
         optionName: 'Background',
         title: 'Background',
-        description: 'Change your profile background',
+        description: ['Change your profile background'],
     },
     {
         optionName: 'Song',
         title: 'Song',
-        description: 'Change your profile song',
+        description: ['Change your profile song'],
     },
 ];
 
