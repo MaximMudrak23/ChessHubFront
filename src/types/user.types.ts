@@ -7,7 +7,7 @@ export type ProfileBackground = {
     url: string;
 }
 export type ProfileSong = {
-    songAvatar: string;
+    songAvatarURL: string;
     songName: string;
     songURL: string;
 }

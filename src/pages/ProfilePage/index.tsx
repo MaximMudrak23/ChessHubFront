@@ -20,13 +20,19 @@ export default function ProfilePage() {
     const hasSong =
         Boolean(user.profileSong?.songURL) &&
         Boolean(user.profileSong?.songName) &&
-        Boolean(user.profileSong?.songAvatar);
+        Boolean(user.profileSong?.songAvatarURL);
 
     return (
         <>
             <SteamContentWrapper
-                srcIMG={profileBackground?.type === 'image' ? profileBackground.url : undefined}
-                srcVideo={profileBackground?.type === 'video' ? profileBackground.url : undefined}
+                srcIMG={profileBackground?.type === 'image' && profileBackground.url
+                    ? profileBackground.url
+                    : undefined
+                }
+                srcVideo={profileBackground?.type === 'video' && profileBackground.url
+                    ? profileBackground.url
+                    : undefined
+                }
                 styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
             >
                 <header className={s.profile_header}>
@@ -56,7 +62,7 @@ export default function ProfilePage() {
                         {hasSong && <ProfilePlate
                             isSong
                             text={user.profileSong!.songName}
-                            imgURL={user.profileSong!.songAvatar}
+                            imgURL={user.profileSong!.songAvatarURL}
                         />}
                         {isMyProfile && <Button
                             text={'Edit Profile'}

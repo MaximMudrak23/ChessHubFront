@@ -1,22 +1,18 @@
 import s from './styles.module.scss'
-import { useState } from 'react'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
-import EventScreen from './components/EventScreen';
-import OptionsContainer from '../../components/Modules/OptionsContainer';
+import OptionsScreen from '@/components/Modules/OptionsScreen';
 import { SVG } from '@/constants/paths';
 
-const OPTIONS = [
-    {name: 'Board & Figures'},
-    {name: 'Game Process'},
-    {name: 'Profile'},
-    {name: 'Account'},
-    {name: 'Languages'},
-    {name: 'Labs', imgURL: SVG.labsIcon},
+const OPTIONS_PAGE_OPTIONS = [
+    {
+        optionName: 'Game Process',
+        title: 'Game Process',
+        description: 'Change your nickname and description',
+        // Component: GeneralProfileEdit,
+    },
 ];
 
 export default function OptionsPage() {
-    const [selectedFolder,setSelectedFolder] = useState(0);
-    
     return (
         <SteamContentWrapper styleProps={{backgroundColor: 'transparent'}}>
             <div className={s.title}>
@@ -24,10 +20,7 @@ export default function OptionsPage() {
                 <h1>Options</h1>
             </div>
 
-            <div className={s.content}>
-                <OptionsContainer options={OPTIONS} activeIndex={selectedFolder} onSelect={setSelectedFolder} />
-                <EventScreen selectedFolder={selectedFolder} />
-            </div>
+            <OptionsScreen options={OPTIONS_PAGE_OPTIONS} />
         </SteamContentWrapper>
     )
 }

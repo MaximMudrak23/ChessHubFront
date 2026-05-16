@@ -7,6 +7,7 @@ type UserStore = {
     isAuth: boolean;
 
     setAuth: (user: User, token: string) => void;
+    setUser: (user: User) => void;
     logout: () => void;
 }
 
@@ -20,6 +21,8 @@ export const useUserStore = create<UserStore>(set => ({
         token,
         isAuth: true,
     }),
+
+    setUser: (user) => set({user}),
 
     logout: () => set({
         user: null,
