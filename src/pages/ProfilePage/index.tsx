@@ -10,20 +10,23 @@ import { useUserStore } from '@/store/userStore'
 
 export default function ProfilePage() {
     const user = useUserStore(s => s.user);
+    const { id } = useParams();
 
     if (!user) return null;
 
-    const bg = user.profileBackground;
-
-    const { id } = useParams();
+    const profileBackground = user.profileBackground;
     const isMyProfile =  id === user.id;
-    const hasSong = Boolean(user.profileSong?.songURL) && Boolean(user.profileSong?.songName) && Boolean(user.profileSong?.songAvatar);
+    
+    const hasSong =
+        Boolean(user.profileSong?.songURL) &&
+        Boolean(user.profileSong?.songName) &&
+        Boolean(user.profileSong?.songAvatar);
 
     return (
         <>
             <SteamContentWrapper
-                srcIMG={bg?.type === 'image' ? bg.url : undefined}
-                srcVideo={bg?.type === 'video' ? bg.url : undefined}
+                srcIMG={profileBackground?.type === 'image' ? profileBackground.url : undefined}
+                srcVideo={profileBackground?.type === 'video' ? profileBackground.url : undefined}
                 styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
             >
                 <header className={s.profile_header}>
