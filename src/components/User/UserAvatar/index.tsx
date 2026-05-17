@@ -8,22 +8,28 @@ type Props = {
     size: number;
     imgURL?: string;
     frameURL?: string;
+    hideAvatar?: boolean;
     className?: string;
 }
 
 // style={size ? { width: size, height: size } : undefined} и в css вместо фита по 100% процентов
 
-export default function UserAvatar({userName, size, imgURL, frameURL, className}: Props) {
+export default function UserAvatar(props: Props) {
     return (
-        <div className={clsx(s.userAvatarContainer, className)}>
-            <img
-                className={s.userAvatar}
-                src={imgURL ? getFileURL(imgURL) : defaultPFP}
-                alt={`${userName} Avatar`}
-                draggable={false}
-                style={{width: size, height: size}}
-            />
-            {frameURL && <img className={s.userAvatarFrame} src={getFileURL(frameURL)} alt={`${userName} Avatar Frame`} />}
+        <div className={
+            clsx(s.userAvatarContainer, props.className)}
+            style={{width: props.size, height: props.size}}
+        >
+            {!props.hideAvatar &&
+                <img
+                    className={s.userAvatar}
+                    src={props.imgURL ? getFileURL(props.imgURL) : defaultPFP}
+                    alt={`${props.userName} Avatar`}
+                    draggable={false}
+                    style={{width: props.size, height: props.size}}
+                />
+            }
+            {props.frameURL && <img className={s.userAvatarFrame} src={getFileURL(props.frameURL)} alt={`${props.userName} Avatar Frame`} />}
         </div>
     )
 }

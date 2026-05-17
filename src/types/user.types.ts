@@ -22,6 +22,7 @@ export type User = {
     description?: string;
     avatarURL?: string
     avatarFrameURL?: string;
+    unlockedFrames: string[];
     profileBackground?: ProfileBackground;
     profileSong?: ProfileSong;
     boardTheme: BoardTheme;

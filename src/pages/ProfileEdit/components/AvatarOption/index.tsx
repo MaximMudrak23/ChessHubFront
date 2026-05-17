@@ -23,6 +23,8 @@ export default function AvatarOption() {
 
     if (!user || !token) return null;
 
+    const availableFrames = user.unlockedFrames || [];
+
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
 
@@ -35,6 +37,7 @@ export default function AvatarOption() {
     const handleSave = async () => {
         const data = await updateAvatar(token, {
             avatarFile,
+            avatarFrameURL: previewFrameURL,
         });
 
         setUser(data.user);
@@ -58,7 +61,7 @@ export default function AvatarOption() {
                         frameURL={previewFrameURL}
                     />
                 </div>
-                <div className={s.upload_button_container}>
+                <div className={s.action_buttons_container}>
                     <input
                         id="avatarUpload"
                         type="file"
@@ -74,15 +77,31 @@ export default function AvatarOption() {
                         onClick={() => document.getElementById('avatarUpload')?.click()}
                         styleProps={{flex: 1, height: 65}}
                     />
+                    <Button
+                        text="No Frame"
+                        variant="profile"
+                        animation="white-hover"
+                        onClick={() => setPreviewFrameURL('')}
+                        styleProps={{flex: 1, height: 65}}
+                    />
                 </div>
             </div>
-            {/* <div className={s.user_unlocked_frames}>
-                <UserAvatar
-                    userName="Frame"
-                    size={90}
-                    frameURL={frame}
-                />
-            </div> */}
+            <div className={s.user_unlocked_frames}>
+                {availableFrames.map(frameURL => (
+                    <div
+                        key={frameURL}
+                        onClick={() => setPreviewFrameURL(frameURL)}
+                        className={s.frame_preview}
+                    >
+                        <UserAvatar
+                            userName="Frame"
+                            size={150}
+                            frameURL={frameURL}
+                            hideAvatar
+                        />
+                    </div>
+                ))}
+            </div>
             <div className={s.buttons_container}>
                 <Button
                     text='Save'
