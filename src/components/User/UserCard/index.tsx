@@ -24,6 +24,8 @@ type Props =
     }
 
 export default function UserCard(props: Props) {
+    const fixedRole = props.variation === 'header' ? props.userRole.charAt(0).toUpperCase() + props.userRole.slice(1) : null;
+
     return (
         <section className={clsx(s.userCard, props.variation === 'card' && props.isActive && s.active)}>
             <UserAvatar
@@ -47,7 +49,7 @@ export default function UserCard(props: Props) {
             }
             {props.variation === 'header' &&
                 <p className={s.usercard_role}>
-                    <span>{props.userRole}</span>
+                    <span>{fixedRole}</span>
                 </p>
             }
         </section>

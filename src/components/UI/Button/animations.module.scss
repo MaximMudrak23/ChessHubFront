@@ -10,7 +10,7 @@
 
         &:hover { filter: brightness(0.8); }
     }
-    &--flying {
+    &--floating {
         cursor: default;
         animation: flying 2.5s ease-in-out infinite;
 

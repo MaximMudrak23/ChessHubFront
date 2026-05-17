@@ -23,57 +23,55 @@ export default function ProfilePage() {
     const isMyProfile =  id === user.id;
 
     return (
-        <>
-            <SteamContentWrapper
-                srcIMG={
-                    profileBackground?.type === 'image' && profileBackground.url
-                        ? getFileURL(profileBackground.url)
-                        : undefined
-                }
-                srcVideo={
-                    profileBackground?.type === 'video' && profileBackground.url
-                        ? getFileURL(profileBackground.url)
-                        : undefined
-                }
-                styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
-            >
-                <header className={s.profile_header}>
-                    <UserAvatar
-                        userName={`${user.name} Avatar`}
-                        size={200}
-                        imgURL={user.avatarURL}
-                        frameURL={user.avatarFrameURL}
+        <SteamContentWrapper
+            srcIMG={
+                profileBackground?.type === 'image' && profileBackground.url
+                    ? getFileURL(profileBackground.url)
+                    : undefined
+            }
+            srcVideo={
+                profileBackground?.type === 'video' && profileBackground.url
+                    ? getFileURL(profileBackground.url)
+                    : undefined
+            }
+            styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
+        >
+            <header className={s.profile_header}>
+                <UserAvatar
+                    userName={`${user.name} Avatar`}
+                    size={200}
+                    imgURL={user.avatarURL}
+                    frameURL={user.avatarFrameURL}
+                />
+
+                <div className={s.user_info}>
+                    <UserName
+                        userName={user.name}
+                        Icons={user.userIcons}
+                        variation='profile'
                     />
-
-                    <div className={s.user_info}>
-                        <UserName
-                            userName={user.name}
-                            Icons={user.userIcons}
-                            variation='profile'
-                        />
-                        <div className={s.description_wrapper}>
-                            <p>{user.description}</p>
-                        </div>
+                    <div className={s.description_wrapper}>
+                        <p>{user.description}</p>
                     </div>
+                </div>
 
-                    <div className={s.user_buttons}>
-                        <ProfilePlate
-                            isElo
-                            text={`${user.elo}`}
-                        />
-                        {profileSong && (
-                            <ProfileSongPlate song={profileSong} />
-                        )}
-                        {isMyProfile && <Button
-                            text={'Edit Profile'}
-                            active={true}
-                            variant='profile'
-                            animation='white-hover'
-                            onClick={() => navigate(`/profile/${id}/edit`)}
-                        />}
-                    </div>
-                </header>
-            </SteamContentWrapper>
-        </>
+                <div className={s.user_buttons}>
+                    <ProfilePlate
+                        isElo
+                        text={`${user.elo}`}
+                    />
+                    {profileSong && (
+                        <ProfileSongPlate song={profileSong} />
+                    )}
+                    {isMyProfile && <Button
+                        text={'Edit Profile'}
+                        active={true}
+                        variant='profile'
+                        animation='white-hover'
+                        onClick={() => navigate(`/profile/${id}/edit`)}
+                    />}
+                </div>
+            </header>
+        </SteamContentWrapper>
     )
 }
