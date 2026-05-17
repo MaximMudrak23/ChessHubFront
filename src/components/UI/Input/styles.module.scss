@@ -25,6 +25,13 @@
 
         &::placeholder {color: #929292;}
     }
+    &--profile {
+        background-color: #1B1B1B;
+        color: #FFF;
+        border: 1px solid #05090C;
+
+        &::placeholder {color: #5e5e5e;}
+    }
 }
 
 .eyeIconBlock {

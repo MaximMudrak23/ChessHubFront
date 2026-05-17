@@ -6,9 +6,12 @@ import Button from '../../components/UI/Button'
 import ProfilePlate from './components/ProfilePlate'
 import { useParams } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function ProfilePage() {
+    const navigate = useNavigate();
+
     const user = useUserStore(s => s.user);
     const { id } = useParams();
 
@@ -69,7 +72,7 @@ export default function ProfilePage() {
                             active={true}
                             variant='profile'
                             animation='white-hover'
-                            onClick={() => alert('Unfortunately now its not work')}
+                            onClick={() => navigate(`/profile/${id}/edit`)}
                         />}
                     </div>
                 </header>

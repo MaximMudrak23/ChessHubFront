@@ -29,12 +29,12 @@ export default function OptionsScreen({options}: Props) {
 
             <section className={s.event_screen}>
                 <div className={s.title}>
-                    <h1>{config.title}</h1>
-                    <p className={s.description}>
+                    <h2>{config.title}</h2>
+                    <div className={s.description}>
                         {config.description?.map(text => (
                             <p key={text}>{text}</p>
                         ))}
-                    </p>
+                    </div>
                 </div>
 
                 {config.Component ? <config.Component /> : <p className={s.error}>This option is in development ⚙️</p>}

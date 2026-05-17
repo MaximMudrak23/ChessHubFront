@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { SVG } from '@/constants/paths';
 import clsx from 'clsx';
 
-type Variant = 'grey';
+type Variant = 'grey' | 'profile';
 type Animation = 'fluid-gradient';
 
 type Props = {
