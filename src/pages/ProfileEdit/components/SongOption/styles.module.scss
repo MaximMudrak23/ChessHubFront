@@ -1,26 +1,9 @@
-.upload_avatar_container {
+.songs_container {
+    height: 350px;
+    padding: 12px;
+
     display: flex;
-
-    .preview_container { padding: 12px; }
-
-    .action_buttons_container {
-        flex: 1;
-        padding: 12px;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 12px;
-    }
-}
-
-.user_unlocked_frames {
-    padding: 16px;
-    
-    display: flex;
-    gap: 16px;
-
-    overflow-x: auto;
+    gap: 8px;
 }
 
 .buttons_container {

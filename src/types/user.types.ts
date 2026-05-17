@@ -7,9 +7,10 @@ export type ProfileBackground = {
     url: string;
 }
 export type ProfileSong = {
-    songAvatarURL: string;
     songName: string;
+    songAuthor: string;
     songURL: string;
+    songAvatarURL: string;
 }
 
 export type User = {
@@ -24,6 +25,7 @@ export type User = {
     avatarFrameURL?: string;
     unlockedFrames: string[];
     unlockedProfileBackgrounds: ProfileBackground[];
+    unlockedProfileSongs: ProfileSong[];
     profileBackground?: ProfileBackground;
     profileSong?: ProfileSong;
     boardTheme: BoardTheme;

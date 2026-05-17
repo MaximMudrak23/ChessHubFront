@@ -1,4 +1,4 @@
-import type { AuthResponse, ProfileBackground } from '@/types/user.types';
+import type { AuthResponse, ProfileBackground, ProfileSong } from '@/types/user.types';
 import { API_URL } from './config';
 
 type UpdateProfileData = {
@@ -62,6 +62,28 @@ type UpdateBackgroundData = {
 
 export async function updateBackground(token: string, data: UpdateBackgroundData): Promise<Omit<AuthResponse, 'token'>> {
     const res = await fetch(`${API_URL}/users/profile-background`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+type UpdateSongData = {
+    profileSong: ProfileSong | null;
+};
+
+export async function updateSong(token: string, data: UpdateSongData): Promise<Omit<AuthResponse, 'token'>> {
+    const res = await fetch(`${API_URL}/users/song`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

@@ -2,30 +2,45 @@
     background-color: rgba($color: #0F1011, $alpha: 0.5);
     font-size: 1.2rem;
     user-select: none;
+}
 
-    .elo_container, .song_container {
-        width: 100%;
-        height: 100%;
+.elo_container, .song_container {
+    width: 100%;
+    height: 100%;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.elo_container {
+    gap: 4px;
+    color: #B7B7B7;
+}
+
+.song_container {
+    position: relative;
+    padding: 0 12px;
+    gap: 8px;
+
+    .song_icon_container {
+        position: relative; 
         display: flex;
-        align-items: center;
         justify-content: center;
-    }
 
-    .elo_container {
-        gap: 4px;
-        
-        .elo_label { font-weight: 500; }
-        .elo_label, .text_label { color: #B7B7B7; }
-    }
+        .song_effect {
+            position: absolute;
+            height: 100%;
 
-    .song_container {
-        position: relative;
-        padding: 0 12px;
-        gap: 8px;
+            top: -24px;
+            left: 10px;
+            z-index: 9999;
 
-        & > img {
-            --img-size: 45px;
+            pointer-events: none;
+        }
+
+        .song_icon {
+            --img-size: 40px;
             height: var(--img-size);
             width: var(--img-size);
 
@@ -44,21 +59,32 @@
             }
         }
 
-        .song_effect {
-            position: absolute;
-            height: 100%;
+        .song_action_icon {
+            width: 18px;
+            height: 18px;
 
-            top: -24px;
-            left: 10px;
-            z-index: 9999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            opacity: 0;
+            transition: opacity 0.2s ease;
 
             pointer-events: none;
+            z-index: 3;
         }
 
-        .text_label {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        &:hover {
+            .song_action_icon {
+                opacity: 1;
+            }
         }
+    }
+    
+    .text_label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

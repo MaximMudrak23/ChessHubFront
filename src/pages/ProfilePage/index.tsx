@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom'
 import { getFileURL } from '@/utils/getFileURL'
+import ProfileSongPlate from './components/ProfileSongPlate.tsx'
 
 export default function ProfilePage() {
     const navigate = useNavigate();
@@ -18,12 +19,8 @@ export default function ProfilePage() {
     if (!user) return null;
 
     const profileBackground = user.profileBackground;
+    const profileSong = user.profileSong;
     const isMyProfile =  id === user.id;
-    
-    const hasSong =
-        Boolean(user.profileSong?.songURL) &&
-        Boolean(user.profileSong?.songName) &&
-        Boolean(user.profileSong?.songAvatarURL);
 
     return (
         <>
@@ -64,11 +61,9 @@ export default function ProfilePage() {
                             isElo
                             text={`${user.elo}`}
                         />
-                        {hasSong && <ProfilePlate
-                            isSong
-                            text={user.profileSong!.songName}
-                            imgURL={user.profileSong!.songAvatarURL}
-                        />}
+                        {profileSong && (
+                            <ProfileSongPlate song={profileSong} />
+                        )}
                         {isMyProfile && <Button
                             text={'Edit Profile'}
                             active={true}

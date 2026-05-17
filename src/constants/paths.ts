@@ -65,6 +65,8 @@ export const SVG = {
     more: '/svg/more.svg',
     optionIcon: '/svg/option-icon.svg',
     profileIcon: '/svg/user-profile.svg',
+    profilePause: '/svg/profile-pause.svg',
+    profilePlay: '/svg/profile-play.svg',
     rightArrow: '/svg/right-arrow.svg',
     searchIcon: '/svg/user-search.svg',
     logoutIcon: '/svg/user-logout.svg',

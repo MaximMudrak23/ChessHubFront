@@ -40,9 +40,7 @@ const PROFILE_EDIT_OPTIONS = [
         optionName: 'Song',
         title: 'About',
         description: [
-            'Upload your .mp3 or .wav files.',
-            'Upload square image at least 175x175 pixels',
-            'Your profile song respresent you throughout ChessHub. and must be appropriate for all audiences, also please don’t upload sounds that might scared. Please be polite.',
+            'Select song for your profile',
         ],
         Component: SongOption,
     },
