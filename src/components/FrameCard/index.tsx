@@ -7,6 +7,7 @@ type Variant = 'profile' | 'shop';
 type Props = {
     frameURL: string;
     variant: Variant;
+    
     isActive?: boolean;
     name?: string;
     price?: number;

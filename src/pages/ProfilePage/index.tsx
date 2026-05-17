@@ -7,7 +7,7 @@ import ProfilePlate from './components/ProfilePlate'
 import { useParams } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom'
-
+import { getFileURL } from '@/utils/getFileURL'
 
 export default function ProfilePage() {
     const navigate = useNavigate();
@@ -28,13 +28,15 @@ export default function ProfilePage() {
     return (
         <>
             <SteamContentWrapper
-                srcIMG={profileBackground?.type === 'image' && profileBackground.url
-                    ? profileBackground.url
-                    : undefined
+                srcIMG={
+                    profileBackground?.type === 'image' && profileBackground.url
+                        ? getFileURL(profileBackground.url)
+                        : undefined
                 }
-                srcVideo={profileBackground?.type === 'video' && profileBackground.url
-                    ? profileBackground.url
-                    : undefined
+                srcVideo={
+                    profileBackground?.type === 'video' && profileBackground.url
+                        ? getFileURL(profileBackground.url)
+                        : undefined
                 }
                 styleProps={{backgroundColor: 'rgb(27, 25, 24, 0.5)'}}
             >

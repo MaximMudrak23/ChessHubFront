@@ -1,6 +1,3 @@
-export const AVATAR_FRAMES = {
-    otherSide: '/avatar-frames/other-side.png',
-};
 export const BACKGROUNDS = {
     default: '/backgrounds/default.jpg',
     redBull: '/backgrounds/red-bull.webp',

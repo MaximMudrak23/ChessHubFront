@@ -1,6 +1,7 @@
 import s from './styles.module.scss'
 import UserAvatar from '@/components/User/UserAvatar'
 import Button from '@/components/UI/Button'
+import FrameCard from '@/components/FrameCard';
 import { updateAvatar } from '@/api/userApi';
 import { useUserStore } from '@/store/userStore';
 import { useState, useEffect } from 'react';
@@ -88,18 +89,13 @@ export default function AvatarOption() {
             </div>
             <div className={s.user_unlocked_frames}>
                 {availableFrames.map(frameURL => (
-                    <div
+                    <FrameCard
                         key={frameURL}
+                        frameURL={frameURL}
+                        variant="profile"
+                        isActive={previewFrameURL === frameURL}
                         onClick={() => setPreviewFrameURL(frameURL)}
-                        className={s.frame_preview}
-                    >
-                        <UserAvatar
-                            userName="Frame"
-                            size={150}
-                            frameURL={frameURL}
-                            hideAvatar
-                        />
-                    </div>
+                    />
                 ))}
             </div>
             <div className={s.buttons_container}>

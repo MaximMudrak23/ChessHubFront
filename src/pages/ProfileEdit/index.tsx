@@ -4,6 +4,8 @@ import OptionsScreen from '@/components/Modules/OptionsScreen';
 
 import GeneralOption from './components/GeneralOption';
 import AvatarOption from './components/AvatarOption';
+import BackgroundOption from './components/BackgroundOption';
+import SongOption from './components/SongOption';
 
 import { SVG } from '@/constants/paths';
 
@@ -22,19 +24,27 @@ const PROFILE_EDIT_OPTIONS = [
         title: 'About',
         description: [
             'Upload file from your device.',
-            'Required square image at least 200x200 pixels.'
+            'Required square image at least 200x200 pixels.',
         ],
         Component: AvatarOption,
     },
     {
         optionName: 'Background',
-        title: 'Background',
-        description: ['Change your profile background'],
+        title: 'About',
+        description: [
+            'Select background for your profile.',
+        ],
+        Component: BackgroundOption,
     },
     {
         optionName: 'Song',
-        title: 'Song',
-        description: ['Change your profile song'],
+        title: 'About',
+        description: [
+            'Upload your .mp3 or .wav files.',
+            'Upload square image at least 175x175 pixels',
+            'Your profile song respresent you throughout ChessHub. and must be appropriate for all audiences, also please don’t upload sounds that might scared. Please be polite.',
+        ],
+        Component: SongOption,
     },
 ];
 

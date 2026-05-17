@@ -1,4 +1,4 @@
-import type { AuthResponse } from '@/types/user.types';
+import type { AuthResponse, ProfileBackground } from '@/types/user.types';
 import { API_URL } from './config';
 
 type UpdateProfileData = {
@@ -46,6 +46,28 @@ export async function updateAvatar(token: string, data: UpdateAvatarData): Promi
             Authorization: `Bearer ${token}`,
         },
         body: formData,
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+type UpdateBackgroundData = {
+    profileBackground: ProfileBackground | null;
+};
+
+export async function updateBackground(token: string, data: UpdateBackgroundData): Promise<Omit<AuthResponse, 'token'>> {
+    const res = await fetch(`${API_URL}/users/profile-background`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
     });
 
     if (!res.ok) {
