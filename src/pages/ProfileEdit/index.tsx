@@ -3,6 +3,7 @@ import SteamContentWrapper from '../../components/SteamContentWrapper'
 import OptionsScreen from '@/components/Modules/OptionsScreen';
 
 import GeneralOption from './components/GeneralOption';
+import AvatarOption from './components/AvatarOption';
 
 import { SVG } from '@/constants/paths';
 
@@ -18,8 +19,12 @@ const PROFILE_EDIT_OPTIONS = [
     },
     {
         optionName: 'Avatar',
-        title: 'Avatar',
-        description: ['Change your avatar and frame'],
+        title: 'About',
+        description: [
+            'Upload file from your device.',
+            'Required square image at least 200x200 pixels.'
+        ],
+        Component: AvatarOption,
     },
     {
         optionName: 'Background',

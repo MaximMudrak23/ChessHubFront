@@ -1,0 +1,19 @@
+.upload_avatar_container {
+    display: flex;
+
+    .preview_container { padding: 12px; }
+
+    .upload_button_container {
+        flex: 1;
+
+        display: flex;
+        padding: 12px;
+    }
+}
+
+.buttons_container {
+    height: 100px;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+}
