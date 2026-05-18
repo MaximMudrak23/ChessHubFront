@@ -7,6 +7,8 @@ import AvatarOption from './components/AvatarOption';
 import BackgroundOption from './components/BackgroundOption';
 import SongOption from './components/SongOption';
 
+import { Navigate, useParams } from 'react-router-dom'
+import { useUserStore } from '@/store/userStore'
 import { SVG } from '@/constants/paths';
 
 const PROFILE_EDIT_OPTIONS = [
@@ -47,6 +49,15 @@ const PROFILE_EDIT_OPTIONS = [
 ];
 
 export default function ProfileEdit() {
+    const user = useUserStore(s => s.user);
+    const { id } = useParams();
+
+    if (!user) return null;
+
+    if (id !== user.id) {
+        return <Navigate to={`/profile/${id}`} replace />;
+    }
+    
     return (
         <SteamContentWrapper styleProps={{backgroundColor: 'transparent'}}>
             <div className={s.title}>

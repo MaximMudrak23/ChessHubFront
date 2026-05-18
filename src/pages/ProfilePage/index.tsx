@@ -9,18 +9,45 @@ import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom'
 import { getFileURL } from '@/utils/getFileURL'
 import ProfileSongPlate from './components/ProfileSongPlate.tsx'
+import { useEffect, useState } from 'react'
+import { getUserById } from '@/api/userApi'
+import type { User } from '@/types/user.types'
 
 export default function ProfilePage() {
     const navigate = useNavigate();
-
-    const user = useUserStore(s => s.user);
     const { id } = useParams();
 
-    if (!user) return null;
+    const myUser = useUserStore(s => s.user);
+    const token = useUserStore(s => s.token);
 
-    const profileBackground = user.profileBackground;
-    const profileSong = user.profileSong;
-    const isMyProfile =  id === user.id;
+    const [profileUser, setProfileUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        if (!id || !myUser || !token) return;
+
+        if (id === myUser.id) {
+            setProfileUser(myUser);
+            return;
+        }
+
+        const loadUser = async () => {
+            try {
+                const data = await getUserById(token, id);
+                setProfileUser(data.user);
+            } catch (error) {
+                console.log(error);
+                setProfileUser(null);
+            }
+        }
+
+        loadUser();
+    }, [id, myUser, token]);
+
+    if (!profileUser || !myUser) return null;
+
+    const profileBackground = profileUser.profileBackground;
+    const profileSong = profileUser.profileSong;
+    const isMyProfile = id === myUser.id;
 
     return (
         <SteamContentWrapper
@@ -38,27 +65,27 @@ export default function ProfilePage() {
         >
             <header className={s.profile_header}>
                 <UserAvatar
-                    userName={`${user.name} Avatar`}
+                    userName={`${profileUser.name} Avatar`}
                     size={200}
-                    imgURL={user.avatarURL}
-                    frameURL={user.avatarFrameURL}
+                    imgURL={profileUser.avatarURL}
+                    frameURL={profileUser.avatarFrameURL}
                 />
 
                 <div className={s.user_info}>
                     <UserName
-                        userName={user.name}
-                        Icons={user.userIcons}
+                        userName={profileUser.name}
+                        Icons={profileUser.userIcons}
                         variation='profile'
                     />
                     <div className={s.description_wrapper}>
-                        <p>{user.description}</p>
+                        <p>{profileUser.description}</p>
                     </div>
                 </div>
 
                 <div className={s.user_buttons}>
                     <ProfilePlate
                         isElo
-                        text={`${user.elo}`}
+                        text={`${profileUser.elo}`}
                     />
                     {profileSong && (
                         <ProfileSongPlate song={profileSong} />

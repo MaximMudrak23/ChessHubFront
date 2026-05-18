@@ -1,4 +1,4 @@
-import type { AuthResponse, ProfileBackground, ProfileSong } from '@/types/user.types';
+import type { AuthResponse, ProfileBackground, ProfileSong, User } from '@/types/user.types';
 import { API_URL } from './config';
 
 type UpdateProfileData = {
@@ -90,6 +90,48 @@ export async function updateSong(token: string, data: UpdateSongData): Promise<O
             Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+type SearchUsersResponse = {
+    users: User[];
+    totalPages: number;
+};
+
+export async function searchUsers(token: string, q: string, page: number, limit: number = 10): Promise<SearchUsersResponse> {
+    const res = await fetch(
+        `${API_URL}/users/search?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+type GetUserByIdResponse = {
+    user: User;
+};
+
+export async function getUserById(token: string, id: string): Promise<GetUserByIdResponse> {
+    const res = await fetch(`${API_URL}/users/profile/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
 
     if (!res.ok) {

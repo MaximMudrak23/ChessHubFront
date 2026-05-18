@@ -1,4 +1,6 @@
 import {Routes, Route} from 'react-router-dom'
+import PublicOnlyRoute from './components/PublicOnlyRoute'
+import ProtectedRoute from './components/ProtectedRoute'
 import LayoutWithHeader from './components/LayoutWithHeader'
 import AuthLoader from './components/AuthLoader'
 
@@ -18,17 +20,22 @@ function App() {
       <AuthLoader />
 
       <Routes>
-        <Route path='/' element={<WelcomePage />} />
-
-        <Route element={<LayoutWithHeader />} >
-          <Route path='/main' element={<MainPage />} />
-          <Route path='/profile/:id' element={<ProfilePage />} />
-          <Route path='/profile/:id/edit' element={<ProfileEdit />} />
-          <Route path='/search' element={<SearchPage />} />
-          <Route path='/game/:id' element={<GamePage />} />
-          <Route path='/options' element={<OptionsPage />} />
-          <Route path='/admin' element={<AdminPage />} />
+        <Route element={<PublicOnlyRoute />}>
+          <Route path='/' element={<WelcomePage />} />
         </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route element={<LayoutWithHeader />} >
+            <Route path='/main' element={<MainPage />} />
+            <Route path='/profile/:id' element={<ProfilePage />} />
+            <Route path='/profile/:id/edit' element={<ProfileEdit />} />
+            <Route path='/search' element={<SearchPage />} />
+            <Route path='/game/:id' element={<GamePage />} />
+            <Route path='/options' element={<OptionsPage />} />
+            <Route path='/admin' element={<AdminPage />} />
+          </Route>
+        </Route>
+
         
         <Route path='*' element={<Page404 />} />
       </Routes>

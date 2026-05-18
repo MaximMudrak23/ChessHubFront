@@ -5,57 +5,72 @@ import PageSlider from './components/PageSlider'
 import { useEffect, useState } from 'react'
 import Lottie from 'lottie-react'
 import loadingLootie from './loading.json'
-
-type CardType = {
-    ImgURL: string;
-    username: string;
-    description?: string;
-    isFriend: boolean;
-}
+import { searchUsers } from '@/api/userApi'
+import { useUserStore } from '@/store/userStore'
+import type { User } from '@/types/user.types'
 
 export default function SearchPage() {
-    const [value, setValue] = useState<string>('');
-    const [cards, setCards] = useState<CardType[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const token = useUserStore(s => s.token);
 
-    const [debouncedValue,setDebouncedValue] = useState('');
-    const [isLoading,setIsLoading] = useState(false);
+    const [value, setValue] = useState('');
+    const [cards, setCards] = useState<User[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
-    useEffect(()=> {
-        const timer = setTimeout(()=>{setDebouncedValue(value)},600);
+    const [debouncedValue, setDebouncedValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedValue(value);
+            setCurrentPage(1);
+        }, 600);
+
         return () => clearTimeout(timer);
     }, [value]);
 
     useEffect(() => {
-        if (debouncedValue === '') {
+        if (!token) return;
+
+        if (debouncedValue.trim() === '') {
             setCards([]);
+            setTotalPages(0);
             return;
         }
 
-        setIsLoading(true);
+        const loadUsers = async () => {
+            try {
+                setIsLoading(true);
 
-        setTimeout(() => {
-            const mockData: CardType[] = [
-                { ImgURL: '/all/recront.jpg', username: 'Recront', isFriend: true }
-            ];
-            
-            if (debouncedValue.toLowerCase().includes('rec')) {
-                setCards(mockData);
-            } else {
+                const data = await searchUsers(token, debouncedValue, currentPage, 10);
+
+                setCards(data.users);
+                setTotalPages(data.totalPages);
+            } catch (error) {
+                console.log(error);
                 setCards([]);
+                setTotalPages(0);
+            } finally {
+                setIsLoading(false);
             }
-            
-            setIsLoading(false);
-        }, 5000);
+        }
 
-    }, [debouncedValue, currentPage]);
+        loadUsers();
+    }, [debouncedValue, currentPage, token]);
 
     return (  
-        <SteamContentWrapper styleProps={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px'}}>
+        <SteamContentWrapper
+            styleProps={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '12px'
+            }}
+        >
             <Input
                 id='search-input'
                 value={value}
-                onChangeHandler={v =>setValue(v)}
+                onChangeHandler={setValue}
                 variant='grey'
                 placeholderText='Who you want to find?'
                 styleProps={{
@@ -65,35 +80,51 @@ export default function SearchPage() {
                 }}
             />
 
-        {isLoading ? (
-            <Lottie animationData={loadingLootie} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
-        ) : (
-            <>
-                {cards.length > 0 ? (
-                    cards.map((c, i) => (
-                        <FindCard key={c.username + i} imgURL={c.ImgURL} username={c.username} description={c.description} isFriend={c.isFriend} />
-                    ))
-                ) : (
-                    debouncedValue !== '' && (
-                        <div style={{
-                            width: '100%',
-                            height: '75px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <p style={{ fontSize: '1.4rem' }}>
-                                {`No user found with the username "${debouncedValue}". Try another one.`}
-                            </p>
-                        </div>
-                    )
-                )}
-            </>
-        )}
+            {isLoading ? (
+                <Lottie
+                    animationData={loadingLootie}
+                    loop={true}
+                    autoplay={true}
+                    style={{ width: 200, height: 200 }}
+                />
+            ) : (
+                <>
+                    {cards.length > 0 ? (
+                        cards.map(user => (
+                            <FindCard
+                                key={user.id}
+                                id={user.id}
+                                imgURL={user.avatarURL}
+                                frameURL={user.avatarFrameURL}
+                                username={user.name}
+                                description={user.description}
+                            />
+                        ))
+                    ) : (
+                        debouncedValue !== '' && (
+                            <div style={{
+                                width: '100%',
+                                height: '75px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <p style={{ fontSize: '1.4rem' }}>
+                                    {`No user found with the username "${debouncedValue}". Try another one.`}
+                                </p>
+                            </div>
+                        )
+                    )}
+                </>
+            )}
 
-        {!isLoading && cards.length > 0 && (
-            <PageSlider totalPages={5} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        )}
+            {!isLoading && cards.length > 0 && (
+                <PageSlider
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
+            )}
         </SteamContentWrapper>
     )
 }

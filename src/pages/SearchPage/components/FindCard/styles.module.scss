@@ -1,44 +1,40 @@
 .find_card {
-    width: 95%;
-    height: 120px;
+    width: 80%;
+    height: fit-content;
     background: #101010;
 
-    border-radius: 10px;
-    padding: 0 18px;
+    padding: 12px;
 
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.text_container {
+    flex: 1;
     
-    overflow: hidden;
+    .username {
+        font-size: 1.4rem;
+        font-weight: 500;
 
-    & > img {
-        height: 75%;
-        border-radius: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
+    .description {
+        color: rgba($color: #FFF, $alpha: 0.75);
+        font-size: 1rem;
 
-    & > .text_info {
-        flex: 1;
-        min-width: 0;
-        
-        padding: 12px 0;
-        
-        .username {
-            font-size: 1.4rem;
-            font-weight: 500;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .description {
-            color: #afafaf;
-            font-size: 1.2rem;
-
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-        }
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
+}
+
+.button_container {
+    flex: 1;
+
+    display: flex;
+    justify-content: flex-end;
 }
