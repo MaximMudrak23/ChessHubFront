@@ -36,7 +36,7 @@ export default function UserOption() {
         <>
             <div className={s.find_container}>
                 <Input
-                    id='admin-search-input'
+                    id='admin-user-search-input'
                     value={value}
                     onChangeHandler={setValue}
                     variant='grey'
@@ -45,7 +45,7 @@ export default function UserOption() {
                         width: '85%',
                         height: '75px',
                         margin: '32px 0',
-                        borderRadius: 9999,
+                        borderRadius: 10,
                     }}
                 />
             </div>

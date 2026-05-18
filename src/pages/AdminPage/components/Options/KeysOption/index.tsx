@@ -1,118 +1,90 @@
 import s from './styles.module.scss'
-import UserAvatar from '@/components/User/UserAvatar'
-import Button from '@/components/UI/Button'
-import FrameCard from '@/components/FrameCard';
-import { updateAvatar } from '@/api/userApi';
+import Input from '@/components/UI/Input';
+import Button from '@/components/UI/Button';
+import KeyCard from '../../Cards/KeyCard';
+import { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { useState, useEffect } from 'react';
+import { createAdminKey, deleteAdminKey, getAdminKeys } from '@/api/adminApi';
 
-export default function AvatarOption() {
-    const user = useUserStore(s => s.user);
+type AdminKey = {
+    _id: string;
+    code: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export default function KeysOption() {
     const token = useUserStore(s => s.token);
-    const setUser = useUserStore(s => s.setUser);
 
-    const [avatarFile, setAvatarFile] = useState<File | undefined>();
-    const [previewAvatarURL, setPreviewAvatarURL] = useState('');
-    const [previewFrameURL, setPreviewFrameURL] = useState('');
+    const [value, setValue] = useState('');
+    const [keys, setKeys] = useState<AdminKey[]>([]);
 
     useEffect(() => {
-        if (!user) return;
+        if (!token) return;
 
-        setPreviewAvatarURL(user.avatarURL || '');
-        setPreviewFrameURL(user.avatarFrameURL || '');
-    }, [user]);
+        const loadKeys = async () => {
+            const data = await getAdminKeys(token);
+            setKeys(data.keys);
+        }
 
-    if (!user || !token) return null;
+        loadKeys();
+    }, [token]);
 
-    const availableFrames = user.unlockedFrames || [];
+    const handleCreate = async () => {
+        if (!token) return;
 
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-
-        if (!file) return;
-
-        setAvatarFile(file);
-        setPreviewAvatarURL(URL.createObjectURL(file));
+        const data = await createAdminKey(token);
+        setKeys(prev => [data.key, ...prev]);
     }
 
-    const handleSave = async () => {
-        const data = await updateAvatar(token, {
-            avatarFile,
-            avatarFrameURL: previewFrameURL,
-        });
+    const handleDelete = async (id: string) => {
+        if (!token) return;
 
-        setUser(data.user);
-        setAvatarFile(undefined);
+        await deleteAdminKey(token, id);
+        setKeys(prev => prev.filter(key => key._id !== id));
     }
 
-    const handleCancel = () => {
-        setAvatarFile(undefined);
-        setPreviewAvatarURL(user.avatarURL || '');
-        setPreviewFrameURL(user.avatarFrameURL || '');
-    }
-    
+    const filteredKeys = keys.filter(key =>
+        key.code.toLowerCase().includes(value.toLowerCase())
+    );
+
     return (
         <>
-            <div className={s.upload_avatar_container}>
-                <div className={s.preview_container}>
-                    <UserAvatar
-                        userName={`${user.name} Preview`}
-                        size={200}
-                        imgURL={previewAvatarURL}
-                        frameURL={previewFrameURL}
-                    />
-                </div>
-                <div className={s.action_buttons_container}>
-                    <input
-                        id="avatarUpload"
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={handleAvatarChange}
-                    />
-
-                    <Button
-                        text="Upload Avatar"
-                        variant="profile"
-                        animation="white-hover"
-                        onClick={() => document.getElementById('avatarUpload')?.click()}
-                        styleProps={{flex: 1, height: 65}}
-                    />
-                    <Button
-                        text="No Frame"
-                        variant="profile"
-                        animation="white-hover"
-                        onClick={() => setPreviewFrameURL('')}
-                        styleProps={{flex: 1, height: 65}}
-                    />
-                </div>
+            <div className={s.find_container}>
+                <Input
+                    id='admin-key-search-input'
+                    value={value}
+                    onChangeHandler={setValue}
+                    variant='grey'
+                    placeholderText='Find key...'
+                    styleProps={{
+                        width: '85%',
+                        height: '75px',
+                        margin: '32px 0',
+                        borderRadius: 10,
+                    }}
+                />
+                <Button
+                    text='Create Key'
+                    variant='profile'
+                    animation='white-hover'
+                    onClick={handleCreate}
+                    styleProps={{
+                        flex: '1',
+                        padding: '12px',
+                        borderRadius: 10,
+                    }}
+                />
             </div>
-            <div className={s.user_unlocked_frames}>
-                {availableFrames.map(frameURL => (
-                    <FrameCard
-                        key={frameURL}
-                        frameURL={frameURL}
-                        variant="profile"
-                        isActive={previewFrameURL === frameURL}
-                        onClick={() => setPreviewFrameURL(frameURL)}
+
+            <div className={s.cards_container}>
+                {filteredKeys.map(key => (
+                    <KeyCard
+                        key={key._id}
+                        keyValue={key.code}
+                        onDelete={() => handleDelete(key._id)}
                     />
                 ))}
-            </div>
-            <div className={s.buttons_container}>
-                <Button
-                    text='Save'
-                    variant='profile'
-                    animation='white-hover'
-                    onClick={handleSave}
-                    styleProps={{flex: '1'}}
-                />
-                <Button
-                    text='Cancel'
-                    variant='profile'
-                    animation='white-hover'
-                    onClick={handleCancel}
-                    styleProps={{flex: '1'}}
-                />
             </div>
         </>
     )

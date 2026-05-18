@@ -1,32 +1,23 @@
 import s from './styles.module.scss'
-import Input from '@/components/UI/Input'
+import Button from '@/components/UI/Button'
 
-import { useState } from 'react';
+type Props = {
+    keyValue: string;
+    onDelete: () => void;
+}
 
-export default function UserOption() {
-    const [value, setValue] = useState('');
-
+export default function KeyCard(props: Props) {
     return (
-        <>
-            <div className={s.find_container}>
-                <Input
-                    id='admin-search-input'
-                    value={value}
-                    onChangeHandler={setValue}
-                    variant='grey'
-                    placeholderText='Who you want to find?'
-                    styleProps={{
-                        width: '85%',
-                        height: '75px',
-                        margin: '32px 0',
-                        borderRadius: 9999,
-                    }}
-                />
-            </div>
-
-            <div className={s.cards_container}>
-
-            </div>
-        </>
+        <div className={s.key_card}>
+            <p className={s.title}>Code</p>
+            <p className={s.value}>{props.keyValue}</p>
+            <Button
+                text='Delete'
+                variant='profile'
+                animation='white-hover'
+                onClick={props.onDelete}
+                className={s.button}
+            />
+        </div>
     )
 }

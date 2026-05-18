@@ -3,6 +3,7 @@ import SteamContentWrapper from '@/components/SteamContentWrapper'
 import OptionsScreen from '@/components/Modules/OptionsScreen'
 
 import UserOption from './components/Options/UserOption'
+import KeysOption from './components/Options/KeysOption'
 
 import { SVG } from '@/constants/paths'
 
@@ -17,7 +18,7 @@ const ADMIN_OPTIONS = [
     },
     {
         optionName: 'Keys',
-        // Component: GeneralOption,
+        Component: KeysOption,
     },
 ]
 
