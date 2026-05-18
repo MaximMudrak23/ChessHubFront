@@ -5,7 +5,7 @@ import { useState } from 'react';
 type OptionsType = {
     optionName: string;
     optionIconURL?: string;
-    title: string;
+    title?: string;
     description?: string[];
     Component?: React.ElementType;
 }
@@ -28,14 +28,14 @@ export default function OptionsScreen({options}: Props) {
             />
 
             <section className={s.event_screen}>
-                <div className={s.title}>
+                {(config.title || config.description?.length) && <div className={s.title}>
                     <h2>{config.title}</h2>
                     <div className={s.description}>
                         {config.description?.map(text => (
                             <p key={text}>{text}</p>
                         ))}
                     </div>
-                </div>
+                </div>}
 
                 {config.Component ? <config.Component /> : <p className={s.error}>This option is in development ⚙️</p>}
             </section>

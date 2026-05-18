@@ -1,58 +1,10 @@
-.page {
-    flex: 1;
+.title {
+    height: 75px;
+    padding-left: 12px;
+
     display: flex;
+    align-items: center;
+    gap: 12px;
 
-    .content_area {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-
-        .header {
-            min-height: 64px;
-            background-color: #1A1817;
-            display: flex;
-            flex-wrap: wrap;
-
-            .input {
-                flex: 1;
-                min-height: 64px;
-                
-                border: 1px solid #FFF;
-                border-radius: 5px;
-                margin: 8px;
-            }
-
-            .buttons {
-                flex: 1;
-                display: flex;
-                
-                padding: 8px;
-                gap: 8px;
-
-                .button {
-                    flex: 1;
-                    min-width: 124px;
-                    min-height: 64px;
-
-                    border-radius: 5px;
-                }
-            }
-
-            @media (max-width: 980px) {
-                & {
-                    flex-direction: column;
-                }
-            }
-        }
-
-        .cards {
-            flex: 1;
-            padding: 24px;
-            
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(325px, 325px));
-            justify-content: center;
-            gap: 16px;
-        }
-    }
+    user-select: none;
 }

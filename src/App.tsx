@@ -1,6 +1,7 @@
 import {Routes, Route} from 'react-router-dom'
 import PublicOnlyRoute from './components/PublicOnlyRoute'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminRoute from './components/AdminRoute'
 import LayoutWithHeader from './components/LayoutWithHeader'
 import AuthLoader from './components/AuthLoader'
 
@@ -32,7 +33,10 @@ function App() {
             <Route path='/search' element={<SearchPage />} />
             <Route path='/game/:id' element={<GamePage />} />
             <Route path='/options' element={<OptionsPage />} />
-            <Route path='/admin' element={<AdminPage />} />
+            
+            <Route element={<AdminRoute />}>
+              <Route path='/admin' element={<AdminPage />} />
+            </Route>
           </Route>
         </Route>
 

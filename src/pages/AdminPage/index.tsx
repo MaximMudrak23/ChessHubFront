@@ -1,81 +1,35 @@
 import s from './styles.module.scss'
-import OptionsContainer from '../../components/Modules/OptionsContainer'
-import Button from '../../components/UI/Button'
-import Input from '../../components/UI/Input'
-import Card from './components/Card'
-import { useState } from 'react'
+import SteamContentWrapper from '@/components/SteamContentWrapper'
+import OptionsScreen from '@/components/Modules/OptionsScreen'
 
-const folders = [
+import UserOption from './components/Options/UserOption'
+
+import { SVG } from '@/constants/paths'
+
+const ADMIN_OPTIONS = [
     {
-        folderName: 'Users',
-        placeholderText: 'Find user...',
-        buttons: [
-            { text: 'Find', onClick: () => {} },
-            { text: 'Create', onClick: () => {} },
-        ]
+        optionName: 'Users',
+        Component: UserOption,
     },
     {
-        folderName: 'Keys',
-        placeholderText: 'Find key...',
-        buttons: [
-            { text: 'Find', onClick: () => {} },
-            { text: 'Create', onClick: () => {} },
-        ]
-    }
-];
+        optionName: 'Bots',
+        // Component: GeneralOption,
+    },
+    {
+        optionName: 'Keys',
+        // Component: GeneralOption,
+    },
+]
 
 export default function AdminPage() {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [inputValue, setInputValue] = useState('');
-
     return (
-        <section className={s.page}>
-            <OptionsContainer
-                options={folders.map(folder => ({name: folder.folderName}))}
-                activeIndex={activeIndex}
-                onSelect={setActiveIndex}
-                styleProps={{ backgroundColor: '#1A1817' }}
-            />
-
-            <div className={s.content_area}>
-                <header className={s.header}>
-                    <Input
-                        value={inputValue}
-                        onChangeHandler={setInputValue}
-                        id={'admin-input'}
-                        variant={'grey'}
-                        placeholderText={folders[activeIndex].placeholderText}
-                        className={s.input}
-                    />
-                    
-                    <div className={s.buttons}>
-                        {folders[activeIndex].buttons.map(btn => (
-                            <Button
-                                key={btn.text}
-                                text={btn.text}
-                                variant='green'
-                                onClick={btn.onClick}
-                                className={s.button}
-                            />
-                        ))}
-                    </div>
-                </header>
-
-                <div className={s.cards}>
-                    {/* <Card
-                        imgURL={'/all/i1.png'}
-                        frameURL={'/steam/steam2.png'}
-                        username={'Recront'}
-                        regDate={'17/04/2026'}
-                        id={1}
-                        login={'zxcloginasd'}
-                        mail={'zxcasdmail@gmail.com'}
-                        role={'User'}
-                        lastSeen={'Online'}
-                        isBanned={false} 
-                    /> */}
-                </div>
+        <SteamContentWrapper styleProps={{backgroundColor: 'transparent'}}>
+            <div className={s.title}>
+                <img src={SVG.gear} alt="Gear" draggable={false} />
+                <h1>Admin</h1>
             </div>
-        </section>
+
+            <OptionsScreen options={ADMIN_OPTIONS} />
+        </SteamContentWrapper>
     )
 }

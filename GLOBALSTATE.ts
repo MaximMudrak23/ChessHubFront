@@ -1,5 +1,5 @@
 // This is file for not real global state just for test, later this file will be deleted
-import { SVG, PROFILE_BACKGROUNDS, BOARDS, BACKGROUNDS } from "@/constants/paths"
+import { SVG, BOARDS, BACKGROUNDS } from "@/constants/paths"
 
 export const globalState = {
     id: 'USER1',
@@ -9,7 +9,7 @@ export const globalState = {
     elo: 2000,
     avatarURL: '/other/steamgif.gif',
     avatarFrameURL: null,
-    profileBackground: PROFILE_BACKGROUNDS.seaDepths,
+    profileBackground: null,
     profileSongName: "U waren't here, but I really miss you",
     profileSongAvatar: '/other/steamgif.gif',
     role: 'Admin',

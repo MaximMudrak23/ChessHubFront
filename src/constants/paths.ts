@@ -42,10 +42,6 @@ export const LOGO = {
     logo: '/logo/logo.png',
     newLogo: '/logo/new-logo.png',
 };
-export const PROFILE_BACKGROUNDS = {
-    cozinessAmongTheSnows: '/profile-backgrounds/coziness-among-the-snows.webm',
-    seaDepths: '/profile-backgrounds/sea-depths.webm',
-};
 export const SPLASH_SCREEN = {
     background: '/splash-screen/background.png',
     leftHand: '/splash-screen/left-hand.png',
@@ -65,9 +61,12 @@ export const SVG = {
     more: '/svg/more.svg',
     optionIcon: '/svg/option-icon.svg',
     profileIcon: '/svg/user-profile.svg',
+    adminIcon: '/svg/admin-page.svg',
     profilePause: '/svg/profile-pause.svg',
     profilePlay: '/svg/profile-play.svg',
     rightArrow: '/svg/right-arrow.svg',
     searchIcon: '/svg/user-search.svg',
     logoutIcon: '/svg/user-logout.svg',
+    expandIcon: '/svg/expand-icon.svg',
+    adminEditIcon: '/svg/admin-edit-icon.svg',
 };

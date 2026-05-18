@@ -8,29 +8,41 @@ export function useHeaderOptions() {
     const logout = useUserStore(s => s.logout);
     const navigate = useNavigate();
 
-    const options = useMemo(() => [
-        {
-            img: SVG.menuIcon,
-            text: 'Main',
-            onClick: () => navigate('/main'),
-        },
-        {
-            img: SVG.profileIcon,
-            text: 'Profile',
-            onClick: () => {
-                if (!user) {
-                    alert('I Can`t find your profile!');
-                    return;
-                }
-                navigate(`/profile/${user?.id}`);
+    const options = useMemo(() => {
+        const baseOptions = [
+            {
+                img: SVG.menuIcon,
+                text: 'Main',
+                onClick: () => navigate('/main'),
             },
-        },
-        {
-            img: SVG.searchIcon,
-            text: 'Search',
-            onClick: () => navigate('/search'),
-        },
-        {
+            {
+                img: SVG.profileIcon,
+                text: 'Profile',
+                onClick: () => {
+                    if (!user) {
+                        alert('I Can`t find your profile!');
+                        return;
+                    }
+
+                    navigate(`/profile/${user.id}`);
+                },
+            },
+            {
+                img: SVG.searchIcon,
+                text: 'Search',
+                onClick: () => navigate('/search'),
+            },
+        ];
+
+        if (user?.role === 'admin') {
+            baseOptions.push({
+                img: SVG.adminIcon,
+                text: 'Admin',
+                onClick: () => navigate('/admin'),
+            });
+        }
+
+        baseOptions.push({
             img: SVG.logoutIcon,
             text: 'Logout',
             onClick: () => {
@@ -38,8 +50,10 @@ export function useHeaderOptions() {
                 localStorage.removeItem('token');
                 navigate('/');
             },
-        },
-    ], [navigate, user, logout]);
+        });
+
+        return baseOptions;
+    }, [navigate, user, logout]);
 
     return options;
 }
