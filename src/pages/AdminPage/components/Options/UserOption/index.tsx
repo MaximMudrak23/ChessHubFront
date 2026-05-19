@@ -3,7 +3,7 @@ import Input from '@/components/UI/Input'
 import PlayerCard from '../../Cards/PlayerCard';
 import { useEffect, useState } from 'react'
 import { useUserStore } from '@/store/userStore'
-import { getAdminUsers } from '@/api/adminApi'
+import { getAdminUsers, deleteAdminUser } from '@/api/adminApi'
 import type { User } from '@/types/user.types'
 
 export default function UserOption() {
@@ -54,9 +54,32 @@ export default function UserOption() {
                 {filteredUsers.map(user => (
                     <PlayerCard
                         key={user.id}
-                        user={user}
-                        onDelete={id => {
-                            setUsers(prev => prev.filter(user => user.id !== id));
+                        name={user.name}
+                        subtitle={user.email}
+                        avatarURL={user.avatarURL}
+                        frameURL={user.avatarFrameURL}
+                        fields={[
+                            ['ID', user.id],
+                            ['Name', user.name],
+                            ['Email', user.email],
+                            ['Role', user.role],
+                            ['Elo', String(user.elo)],
+                            ['Description', user.description || '-'],
+                            ['Avatar URL', user.avatarURL || '-'],
+                            ['Frame URL', user.avatarFrameURL || '-'],
+                            ['Board Theme', user.boardTheme],
+                            ['Menu Background', user.menuBackground],
+                        ]}
+                        deleteText="Delete account"
+                        onDelete={async () => {
+                            if (!token) return;
+
+                            const confirmed = confirm(`Delete "${user.name}" account?`);
+                            if (!confirmed) return;
+
+                            await deleteAdminUser(token, user.id);
+
+                            setUsers(prev => prev.filter(item => item.id !== user.id));
                         }}
                     />
                 ))}

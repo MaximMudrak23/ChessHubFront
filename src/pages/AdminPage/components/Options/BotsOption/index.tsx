@@ -1,119 +1,124 @@
 import s from './styles.module.scss'
-import UserAvatar from '@/components/User/UserAvatar'
+import Input from '@/components/UI/Input'
 import Button from '@/components/UI/Button'
-import FrameCard from '@/components/FrameCard';
-import { updateAvatar } from '@/api/userApi';
-import { useUserStore } from '@/store/userStore';
-import { useState, useEffect } from 'react';
+import PlayerCard from '../../Cards/PlayerCard'
+import CreateBotModal from './components/CreateBotModal'
+import { useEffect, useState } from 'react'
+import {
+    createAdminBot,
+    deleteAdminBot,
+    getAdminBots,
+    type AdminBot,
+} from '@/api/adminApi'
+import { useUserStore } from '@/store/userStore'
 
-export default function AvatarOption() {
-    const user = useUserStore(s => s.user);
+export default function BotsOption() {
     const token = useUserStore(s => s.token);
-    const setUser = useUserStore(s => s.setUser);
-
-    const [avatarFile, setAvatarFile] = useState<File | undefined>();
-    const [previewAvatarURL, setPreviewAvatarURL] = useState('');
-    const [previewFrameURL, setPreviewFrameURL] = useState('');
+    const [value, setValue] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const [bots, setBots] = useState<AdminBot[]>([]);
 
     useEffect(() => {
-        if (!user) return;
+        if (!token) return;
 
-        setPreviewAvatarURL(user.avatarURL || '');
-        setPreviewFrameURL(user.avatarFrameURL || '');
-    }, [user]);
+        const loadBots = async () => {
+            try {
+                const data = await getAdminBots(token);
+                setBots(data.bots);
+            } catch (error) {
+                console.log(error);
+            }
+        }
 
-    if (!user || !token) return null;
+        loadBots();
+    }, [token]);
 
-    const availableFrames = user.unlockedFrames || [];
+    const handleCreateBot = async (data: {
+        botType: 'stockfish' | 'mirror' | 'personality';
+        name: string;
+        skillLevel: number;
+    }) => {
+        if (!token) return;
 
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-
-        if (!file) return;
-
-        setAvatarFile(file);
-        setPreviewAvatarURL(URL.createObjectURL(file));
+        try {
+            const res = await createAdminBot(token, data);
+            setBots(prev => [res.bot, ...prev]);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    const handleSave = async () => {
-        const data = await updateAvatar(token, {
-            avatarFile,
-            avatarFrameURL: previewFrameURL,
-        });
+    const filteredBots = bots.filter(bot =>
+        bot.name.toLowerCase().includes(value.toLowerCase()) ||
+        bot.botType.toLowerCase().includes(value.toLowerCase())
+    );
 
-        setUser(data.user);
-        setAvatarFile(undefined);
-    }
-
-    const handleCancel = () => {
-        setAvatarFile(undefined);
-        setPreviewAvatarURL(user.avatarURL || '');
-        setPreviewFrameURL(user.avatarFrameURL || '');
-    }
-    
     return (
         <>
-            <div className={s.upload_avatar_container}>
-                <div className={s.preview_container}>
-                    <UserAvatar
-                        userName={`${user.name} Preview`}
-                        size={200}
-                        imgURL={previewAvatarURL}
-                        frameURL={previewFrameURL}
-                    />
-                </div>
-                <div className={s.action_buttons_container}>
-                    <input
-                        id="avatarUpload"
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={handleAvatarChange}
-                    />
+            <div className={s.find_container}>
+                <Input
+                    id='admin-user-search-input'
+                    value={value}
+                    onChangeHandler={setValue}
+                    variant='grey'
+                    placeholderText='Find bot...'
+                    styleProps={{
+                        width: '85%',
+                        height: '75px',
+                        margin: '32px 0',
+                        borderRadius: 10,
+                    }}
+                />
 
-                    <Button
-                        text="Upload Avatar"
-                        variant="profile"
-                        animation="white-hover"
-                        onClick={() => document.getElementById('avatarUpload')?.click()}
-                        styleProps={{flex: 1, height: 65}}
-                    />
-                    <Button
-                        text="No Frame"
-                        variant="profile"
-                        animation="white-hover"
-                        onClick={() => setPreviewFrameURL('')}
-                        styleProps={{flex: 1, height: 65}}
-                    />
-                </div>
+                <Button
+                    text='Create Bot'
+                    variant='profile'
+                    animation='white-hover'
+                    onClick={() => setIsOpen(true)}
+                    className={s.button}
+                />
             </div>
-            <div className={s.user_unlocked_frames}>
-                {availableFrames.map(frameURL => (
-                    <FrameCard
-                        key={frameURL}
-                        frameURL={frameURL}
-                        variant="profile"
-                        isActive={previewFrameURL === frameURL}
-                        onClick={() => setPreviewFrameURL(frameURL)}
+
+            <div className={s.cards_container}>
+                {filteredBots.map(bot => (
+                    <PlayerCard
+                        key={bot.id}
+                        name={bot.name}
+                        subtitle={`${bot.botType} • Skill ${bot.skillLevel}`}
+                        avatarURL={bot.avatarURL}
+                        frameURL={bot.avatarFrameURL}
+                        fields={[
+                            ['ID', bot.id],
+                            ['Name', bot.name],
+                            ['Type', bot.botType],
+                            ['Engine', bot.engine],
+                            ['Skill Level', String(bot.skillLevel)],
+                            ['Elo', String(bot.elo)],
+                            ['Status', bot.status],
+                            ['Description', bot.description || '-'],
+                            ['PGN files', String(bot.pgnFiles.length)],
+                        ]}
+                        deleteText="Delete bot"
+                        onDelete={async () => {
+                            if (!token) return;
+
+                            const confirmed = confirm(`Delete bot "${bot.name}"?`);
+                            if (!confirmed) return;
+
+                            await deleteAdminBot(token, bot.id);
+
+                            setBots(prev => prev.filter(item => item.id !== bot.id));
+                        }}
                     />
                 ))}
             </div>
-            <div className={s.buttons_container}>
-                <Button
-                    text='Save'
-                    variant='profile'
-                    animation='white-hover'
-                    onClick={handleSave}
-                    styleProps={{flex: '1'}}
+
+            {isOpen && (
+                <CreateBotModal
+                    onClose={() => setIsOpen(false)}
+                    onCreate={handleCreateBot}
                 />
-                <Button
-                    text='Cancel'
-                    variant='profile'
-                    animation='white-hover'
-                    onClick={handleCancel}
-                    styleProps={{flex: '1'}}
-                />
-            </div>
+            )}
         </>
     )
 }

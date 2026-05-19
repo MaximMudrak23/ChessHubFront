@@ -2,6 +2,7 @@ import s from './styles.module.scss'
 import clsx from 'clsx'
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { IconType } from '@/types/user.types'
+import { getFileURL } from '@/utils/getFileURL'
 
 type Props = {
     userName: string;
@@ -80,7 +81,7 @@ export default function UserName(props: Props) {
             </span>
 
             {props.Icons?.slice(0, visibleIconsCount).map((icon, i) => (
-                <img key={i} src={icon.iconURL} alt={`Icon ${i}`} />
+                <img key={i} src={getFileURL(icon.iconURL)} alt={`Icon ${i}`} />
             ))}
         </div>
     )

@@ -85,3 +85,76 @@ export async function deleteAdminKey(token: string, id: string) {
 
     return res.json();
 }
+
+type CreateBotData = {
+    name: string;
+    botType: 'stockfish' | 'mirror' | 'personality';
+    skillLevel: number;
+};
+
+export async function createAdminBot(token: string, data: CreateBotData) {
+    const res = await fetch(`${API_URL}/admin/bots`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+export type AdminBot = {
+    id: string;
+    isBot: true;
+    botType: 'stockfish' | 'mirror' | 'personality';
+    name: string;
+    description?: string;
+    avatarURL?: string;
+    avatarFrameURL?: string;
+    userIcons?: { title: string; iconURL: string }[];
+    profileBackground?: any;
+    profileSong?: any;
+    elo: number;
+    engine: 'stockfish';
+    skillLevel: number;
+    pgnFiles: string[];
+    status: 'idle' | 'searching' | 'playing' | 'disabled';
+};
+
+export async function getAdminBots(token: string): Promise<{ bots: AdminBot[] }> {
+    const res = await fetch(`${API_URL}/admin/bots`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+export async function deleteAdminBot(token: string, id: string) {
+    const res = await fetch(`${API_URL}/admin/bots/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}

@@ -69,11 +69,7 @@ export default function KeysOption() {
                     variant='profile'
                     animation='white-hover'
                     onClick={handleCreate}
-                    styleProps={{
-                        flex: '1',
-                        padding: '12px',
-                        borderRadius: 10,
-                    }}
+                    className={s.button}
                 />
             </div>
 

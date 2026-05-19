@@ -15,6 +15,7 @@ export type ProfileSong = {
 
 export type User = {
     id: string;
+    isBot?: boolean;
     name: string;
     email: string;
     elo: number;

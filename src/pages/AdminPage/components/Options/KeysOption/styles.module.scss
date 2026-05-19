@@ -1,10 +1,20 @@
 .find_container {
-    padding: 12px;
+    padding: 0 12px;
 
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
+
+    .button {
+        flex: 1;
+        height: 75px;
+        
+        padding: 12px;
+        border-radius: 10px;
+
+        white-space: nowrap;
+    }
 }
 
 .cards_container {
