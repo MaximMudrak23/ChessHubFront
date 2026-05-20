@@ -1,6 +1,8 @@
 import s from './styles.module.scss'
 import Button from '../../../../components/UI/Button'
 import UserAvatar from '@/components/User/UserAvatar'
+import UserName from '@/components/User/UserName';
+import type { IconType } from '@/types/user.types'
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -9,6 +11,7 @@ type Props = {
     description?: string;
     imgURL?: string;
     frameURL?: string;
+    userIcons?: IconType[];
 }
 
 export default function FindCard(props: Props) {
@@ -24,7 +27,12 @@ export default function FindCard(props: Props) {
             />
 
             <div className={s.text_container}>
-                <h3 className={s.username}>{props.username}</h3>
+                <UserName
+                    userName={props.username}
+                    variation="card"
+                    Icons={props.userIcons}
+                    className={s.username}
+                />
                 <p className={s.description}>{props.description}</p>
             </div>
 

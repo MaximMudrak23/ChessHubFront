@@ -10,7 +10,13 @@ export type PieceCode = `${Color}${PieceName}`;
 
 export type Square = `${File}${Rank}`;
 
-export type GameStatus = 'playing' | 'stalemate' | 'checkmate';
+export type GameStatus =
+    | 'playing'
+    | 'checkmate'
+    | 'stalemate'
+    | 'fifty-move-draw'
+    | 'threefold-repetition-draw'
+    | 'insufficient-material-draw';
 
 export type PieceType = {
     id: string;

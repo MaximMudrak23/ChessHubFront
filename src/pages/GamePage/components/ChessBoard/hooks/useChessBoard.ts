@@ -10,10 +10,26 @@ import { isMoveSafe } from "../utils/lib/isMoveSafe";
 import { isKingInCheck } from '../utils/lib/isKingInCheck';
 import { hasLegalMoves } from "../utils/lib/hasLegalMoves";
 import { playSound } from "../utils/lib/playSound";
+import { piecesToFen } from '../utils/lib/piecesToFen';
+import { getBotMove } from '@/api/gameApi';
+import { applyStockfishMove } from '../utils/lib/applyStockfishMove';
+import { hasInsufficientMaterial } from "../utils/lib/hasInsufficientMaterial";
 
 // useChessBoard, обязан просто управлять кликами и дергать за функции как ниточки в зависимости от того, на что мы кликнули
 
-export default function useChessBoard(currentUserSide: Side | null, currentTurn: Side, setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>, setMoves: React.Dispatch<React.SetStateAction<Move[]>>) {
+export default function useChessBoard(
+    currentUserSide: Side | null,
+    currentTurn: Side,
+    setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>,
+    setMoves: React.Dispatch<React.SetStateAction<Move[]>>,
+    isBotTurn: boolean,
+    halfmoveClock: number,
+    fullmoveNumber: number,
+    setHalfmoveClock: (value: number | ((cur: number) => number)) => void,
+    setFullmoveNumber: (value: number | ((cur: number) => number)) => void,
+    positionHistory: string[],
+    setPositionHistory: (value: string[] | ((cur: string[]) => string[])) => void,
+) {
     const [pieces, setPieces] = useState(initialPieces);
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
     const [lastMove, setLastMove] = useState<{ piece: PieceCode; from: Square; to: Square; } | null>(null);
@@ -70,6 +86,41 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
 
         const isCapture = Boolean(targetPiece);
         const promotedPiece = getPromotedPiece(selectedPiece, targetSquare);
+
+        const isPawnMove = selectedPiece.piece[1] === 'p';
+        const isRealCapture = isCapture || isEnPassant;
+
+        function updateMoveCounters() {
+            if (isPawnMove || isRealCapture) {
+                setHalfmoveClock(0);
+            } else {
+                setHalfmoveClock(cur => cur + 1);
+            }
+
+            if (currentTurn === 'black') {
+                setFullmoveNumber(cur => cur + 1);
+            }
+        }
+
+        function addPositionToHistory(nextPieces: PieceType[]) {
+            const nextTurn = currentTurn === 'white' ? 'black' : 'white';
+
+            const nextFen = piecesToFen(
+                nextPieces,
+                nextTurn,
+                isPawnMove || isRealCapture ? 0 : halfmoveClock + 1,
+                currentTurn === 'black' ? fullmoveNumber + 1 : fullmoveNumber,
+                {
+                    piece: movePieceData.piece,
+                    from: fromSquare,
+                    to: targetSquare,
+                },
+            );
+
+            const key = nextFen.split(' ').slice(0, 4).join(' ');
+
+            setPositionHistory(cur => [...cur, key]);
+        }
 
         const isCastling = selectedPiece.piece[1] === 'k' && Math.abs(targetSquare.charCodeAt(0) - fromSquare.charCodeAt(0)) === 2;
 
@@ -135,6 +186,8 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
                 to: targetSquare,
             });
             addMove(moveLabel);
+            updateMoveCounters();
+            addPositionToHistory(nextPieces);
             setSelectedPieceID(null);
             setCurrentTurn(cur => cur === 'white' ? 'black' : 'white');
 
@@ -153,6 +206,8 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
             to: targetSquare,
         });
         addMove(moveLabel);
+        updateMoveCounters();
+        addPositionToHistory(nextPieces);
         setSelectedPieceID(null);
         setCurrentTurn(cur => cur === 'white' ? 'black' : 'white');
 
@@ -194,7 +249,35 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
     
     const isCheck = isKingInCheck(pieces, currentTurn);
     const hasMoves = hasLegalMoves(pieces, currentTurn);
-    const gameStatus: GameStatus = isCheck && !hasMoves ? 'checkmate' : !isCheck && !hasMoves ? 'stalemate' : 'playing';
+
+    const currentFen = piecesToFen(
+        pieces,
+        currentTurn,
+        halfmoveClock,
+        fullmoveNumber,
+        lastMove,
+    );
+
+    const currentPositionKey = currentFen.split(' ').slice(0, 4).join(' ');
+
+    const currentPositionCount = positionHistory.filter(
+        key => key === currentPositionKey
+    ).length;
+
+    const isInsufficientMaterial = hasInsufficientMaterial(pieces);
+
+    const gameStatus: GameStatus =
+    isInsufficientMaterial
+        ? 'insufficient-material-draw'
+        : currentPositionCount >= 3
+            ? 'threefold-repetition-draw'
+            : halfmoveClock >= 100
+                ? 'fifty-move-draw'
+                : isCheck && !hasMoves
+                    ? 'checkmate'
+                    : !isCheck && !hasMoves
+                        ? 'stalemate'
+                        : 'playing';
 
     const prevCheckRef = useRef(false);
     useEffect(() => {
@@ -208,7 +291,7 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
     const prevGameStatus = useRef<GameStatus>('playing');
     useEffect(() => {
         if (
-            (gameStatus === 'checkmate' || gameStatus === 'stalemate') &&
+            (gameStatus !== 'playing') &&
             prevGameStatus.current === 'playing'
         ) {
             playSound('game-end');
@@ -217,9 +300,64 @@ export default function useChessBoard(currentUserSide: Side | null, currentTurn:
         prevGameStatus.current = gameStatus;
     }, [gameStatus]);
 
-    // useEffect(() => {
-    //     playSound('game-start');
-    // }, []);
+    useEffect(() => {
+        playSound('game-start');
+    }, []);
+
+    const hasSavedInitialPosition = useRef(false);
+
+    useEffect(() => {
+        if (hasSavedInitialPosition.current) return;
+
+        const initialFen = piecesToFen(
+            pieces,
+            currentTurn,
+            halfmoveClock,
+            fullmoveNumber,
+            lastMove,
+        );
+
+        const initialKey = initialFen.split(' ').slice(0, 4).join(' ');
+
+        setPositionHistory([initialKey]);
+
+        hasSavedInitialPosition.current = true;
+    }, []);
+
+    useEffect(() => {
+        if (!isBotTurn) return;
+        if (gameStatus !== 'playing') return;
+
+        const timer = window.setTimeout(async () => {
+            try {
+                const fen = piecesToFen(
+                    pieces,
+                    currentTurn,
+                    halfmoveClock,
+                    fullmoveNumber,
+                    lastMove,
+                );
+
+                const data = await getBotMove(fen, 5);
+
+                const parsedMove = applyStockfishMove({
+                    move: data.move,
+                    pieces,
+                });
+
+                if (!parsedMove) return;
+
+                movePiece(
+                    parsedMove.targetSquare,
+                    parsedMove.pieceID,
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }, 400);
+
+        return () => window.clearTimeout(timer);
+    }, [isBotTurn, currentTurn, gameStatus]);
 
     return {
         pieces,

@@ -13,6 +13,13 @@ type Props = {
     currentTurn: Side;
     setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>;
     setMoves: React.Dispatch<React.SetStateAction<Move[]>>;
+    isBotTurn: boolean;
+    halfmoveClock: number;
+    fullmoveNumber: number;
+    setHalfmoveClock: (value: number | ((cur: number) => number)) => void;
+    setFullmoveNumber: (value: number | ((cur: number) => number)) => void;
+    positionHistory: string[];
+    setPositionHistory: (value: string[] | ((cur: string[]) => string[])) => void;
 }
 
 export default function ChessBoard(props: Props) {
@@ -29,7 +36,19 @@ export default function ChessBoard(props: Props) {
         isCheck,
         gameStatus,
         clearSelection,
-    } = useChessBoard(props.currentUserSide, props.currentTurn, props.setCurrentTurn, props.setMoves);
+    } = useChessBoard(
+        props.currentUserSide,
+        props.currentTurn,
+        props.setCurrentTurn,
+        props.setMoves,
+        props.isBotTurn,
+        props.halfmoveClock,
+        props.fullmoveNumber,
+        props.setHalfmoveClock,
+        props.setFullmoveNumber,
+        props.positionHistory,
+        props.setPositionHistory,
+    );
     
     function handleSquareClick(e: React.MouseEvent, square: Square) {
         e.stopPropagation();
@@ -42,7 +61,7 @@ export default function ChessBoard(props: Props) {
         if (!moved) { clearSelection(); }
     }
     
-    const isGameEnded = gameStatus === 'stalemate' || gameStatus === 'checkmate';
+    const isGameEnded = gameStatus !== 'playing';
     const winnerSide = gameStatus === 'checkmate' ? props.currentTurn === 'white' ? 'black' : 'white' : null;
 
     const boardRef = useRef<HTMLDivElement | null>(null);

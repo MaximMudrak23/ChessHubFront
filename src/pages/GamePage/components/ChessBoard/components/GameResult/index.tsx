@@ -4,6 +4,7 @@ import type { GameStatus } from '../../utils/types/chess.types';
 import type { Side } from '../../../../utils/types/game.types';
 import clsx from 'clsx';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     isGameEnded: boolean;
@@ -12,10 +13,11 @@ type Props = {
 }
 
 export default function GameResult({isGameEnded, gameStatus, winnerSide}: Props) {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        if(gameStatus === 'checkmate' || gameStatus === 'stalemate') {
+        if (gameStatus !== 'playing') {
             setIsOpen(true);
         }
     }, [gameStatus])
@@ -33,6 +35,15 @@ export default function GameResult({isGameEnded, gameStatus, winnerSide}: Props)
             {gameStatus === 'stalemate' &&
                 <p className={s.result_table}>Draw! Stalemate</p>
             }
+            {gameStatus === 'fifty-move-draw' &&
+                <p className={s.result_table}>Draw! 50-move rule</p>
+            }
+            {gameStatus === 'threefold-repetition-draw' &&
+                <p className={s.result_table}>Draw! Threefold repetition</p>
+            }
+            {gameStatus === 'insufficient-material-draw' &&
+                <p className={s.result_table}>Draw! Insufficient material</p>
+            }
 
             <div className={s.button_folder}>
                 <Button
@@ -44,7 +55,7 @@ export default function GameResult({isGameEnded, gameStatus, winnerSide}: Props)
                         fontWeight: '500',
                         borderRadius: '5px',
                     }}
-                    onClick={()=>{}}
+                    onClick={() => navigate('/main')} 
                 />
             </div>
         </div>

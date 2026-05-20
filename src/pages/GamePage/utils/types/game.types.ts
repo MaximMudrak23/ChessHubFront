@@ -1,8 +1,10 @@
 import type { IconType } from '@/types/user.types'
 
 export type Side = 'white' | 'black';
+export type PlayerType = 'human' | 'bot';
 
 export type Player = {
+    type: PlayerType;
     side: Side;
     userId: string;
     imgURL?: string;

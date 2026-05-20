@@ -98,6 +98,7 @@ export default function SearchPage() {
                                 frameURL={user.avatarFrameURL}
                                 username={user.name}
                                 description={user.description}
+                                userIcons={user.userIcons}
                             />
                         ))
                     ) : (
