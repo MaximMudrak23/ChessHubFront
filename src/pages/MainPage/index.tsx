@@ -4,53 +4,51 @@ import Button from '../../components/UI/Button'
 import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom';
-import type { Game } from '@/store/gameStore'
+import { findGame, cancelSearch } from '@/api/gameApi';
+import { mapServerGameToClientGame } from '@/utils/mapServerGameToClientGame';
+import { useMatchmakingStore } from '@/store/matchmakingStore';
 
 export default function MainPage() {
     const navigate = useNavigate();
-    
+
     const user = useUserStore(s => s.user);
+    const token = useUserStore(s => s.token);
     const setGame = useGameStore(s => s.setGame);
 
-    const handleFindGame = () => {
-        if (!user) return;
+    const isSearching = useMatchmakingStore(s => s.isSearching);
+    const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
+    const setEloRange = useMatchmakingStore(s => s.setEloRange);
 
-        const game: Game = {
-            gameId: crypto.randomUUID(),
-            players: {
-                white: {
-                    type: 'human',
-                    userId: user.id,
-                    side: 'white',
-                    userName: user.name,
-                    userElo: user.elo,
-                    imgURL: user.avatarURL,
-                    frameURL: user.avatarFrameURL,
-                    userIcons: user.userIcons,
-                },
-                black: {
-                    type: 'bot',
-                    userId: 'bot-local',
-                    side: 'black',
-                    userName: 'Stockfish Bot',
-                    userElo: 1000,
-                    userIcons: [
-                        {
-                            title: 'Bot',
-                            iconURL: '/uploads/badges/bot-badge.png',
-                        },
-                    ],
-                },
-            },
-            currentTurn: 'white',
-            moves: [],
-            halfmoveClock: 0,
-            fullmoveNumber: 1,
-            positionHistory: [],
-        };
+    async function handleFindGame() {
+        if (!user || !token) return;
 
-        setGame(game);
-        navigate(`/game/${game.gameId}`);
+        if (isSearching) {
+            await cancelSearch(token);
+            setIsSearching(false);
+            setEloRange(null);
+            return;
+        }
+
+        try {
+            setIsSearching(true);
+
+            const data = await findGame(token);
+
+            if (data.status === 'searching') {
+                setEloRange(data.eloRange);
+            }
+
+            if (data.status === 'matched' || data.status === 'in_game') {
+                setIsSearching(false);
+                setEloRange(null);
+                setGame(mapServerGameToClientGame(data.game));
+                navigate(`/game/${data.game._id}`);
+            }
+        } catch (error) {
+            console.log(error);
+            setIsSearching(false);
+            setEloRange(null);
+        }
     }
 
     return (
@@ -59,8 +57,8 @@ export default function MainPage() {
                 <p style={{textAlign: 'center', paddingTop: '48px', fontSize: '1.2rem'}}>Unfortunately, I haven't figured out what to put on this page yet, so it's empty for now. 😢</p>
             </SteamContentWrapper>
             <Button
-                text='Find Game'
-                variant='green'
+                text={isSearching ? 'Cancel Search' : 'Find Game'}
+                variant={isSearching ? 'red' : 'green'}
                 animation='main'
                 className={s.floating}
                 onClick={handleFindGame}

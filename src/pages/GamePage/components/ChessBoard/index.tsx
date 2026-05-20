@@ -6,6 +6,7 @@ import useChessBoard from './hooks/useChessBoard'
 import type { Side, Move } from '../../utils/types/game.types'
 import type { Square } from './utils/types/chess.types'
 import {useEffect, useRef, useState } from 'react';
+import type { GameStatus } from './utils/types/chess.types'
 
 type Props = {
     perspective: Side;
@@ -20,6 +21,7 @@ type Props = {
     setFullmoveNumber: (value: number | ((cur: number) => number)) => void;
     positionHistory: string[];
     setPositionHistory: (value: string[] | ((cur: string[]) => string[])) => void;
+    setGameStatus: (status: GameStatus) => void;
 }
 
 export default function ChessBoard(props: Props) {
@@ -62,6 +64,11 @@ export default function ChessBoard(props: Props) {
     }
     
     const isGameEnded = gameStatus !== 'playing';
+
+    useEffect(() => {
+        props.setGameStatus(gameStatus);
+    }, [gameStatus]);
+
     const winnerSide = gameStatus === 'checkmate' ? props.currentTurn === 'white' ? 'black' : 'white' : null;
 
     const boardRef = useRef<HTMLDivElement | null>(null);
