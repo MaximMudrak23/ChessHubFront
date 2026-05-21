@@ -45,17 +45,6 @@ export default function GamePage() {
             });
     }, [id, players, setGame]);
 
-    if (!user || !players) return null;
-
-    const currentPlayer = Object.values(players).find(
-        p => p.userId === user.id
-    );
-
-    const currentUserSide = currentPlayer?.side ?? null;
-    const perspective = currentPlayer?.side ?? 'white';
-    const activePlayer = players[currentTurn];
-    const isBotTurn = activePlayer.type === 'bot';
-
     const hasFinishedGame = useRef(false);
 
     useEffect(() => {
@@ -83,6 +72,17 @@ export default function GamePage() {
             console.log(error);
         });
     }, [gameStatus, token, gameId, currentTurn, moves]);
+
+    if (!user || !players) return null;
+
+    const currentPlayer = Object.values(players).find(
+        p => p.userId === user.id
+    );
+
+    const currentUserSide = currentPlayer?.side ?? null;
+    const perspective = currentPlayer?.side ?? 'white';
+    const activePlayer = players[currentTurn];
+    const isBotTurn = activePlayer.type === 'bot';
 
     return (
         <section className={s.game_page}>

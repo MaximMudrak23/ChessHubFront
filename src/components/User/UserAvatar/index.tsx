@@ -18,7 +18,6 @@ export default function UserAvatar(props: Props) {
     return (
         <div className={
             clsx(s.userAvatarContainer, props.className)}
-            style={{width: props.size, height: props.size}}
         >
             {!props.hideAvatar &&
                 <img

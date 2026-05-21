@@ -29,6 +29,7 @@ export default function FrameCard(props: Props) {
                 userName="Frame"
                 size={90}
                 frameURL={props.frameURL}
+                className={s.framecard_size}
                 hideAvatar
             />
 
