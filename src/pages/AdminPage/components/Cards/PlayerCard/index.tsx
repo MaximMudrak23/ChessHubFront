@@ -14,6 +14,10 @@ type Props = {
     fields: [string, string][];
     onDelete: () => void;
     deleteText?: string;
+    
+    secondaryActionText?: string;
+    secondaryActionActive?: boolean;
+    onSecondaryAction?: () => void;
 }
 
 export default function PlayerCard({
@@ -24,6 +28,8 @@ export default function PlayerCard({
     fields,
     onDelete,
     deleteText = 'Delete account',
+    secondaryActionText,
+    onSecondaryAction,
 }: Props) {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -68,6 +74,16 @@ export default function PlayerCard({
                 ))}
 
                 <div className={s.buttons_container}>
+                    {onSecondaryAction && (
+                        <Button
+                            text={secondaryActionText ?? 'Action'}
+                            variant="profile"
+                            animation="white-hover"
+                            onClick={onSecondaryAction}
+                            styleProps={{ flex: 1, height: 65 }}
+                        />
+                    )}
+                    
                     <Button
                         text={deleteText}
                         variant="profile"

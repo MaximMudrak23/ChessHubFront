@@ -4,12 +4,8 @@ import Button from '@/components/UI/Button'
 import PlayerCard from '../../Cards/PlayerCard'
 import CreateBotModal from './components/CreateBotModal'
 import { useEffect, useState } from 'react'
-import {
-    createAdminBot,
-    deleteAdminBot,
-    getAdminBots,
-    type AdminBot,
-} from '@/api/adminApi'
+import { createAdminBot, deleteAdminBot, getAdminBots, disableAdminBot, activateAdminBot} from '@/api/adminApi'
+import type { AdminBot } from '@/api/adminApi'
 import { useUserStore } from '@/store/userStore'
 
 export default function BotsOption() {
@@ -43,6 +39,24 @@ export default function BotsOption() {
         try {
             const res = await createAdminBot(token, data);
             setBots(prev => [res.bot, ...prev]);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleToggleBotStatus = async (bot: AdminBot) => {
+        if (!token) return;
+
+        try {
+            const data = bot.status === 'disabled'
+                ? await activateAdminBot(token, bot.id)
+                : await disableAdminBot(token, bot.id);
+
+            setBots(prev =>
+                prev.map(item =>
+                    item.id === bot.id ? data.bot : item
+                )
+            );
         } catch (error) {
             console.log(error);
         }
@@ -109,6 +123,8 @@ export default function BotsOption() {
 
                             setBots(prev => prev.filter(item => item.id !== bot.id));
                         }}
+                        secondaryActionText={bot.status === 'disabled' ? 'Activate bot' : 'Disable bot'}
+                        onSecondaryAction={() => handleToggleBotStatus(bot)}
                     />
                 ))}
             </div>

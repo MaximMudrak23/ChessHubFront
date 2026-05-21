@@ -158,3 +158,33 @@ export async function deleteAdminBot(token: string, id: string) {
 
     return res.json();
 }
+
+export async function disableAdminBot(token: string, id: string) {
+    const res = await fetch(`${API_URL}/admin/bots/${id}/disable`, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to disable bot');
+    }
+
+    return res.json();
+}
+
+export async function activateAdminBot(token: string, id: string) {
+    const res = await fetch(`${API_URL}/admin/bots/${id}/activate`, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to activate bot');
+    }
+
+    return res.json();
+}
