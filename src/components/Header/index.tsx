@@ -101,7 +101,11 @@ export default function Header() {
                 />
 
                 {isSearching && (
-                    <p>
+                    <p style={{
+                        background: 'linear-gradient(to bottom, #9FD05E, #45753C)',
+                        padding: 12,
+                        borderRadius: 10,
+                    }}>
                         Searching... {searchSeconds}s {eloRange ? `±${eloRange} Elo` : ''}
                     </p>
                 )}

@@ -5,7 +5,7 @@ export default function AppBackground() {
     const user = useUserStore(s => s.user);
 
     useEffect(() => {
-        const bg = user?.menuBackground || 'default';
+        const bg = user?.menuBackground || 'default.jpg';
 
         document.documentElement.style.setProperty(
             '--main-background',
