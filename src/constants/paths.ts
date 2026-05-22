@@ -2,12 +2,15 @@ export const BACKGROUNDS = {
     default: '/backgrounds/default.jpg',
     redBull: '/backgrounds/red-bull.webp',
     wood: '/backgrounds/wood.png',
+    darkMac: '/backgrounds/dark-mac.jpg',
 };
 export const BOARDS = {
     water: {
         preview: '/boards/water/preview.png',
         blackCell: '/boards/water/black-cell.png',
         whiteCell: '/boards/water/white-cell.png',
+        blackLettersColor: '#FFFFFF',
+        whiteLettersColor: '#74A0B5',
     }
 };
 export const CHESS_PIECES = {

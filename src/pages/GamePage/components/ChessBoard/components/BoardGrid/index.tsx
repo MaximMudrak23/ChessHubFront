@@ -3,8 +3,9 @@ import type { File, Square } from '../../utils/types/chess.types';
 import { boardSize, coordsToSquare } from '../../utils/lib/board';
 import type { PieceType } from '../../utils/types/chess.types';
 import type { Side } from '../../../../utils/types/game.types';
-import { globalState } from '../../../../../../../GLOBALSTATE';
 import clsx from 'clsx';
+import { useUserStore } from '@/store/userStore';
+import { BOARDS } from '@/constants/paths';
 
 type Props = {
     perspective: Side;
@@ -18,9 +19,16 @@ type Props = {
 };
 
 export default function BoardGrid(props: Props) {
+    const token = useUserStore(s => s.token);
+    const user = useUserStore(s => s.user);
+
+    if (!user || !token) return;
+
     const cells = [];
     const selectedPiece = props.pieces.find(p => p.id === props.selectedPieceID);
     const selectedSquare = selectedPiece?.square;
+
+    const boardTheme = BOARDS[user.boardTheme];
 
     for (let row = 0; row < boardSize; row++) {
         for (let col = 0; col < boardSize; col++) {
@@ -44,10 +52,10 @@ export default function BoardGrid(props: Props) {
             className={s.board_grid}
             style={{
                 '--board-size': boardSize,
-                '--board-light-letters-color': globalState.boardTheme.lightLetters,
-                '--board-dark-letters-color': globalState.boardTheme.darkLetters,
-                '--board-light-square': `url(${globalState.boardTheme.lightSquare})`,
-                '--board-dark-square': `url(${globalState.boardTheme.darkSquare})`,
+                '--board-light-letters-color': boardTheme.whiteLettersColor,
+                '--board-dark-letters-color': boardTheme.blackLettersColor,
+                '--board-light-square': `url(${boardTheme.whiteCell})`,
+                '--board-dark-square': `url(${boardTheme.blackCell})`,
             } as React.CSSProperties}
         >
             {cells.map(({ square, isLight, file, rank, row, col }) => {

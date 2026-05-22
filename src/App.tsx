@@ -3,6 +3,7 @@ import PublicOnlyRoute from './components/PublicOnlyRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import LayoutWithHeader from './components/LayoutWithHeader'
+import AppBackground from './components/AppBackground'
 import AuthLoader from './components/AuthLoader'
 
 import WelcomePage from './pages/WelcomePage'
@@ -19,6 +20,7 @@ function App() {
   return (
     <>
       <AuthLoader />
+      <AppBackground />
 
       <Routes>
         <Route element={<PublicOnlyRoute />}>

@@ -7,8 +7,10 @@
 
   color: white;
   background-color: #272623;
+
+  --main-background: url('/backgrounds/default.jpg');
   
-  background-image: url('/backgrounds/default.jpg');
+  background-image: var(--main-background);
   background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
