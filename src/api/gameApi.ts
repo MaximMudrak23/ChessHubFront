@@ -83,3 +83,17 @@ export async function getGameById(id: string) {
 
     return res.json();
 }
+
+export async function getActiveGame(token: string) {
+    const res = await fetch(`${API_URL}/game/active-game`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to get active game');
+    }
+
+    return res.json();
+}

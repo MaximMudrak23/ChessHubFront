@@ -3,7 +3,9 @@ import PublicOnlyRoute from './components/PublicOnlyRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import LayoutWithHeader from './components/LayoutWithHeader'
+import MatchmakingWatcher from './components/MatchmakingWatcher'
 import AppBackground from './components/AppBackground'
+import ActiveGameLoader from './components/ActiveGameLoader'
 import AuthLoader from './components/AuthLoader'
 
 import WelcomePage from './pages/WelcomePage'
@@ -20,7 +22,9 @@ function App() {
   return (
     <>
       <AuthLoader />
+      <ActiveGameLoader />
       <AppBackground />
+      <MatchmakingWatcher />
 
       <Routes>
         <Route element={<PublicOnlyRoute />}>

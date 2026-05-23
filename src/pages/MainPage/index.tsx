@@ -5,7 +5,6 @@ import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom';
 import { findGame, cancelSearch } from '@/api/gameApi';
-import { mapServerGameToClientGame } from '@/utils/mapServerGameToClientGame';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
 
 export default function MainPage() {
@@ -13,41 +12,43 @@ export default function MainPage() {
 
     const user = useUserStore(s => s.user);
     const token = useUserStore(s => s.token);
-    const setGame = useGameStore(s => s.setGame);
+    
+    const gameID = useGameStore(s => s.gameId);
 
     const isSearching = useMatchmakingStore(s => s.isSearching);
     const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
     const setEloRange = useMatchmakingStore(s => s.setEloRange);
+    const setSearchStartedAt = useMatchmakingStore(s => s.setSearchStartedAt);
+    const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
+
+    const buttonText = gameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
 
     async function handleFindGame() {
         if (!user || !token) return;
 
+        if (gameID) {
+            navigate(`/game/${gameID}`);
+            return;
+        }
+
         if (isSearching) {
             await cancelSearch(token);
-            setIsSearching(false);
-            setEloRange(null);
+            clearMatchmaking();
             return;
         }
 
         try {
             setIsSearching(true);
+            setSearchStartedAt(Date.now());
 
             const data = await findGame(token);
 
             if (data.status === 'searching') {
                 setEloRange(data.eloRange);
             }
-
-            if (data.status === 'matched' || data.status === 'in_game') {
-                setIsSearching(false);
-                setEloRange(null);
-                setGame(mapServerGameToClientGame(data.game));
-                navigate(`/game/${data.game._id}`);
-            }
         } catch (error) {
             console.log(error);
-            setIsSearching(false);
-            setEloRange(null);
+            clearMatchmaking();
         }
     }
 
@@ -57,7 +58,7 @@ export default function MainPage() {
                 <p style={{textAlign: 'center', paddingTop: '48px', fontSize: '1.2rem'}}>Unfortunately, I haven't figured out what to put on this page yet, so it's empty for now. 😢</p>
             </SteamContentWrapper>
             <Button
-                text={isSearching ? 'Cancel Search' : 'Find Game'}
+                text={buttonText}
                 variant={isSearching ? 'red' : 'green'}
                 animation='main'
                 className={s.floating}
