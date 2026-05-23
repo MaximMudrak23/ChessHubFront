@@ -22,6 +22,7 @@ export default function MainPage() {
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
 
     const buttonText = gameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
+    const buttonColor = gameID ? 'blue' : isSearching ? 'red' : 'green';
 
     async function handleFindGame() {
         if (!user || !token) return;
@@ -59,7 +60,7 @@ export default function MainPage() {
             </SteamContentWrapper>
             <Button
                 text={buttonText}
-                variant={isSearching ? 'red' : 'green'}
+                variant={buttonColor}
                 animation='main'
                 className={s.floating}
                 onClick={handleFindGame}

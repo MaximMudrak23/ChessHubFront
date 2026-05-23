@@ -2,7 +2,7 @@ import s from './styles.module.scss'
 import a from './animations.module.scss'
 import clsx from 'clsx';
 
-type Variant = 'none' | 'green' | 'red' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
+type Variant = 'none' | 'green' | 'red' | 'blue' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
 type Animation = 'game' | 'main' | 'floating' | 'mini-jump' | 'white-hover'| 'hover-icon';
 
 type Props = {
