@@ -1,20 +1,21 @@
 .userName {
     min-width: 0;
-    // padding: 8px;
-
     display: flex;
     align-items: center;
+    align-content: flex-start;
     gap: 8px;
     
+    flex-wrap: wrap;
     overflow: hidden;
     cursor: default;
 
     span {
         min-width: 0;
+        max-width: 100%;
+        flex-shrink: 0;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
-        flex-shrink: 1;
     }
 
     img {
@@ -23,6 +24,18 @@
         flex-shrink: 0;
     }
 
-    &--profile { font-size: 1.6rem; font-weight: 500; }
-    &--card { font-size: 1.2rem; }
+    &--profile {
+        height: 2.4rem;
+        span {
+            font-size: 1.6rem;
+            font-weight: 500;
+        }
+    }
+    
+    &--card {
+        height: 1.6rem;
+        span {
+            font-size: 1.2rem;
+        }
+    }
 }
