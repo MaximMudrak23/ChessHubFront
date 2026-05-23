@@ -5,9 +5,11 @@ type UserStore = {
     user: User | null;
     token: string | null;
     isAuth: boolean;
+    isLoading: boolean;
 
     setAuth: (user: User, token: string) => void;
     setUser: (user: User) => void;
+    finishLoading: () => void;
     logout: () => void;
 }
 
@@ -15,6 +17,7 @@ export const useUserStore = create<UserStore>(set => ({
     user: null,
     token: null,
     isAuth: false,
+    isLoading: true,
 
     setAuth: (user, token) => set({
         user,
@@ -24,9 +27,14 @@ export const useUserStore = create<UserStore>(set => ({
 
     setUser: (user) => set({user}),
 
+    finishLoading: () => set({
+        isLoading: false,
+    }),
+
     logout: () => set({
         user: null,
         token: null,
         isAuth: false,
+        isLoading: false,
     }),
 }));

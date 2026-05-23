@@ -44,6 +44,7 @@ export default function Input(propsOBJ: Props) {
             <input
                 id={propsOBJ.id}
                 name={propsOBJ.name}
+                autoComplete='off'
                 className={clsx(
                     s.input,
                     s[`input--${propsOBJ.variant}`],

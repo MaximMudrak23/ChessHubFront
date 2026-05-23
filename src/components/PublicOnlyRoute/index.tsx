@@ -3,6 +3,11 @@ import { useUserStore } from '@/store/userStore'
 
 export default function PublicOnlyRoute() {
     const isAuth = useUserStore(s => s.isAuth);
+    const isLoading = useUserStore(s => s.isLoading);
+
+    if (isLoading) {
+        return null;
+    }
 
     if (isAuth) {
         return <Navigate to="/main" replace />;

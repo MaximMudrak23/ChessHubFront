@@ -3,9 +3,14 @@ import { useUserStore } from '@/store/userStore'
 
 export default function AdminRoute() {
     const user = useUserStore(s => s.user);
+    const isLoading = useUserStore(s => s.isLoading);
+
+    if (isLoading) {
+        return null;
+    }
 
     if (!user) {
-        return null;
+        return <Navigate to="/" replace />;
     }
 
     if (user.role !== 'admin') {
