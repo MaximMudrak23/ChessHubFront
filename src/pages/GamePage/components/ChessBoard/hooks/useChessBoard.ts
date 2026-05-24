@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { Side, Move } from "../../../utils/types/game.types";
 import type { Square, GameStatus, PieceType, PieceCode } from "../utils/types/chess.types";
-import { initialPieces } from "../utils/data/initialPieces";
 import { getPieceSide, getPieceById, getPieceBySquare } from "../utils/lib/getPiece";
 import { canMovePiece } from "../utils/lib/canMovePiece";
 import { getAvailableMoves } from "../utils/lib/getAvaibleMoves";
@@ -22,6 +21,20 @@ export default function useChessBoard(
     currentTurn: Side,
     setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>,
     setMoves: React.Dispatch<React.SetStateAction<Move[]>>,
+    pieces: PieceType[],
+    setPieces: React.Dispatch<React.SetStateAction<PieceType[]>>,
+    lastMove: {
+        piece: PieceCode;
+        from: Square;
+        to: Square;
+    } | null,
+    setLastMove: React.Dispatch<
+        React.SetStateAction<{
+            piece: PieceCode;
+            from: Square;
+            to: Square;
+        } | null>
+    >,
     isBotTurn: boolean,
     halfmoveClock: number,
     fullmoveNumber: number,
@@ -30,9 +43,7 @@ export default function useChessBoard(
     positionHistory: string[],
     setPositionHistory: (value: string[] | ((cur: string[]) => string[])) => void,
 ) {
-    const [pieces, setPieces] = useState(initialPieces);
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
-    const [lastMove, setLastMove] = useState<{ piece: PieceCode; from: Square; to: Square; } | null>(null);
     const [markedSquares, setMarkedSquares] = useState<Square[]>([]);
 
     function clearSelection() {

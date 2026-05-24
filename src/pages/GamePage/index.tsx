@@ -9,6 +9,7 @@ import type { GameStatus } from './components/ChessBoard/utils/types/chess.types
 import { useParams } from 'react-router-dom';
 import { getGameById } from '@/api/gameApi';
 import { mapServerGameToClientGame } from '@/utils/mapServerGameToClientGame';
+import { saveGameState } from '@/api/gameApi';
 
 export default function GamePage() {
     const { id } = useParams();
@@ -20,9 +21,13 @@ export default function GamePage() {
     const setCurrentTurn = useGameStore(s => s.setCurrentTurn);
     const moves = useGameStore(s => s.moves);
     const setMoves = useGameStore(s => s.setMoves);
+    const pieces = useGameStore(s => s.pieces);
+    const setPieces = useGameStore(s => s.setPieces);
+    const lastMove = useGameStore(s => s.lastMove);
+    const setLastMove = useGameStore(s => s.setLastMove);
     const halfmoveClock = useGameStore(s => s.halfmoveClock);
-    const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
     const setHalfmoveClock = useGameStore(s => s.setHalfmoveClock);
+    const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
     const setFullmoveNumber = useGameStore(s => s.setFullmoveNumber);
     const positionHistory = useGameStore(s => s.positionHistory);
     const setPositionHistory = useGameStore(s => s.setPositionHistory);
@@ -44,6 +49,34 @@ export default function GamePage() {
                 console.log(error);
             });
     }, [id, players, setGame]);
+
+    useEffect(() => {
+        if (!token || !gameId) return;
+        if (!pieces.length) return;
+
+        saveGameState(token, {
+            gameId,
+            pieces,
+            currentTurn,
+            moves,
+            lastMove,
+            halfmoveClock,
+            fullmoveNumber,
+            positionHistory,
+        }).catch(error => {
+            console.log(error);
+        });
+    }, [
+        token,
+        gameId,
+        pieces,
+        currentTurn,
+        moves,
+        lastMove,
+        halfmoveClock,
+        fullmoveNumber,
+        positionHistory,
+    ]);
 
     const hasFinishedGame = useRef(false);
 
@@ -92,6 +125,10 @@ export default function GamePage() {
                 currentTurn={currentTurn}
                 setCurrentTurn={setCurrentTurn}
                 setMoves={setMoves}
+                pieces={pieces}
+                setPieces={setPieces}
+                lastMove={lastMove}
+                setLastMove={setLastMove}
                 isBotTurn={isBotTurn}
                 halfmoveClock={halfmoveClock}
                 fullmoveNumber={fullmoveNumber}

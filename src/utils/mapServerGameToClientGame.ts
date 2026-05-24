@@ -27,8 +27,10 @@ export function mapServerGameToClientGame(serverGame: any): Game {
         },
         currentTurn: serverGame.currentTurn,
         moves: serverGame.moves ?? [],
-        halfmoveClock: 0,
-        fullmoveNumber: 1,
-        positionHistory: [],
+        pieces: serverGame.pieces ?? [],
+        lastMove: serverGame.lastMove ?? null,
+        halfmoveClock: serverGame.halfmoveClock ?? 0,
+        fullmoveNumber: serverGame.fullmoveNumber ?? 1,
+        positionHistory: serverGame.positionHistory ?? [],
     };
 }

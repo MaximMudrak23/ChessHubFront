@@ -97,3 +97,20 @@ export async function getActiveGame(token: string) {
 
     return res.json();
 }
+
+export async function saveGameState(token: string, data: unknown) {
+    const res = await fetch(`${API_URL}/game/save-state`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to save game state');
+    }
+
+    return res.json();
+}

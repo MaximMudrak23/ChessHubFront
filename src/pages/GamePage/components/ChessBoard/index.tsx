@@ -4,7 +4,7 @@ import ChessPieces from './components/ChessPieces'
 import GameResult from './components/GameResult'
 import useChessBoard from './hooks/useChessBoard'
 import type { Side, Move } from '../../utils/types/game.types'
-import type { Square } from './utils/types/chess.types'
+import type { PieceType, PieceCode, Square } from './utils/types/chess.types'
 import {useEffect, useRef, useState } from 'react';
 import type { GameStatus } from './utils/types/chess.types'
 
@@ -14,6 +14,20 @@ type Props = {
     currentTurn: Side;
     setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>;
     setMoves: React.Dispatch<React.SetStateAction<Move[]>>;
+    pieces: PieceType[];
+    setPieces: React.Dispatch<React.SetStateAction<PieceType[]>>;
+    lastMove: {
+        piece: PieceCode;
+        from: Square;
+        to: Square;
+    } | null;
+    setLastMove: React.Dispatch<
+        React.SetStateAction<{
+            piece: PieceCode;
+            from: Square;
+            to: Square;
+        } | null>
+    >;
     isBotTurn: boolean;
     halfmoveClock: number;
     fullmoveNumber: number;
@@ -43,6 +57,10 @@ export default function ChessBoard(props: Props) {
         props.currentTurn,
         props.setCurrentTurn,
         props.setMoves,
+        props.pieces,
+        props.setPieces,
+        props.lastMove,
+        props.setLastMove,
         props.isBotTurn,
         props.halfmoveClock,
         props.fullmoveNumber,
