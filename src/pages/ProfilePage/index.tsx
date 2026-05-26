@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { getFileURL } from '@/utils/getFileURL'
 import ProfileSongPlate from './components/ProfileSongPlate.tsx'
 import { useEffect, useState } from 'react'
-import { getUserById } from '@/api/userApi'
+import { getPlayerById } from '@/api/playerApi.ts'
 import type { User } from '@/types/user.types'
 
 export default function ProfilePage() {
@@ -32,7 +32,7 @@ export default function ProfilePage() {
 
         const loadUser = async () => {
             try {
-                const data = await getUserById(token, id);
+                const data = await getPlayerById(token, id);
                 setProfileUser(data.user);
             } catch (error) {
                 console.log(error);

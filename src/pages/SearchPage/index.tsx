@@ -5,7 +5,7 @@ import PageSlider from './components/PageSlider'
 import { useEffect, useState } from 'react'
 import Lottie from 'lottie-react'
 import loadingLootie from './loading.json'
-import { searchUsers } from '@/api/userApi'
+import { searchPlayers } from '@/api/playerApi'
 import { useUserStore } from '@/store/userStore'
 import type { User } from '@/types/user.types'
 
@@ -42,7 +42,7 @@ export default function SearchPage() {
             try {
                 setIsLoading(true);
 
-                const data = await searchUsers(token, debouncedValue, currentPage, 10);
+                const data = await searchPlayers(token, debouncedValue, currentPage, 10);
 
                 setCards(data.users);
                 setTotalPages(data.totalPages);

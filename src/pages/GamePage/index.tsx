@@ -38,7 +38,7 @@ export default function GamePage() {
     const setUser = useUserStore(s => s.setUser);
 
     useEffect(() => {
-        if (players) return;
+        // if (players) return;
         if (!id) return;
 
         getGameById(id)
@@ -48,7 +48,7 @@ export default function GamePage() {
             .catch(error => {
                 console.log(error);
             });
-    }, [id, players, setGame]);
+    }, [id, setGame]);
 
     useEffect(() => {
         if (!token || !gameId) return;
