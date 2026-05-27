@@ -3,6 +3,14 @@ import type { Players, Side, Move } from '@/pages/GamePage/utils/types/game.type
 import type { PieceType, PieceCode, Square } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
 import type { GameStatus } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
 
+type MoveMeta = {
+    isCapture: boolean;
+    isCastling: boolean;
+    isPromotion: boolean;
+    isCheck: boolean;
+    isCheckmate: boolean;
+};
+
 export type Game = {
     gameId: string;
     players: Players;
@@ -18,6 +26,7 @@ export type Game = {
     fullmoveNumber: number;
     positionHistory: string[];
     gameStatus: GameStatus;
+    moveMeta: MoveMeta | null;
 };
 
 export type GameStore = {
@@ -35,6 +44,7 @@ export type GameStore = {
     fullmoveNumber: number;
     positionHistory: string[];
     gameStatus: GameStatus;
+    moveMeta: MoveMeta | null;
 
     setGame: (game: Game) => void;
     clearGame: () => void;
@@ -51,6 +61,7 @@ export const useGameStore = create<GameStore>((set) => ({
     fullmoveNumber: 1,
     positionHistory: [],
     gameStatus: 'playing',
+    moveMeta: null,
 
     setGame: (game) => set({
         gameId: game.gameId,
@@ -63,6 +74,7 @@ export const useGameStore = create<GameStore>((set) => ({
         fullmoveNumber: game.fullmoveNumber,
         positionHistory: game.positionHistory,
         gameStatus: game.gameStatus,
+        moveMeta: game.moveMeta,
     }),
 
     clearGame: () => set({
@@ -76,5 +88,6 @@ export const useGameStore = create<GameStore>((set) => ({
         fullmoveNumber: 1,
         positionHistory: [],
         gameStatus: 'playing',
+        moveMeta: null,
     }),
 }));

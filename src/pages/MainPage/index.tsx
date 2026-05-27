@@ -14,6 +14,8 @@ export default function MainPage() {
     const token = useUserStore(s => s.token);
     
     const gameID = useGameStore(s => s.gameId);
+    const gameStatus = useGameStore(s => s.gameStatus);
+    const activeGameID = gameStatus === 'playing' ? gameID : null;
 
     const isSearching = useMatchmakingStore(s => s.isSearching);
     const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
@@ -21,13 +23,13 @@ export default function MainPage() {
     const setSearchStartedAt = useMatchmakingStore(s => s.setSearchStartedAt);
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
 
-    const buttonText = gameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
-    const buttonColor = gameID ? 'blue' : isSearching ? 'red' : 'green';
+    const buttonText = activeGameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
+    const buttonColor = activeGameID ? 'blue' : isSearching ? 'red' : 'green';
 
     async function handleFindGame() {
         if (!user || !token) return;
 
-        if (gameID) {
+        if (activeGameID) {
             navigate(`/game/${gameID}`);
             return;
         }

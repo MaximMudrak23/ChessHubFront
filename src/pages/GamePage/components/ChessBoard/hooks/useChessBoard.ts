@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Side } from "../../../utils/types/game.types";
-import type { Square, GameStatus, PieceType, PieceCode } from "../utils/types/chess.types";
+import type { Square, PieceType, PieceCode } from "../utils/types/chess.types";
 import { getPieceSide, getPieceById } from "../utils/lib/getPiece";
 import { getAvailableMoves } from "../utils/lib/getAvaibleMoves";
 import { playSound } from "../utils/lib/playSound";
@@ -8,8 +8,9 @@ import { playSound } from "../utils/lib/playSound";
 import { makeMove } from '@/api/gameApi';
 import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore';
-import { mapServerGameToClientGame } from "@/utils/mapServerGameToClientGame";
 import { isKingInCheck } from '../utils/lib/isKingInCheck';
+import { canMovePiece } from '../utils/lib/canMovePiece';
+import { isMoveSafe } from '../utils/lib/isMoveSafe';
 
 // useChessBoard, обязан просто управлять кликами и дергать за функции как ниточки в зависимости от того, на что мы кликнули
 
@@ -27,6 +28,12 @@ export default function useChessBoard(
     const gameId = useGameStore(s => s.gameId);
     const setGame = useGameStore(s => s.setGame);
     const gameStatus = useGameStore(s => s.gameStatus);
+
+    const players = useGameStore(s => s.players);
+    const moves = useGameStore(s => s.moves);
+    const halfmoveClock = useGameStore(s => s.halfmoveClock);
+    const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
+    const positionHistory = useGameStore(s => s.positionHistory);
 
     function clearSelection() {
         setSelectedPieceID(null);
@@ -55,23 +62,67 @@ export default function useChessBoard(
         if (gameStatus !== 'playing') return false;
         if (!pieceID) return false;
         if (isMovePendingRef.current) return false;
-        if (!token || !gameId) return false;
+        if (!token || !gameId || !players) return false;
 
         const selectedPiece = getPieceById(pieces, pieceID);
         if (!selectedPiece) return false;
 
+        if (!canMovePiece(selectedPiece, pieces, targetSquare, lastMove)) {
+            playSound('illegal');
+            return false;
+        }
+
+        if (!isMoveSafe(selectedPiece, pieces, targetSquare)) {
+            playSound('illegal');
+            return false;
+        }
+
+        const previousGame = {
+            gameId,
+            players,
+            currentTurn,
+            moves,
+            pieces,
+            lastMove,
+            halfmoveClock,
+            fullmoveNumber,
+            positionHistory,
+            gameStatus,
+            moveMeta: null,
+        };
+
+        const optimisticPieces = pieces
+        .filter(p => p.square !== targetSquare)
+        .map(p => p.id === pieceID ? {
+                ...p,
+                square: targetSquare,
+                hasMoved: true,
+            } : p
+        );
+
+        setGame({
+            ...previousGame,
+            pieces: optimisticPieces,
+            currentTurn: currentTurn === 'white' ? 'black' : 'white',
+            lastMove: {
+                piece: selectedPiece.piece,
+                from: selectedPiece.square,
+                to: targetSquare,
+            },
+            moveMeta: null,
+        });
+
+        setSelectedPieceID(null);
         isMovePendingRef.current = true;
 
         makeMove(token, {
             gameId,
             pieceID,
             targetSquare,
-        }).then(data => {
-                setGame(mapServerGameToClientGame(data.game));
-            })
+        })
             .catch(error => {
                 console.log(error);
-                playSound('illegal');
+                setGame(previousGame);
             })
             .finally(() => {
                 isMovePendingRef.current = false;
@@ -88,22 +139,6 @@ export default function useChessBoard(
     const availableMoves = selectedPiece ? getAvailableMoves(selectedPiece, pieces, lastMove) : [];
     
     const isCheck = isKingInCheck(pieces, currentTurn);
-
-    const prevGameStatus = useRef<GameStatus>('playing');
-    useEffect(() => {
-        if (
-            (gameStatus !== 'playing') &&
-            prevGameStatus.current === 'playing'
-        ) {
-            playSound('game-end');
-        }
-
-        prevGameStatus.current = gameStatus;
-    }, [gameStatus]);
-
-    useEffect(() => {
-        playSound('game-start');
-    }, []);
 
     return {
         selectedPieceID,

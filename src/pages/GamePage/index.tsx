@@ -6,6 +6,8 @@ import { useGameStore } from '@/store/gameStore'
 import { useParams } from 'react-router-dom';
 import { useLoadGame } from './components/ChessBoard/hooks/useLoadGame'
 import { useFinishGame } from './components/ChessBoard/hooks/useFinishGame'
+import { useGameSocket } from './hooks/useGameSocket'
+import { useGameSounds } from './hooks/useGameSounds'
 
 export default function GamePage() {
     const { id } = useParams();
@@ -16,9 +18,12 @@ export default function GamePage() {
     const moves = useGameStore(s => s.moves);
     const pieces = useGameStore(s => s.pieces);
     const lastMove = useGameStore(s => s.lastMove);
+    const gameId = useGameStore(s => s.gameId);
 
     useLoadGame(id);
     useFinishGame();
+    useGameSocket(gameId);
+    useGameSounds();
 
     if (!user || !players) return null;
 

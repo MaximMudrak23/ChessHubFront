@@ -36,5 +36,6 @@ export function mapServerGameToClientGame(serverGame: any): Game {
             serverGame.status === 'finished'
                 ? serverGame.finishedReason
                 : 'playing',
+        moveMeta: serverGame.moveMeta ?? null,
     };
 }
