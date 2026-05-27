@@ -3,49 +3,28 @@ import BoardGrid from './components/BoardGrid'
 import ChessPieces from './components/ChessPieces'
 import GameResult from './components/GameResult'
 import useChessBoard from './hooks/useChessBoard'
-import type { Side, Move } from '../../utils/types/game.types'
+import type { Side } from '../../utils/types/game.types'
 import type { PieceType, PieceCode, Square } from './utils/types/chess.types'
-import {useEffect, useRef, useState } from 'react';
-import type { GameStatus } from './utils/types/chess.types'
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
     perspective: Side;
     currentUserSide: Side | null;
     currentTurn: Side;
-    setCurrentTurn: React.Dispatch<React.SetStateAction<Side>>;
-    setMoves: React.Dispatch<React.SetStateAction<Move[]>>;
     pieces: PieceType[];
-    setPieces: React.Dispatch<React.SetStateAction<PieceType[]>>;
     lastMove: {
         piece: PieceCode;
         from: Square;
         to: Square;
     } | null;
-    setLastMove: React.Dispatch<
-        React.SetStateAction<{
-            piece: PieceCode;
-            from: Square;
-            to: Square;
-        } | null>
-    >;
-    isBotTurn: boolean;
-    halfmoveClock: number;
-    fullmoveNumber: number;
-    setHalfmoveClock: (value: number | ((cur: number) => number)) => void;
-    setFullmoveNumber: (value: number | ((cur: number) => number)) => void;
-    positionHistory: string[];
-    setPositionHistory: (value: string[] | ((cur: string[]) => string[])) => void;
-    setGameStatus: (status: GameStatus) => void;
 }
 
 export default function ChessBoard(props: Props) {
     const {
-        pieces,
         selectedPieceID,
         selectPiece,
         movePiece,
         availableMoves,
-        lastMove,
         markedSquares,
         setMarkedSquares,
         toggleMarkedSquare,
@@ -55,19 +34,8 @@ export default function ChessBoard(props: Props) {
     } = useChessBoard(
         props.currentUserSide,
         props.currentTurn,
-        props.setCurrentTurn,
-        props.setMoves,
         props.pieces,
-        props.setPieces,
         props.lastMove,
-        props.setLastMove,
-        props.isBotTurn,
-        props.halfmoveClock,
-        props.fullmoveNumber,
-        props.setHalfmoveClock,
-        props.setFullmoveNumber,
-        props.positionHistory,
-        props.setPositionHistory,
     );
     
     function handleSquareClick(e: React.MouseEvent, square: Square) {
@@ -82,10 +50,6 @@ export default function ChessBoard(props: Props) {
     }
     
     const isGameEnded = gameStatus !== 'playing';
-
-    useEffect(() => {
-        props.setGameStatus(gameStatus);
-    }, [gameStatus]);
 
     const winnerSide = gameStatus === 'checkmate' ? props.currentTurn === 'white' ? 'black' : 'white' : null;
 
@@ -150,14 +114,14 @@ export default function ChessBoard(props: Props) {
                 perspective={props.perspective}
                 selectedPieceID={selectedPieceID}
                 availableMoves={availableMoves}
-                lastMove={lastMove}
+                lastMove={props.lastMove}
                 markedSquares={markedSquares}
-                pieces={pieces}
+                pieces={props.pieces}
                 onSquareClick={handleSquareClick}
                 hoveredSquare={hoveredSquare}
             />
             <ChessPieces
-                pieces={pieces}
+                pieces={props.pieces}
                 perspective={props.perspective}
                 selectPiece={selectPiece}
                 onSquareClick={handleSquareClick}

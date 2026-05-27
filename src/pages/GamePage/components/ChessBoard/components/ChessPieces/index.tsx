@@ -30,7 +30,12 @@ export default function ChessPieces(props: Props) {
         props.selectPiece(id);
     }
 
-    function handlePieceMouseDown(e: React.MouseEvent<HTMLImageElement>, id: string, fromSquare: Square, side: Side) {
+    function handlePieceMouseDown(
+        e: React.MouseEvent<HTMLImageElement>,
+        id: string,
+        fromSquare: Square,
+        side: Side
+    ) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -112,7 +117,11 @@ export default function ChessPieces(props: Props) {
                         src={CHESS_PIECES.default[piece]}
                         alt={`${piece} on ${square}`}
                         draggable={false}
-                        className={clsx(s.piece, isCheckedKing && s.check, noTransitionID === id && s.noTransition)}
+                        className={clsx(
+                            s.piece,
+                            isCheckedKing && s.check,
+                            noTransitionID === id && s.noTransition
+                        )}
                         style={{
                             width: `${cellSize}%`,
                             height: `${cellSize}%`,

@@ -19,12 +19,18 @@ type Props = {
 };
 
 export default function BoardGrid(props: Props) {
-    const token = useUserStore(s => s.token);
     const user = useUserStore(s => s.user);
 
-    if (!user || !token) return;
+    if (!user) return null;
 
-    const cells = [];
+    const cells: {
+        square: Square;
+        isLight: boolean;
+        file: File;
+        rank: string;
+        row: number;
+        col: number;
+    }[] = [];
     const selectedPiece = props.pieces.find(p => p.id === props.selectedPieceID);
     const selectedSquare = selectedPiece?.square;
 
@@ -63,7 +69,14 @@ export default function BoardGrid(props: Props) {
 
                 return <div
                     key={square}
-                    className={clsx(s.cell, isLight ? s.lightCell : s.darkCell, square === selectedSquare && s.selected, (props.lastMove?.from === square || props.lastMove?.to === square) && s.lastMove, props.markedSquares.includes(square) && s.marked, square === props.hoveredSquare && s.hovered)}
+                    className={clsx(
+                        s.cell,
+                        isLight ? s.lightCell : s.darkCell,
+                        square === selectedSquare && s.selected,
+                        (props.lastMove?.from === square || props.lastMove?.to === square) && s.lastMove,
+                        props.markedSquares.includes(square) && s.marked,
+                        square === props.hoveredSquare && s.hovered
+                    )}
                     data-square={square}
                     data-rank={rank}
                     data-file={file}

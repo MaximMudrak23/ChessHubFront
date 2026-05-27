@@ -32,5 +32,9 @@ export function mapServerGameToClientGame(serverGame: any): Game {
         halfmoveClock: serverGame.halfmoveClock ?? 0,
         fullmoveNumber: serverGame.fullmoveNumber ?? 1,
         positionHistory: serverGame.positionHistory ?? [],
+        gameStatus:
+            serverGame.status === 'finished'
+                ? serverGame.finishedReason
+                : 'playing',
     };
 }

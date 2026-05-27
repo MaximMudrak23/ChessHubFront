@@ -1,24 +1,5 @@
 import { API_URL } from './config';
 
-export async function getBotMove(fen: string, skillLevel: number) {
-    const res = await fetch(`${API_URL}/game/bot-move`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            fen,
-            skillLevel,
-        }),
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to get bot move');
-    }
-
-    return res.json() as Promise<{ move: string }>;
-}
-
 export async function findGame(token: string) {
     const res = await fetch(`${API_URL}/game/find`, {
         method: 'POST',
@@ -98,8 +79,15 @@ export async function getActiveGame(token: string) {
     return res.json();
 }
 
-export async function saveGameState(token: string, data: unknown) {
-    const res = await fetch(`${API_URL}/game/save-state`, {
+export async function makeMove(
+    token: string,
+    data: {
+        gameId: string;
+        pieceID: string;
+        targetSquare: string;
+    }
+) {
+    const res = await fetch(`${API_URL}/game/move`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -109,7 +97,7 @@ export async function saveGameState(token: string, data: unknown) {
     });
 
     if (!res.ok) {
-        throw new Error('Failed to save game state');
+        throw new Error('Failed to make move');
     }
 
     return res.json();
