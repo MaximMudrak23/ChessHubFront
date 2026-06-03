@@ -63,16 +63,12 @@ export default function SidePanel(props: Props) {
             {canResign &&
                 <div className={s.button_folder}>
                     <Button
-                        text={'Resign'}
+                        icon={SVG.resignIcon}
                         active={true}
-                        variant='black'
+                        variant='glass'
                         animation='white-hover'
                         onClick={resignGame}
-                        styleProps={{
-                            height: '65%',
-                            width: '100px',
-                            borderRadius: '5px',
-                        }}
+                        className={s.button}
                     />
                 </div>
             }

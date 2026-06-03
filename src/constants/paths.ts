@@ -72,4 +72,5 @@ export const SVG = {
     logoutIcon: '/svg/user-logout.svg',
     expandIcon: '/svg/expand-icon.svg',
     adminEditIcon: '/svg/admin-edit-icon.svg',
+    resignIcon: '/svg/resign-icon.svg',
 };

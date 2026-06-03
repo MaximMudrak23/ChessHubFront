@@ -49,9 +49,17 @@
 }
 
 .button_folder {
-    height: 80px;
+    height: 85px;
+    padding: 0 24px;
     
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .button {
+        flex: 1;
+        height: 75%;
+
+        img { height: 2rem; }
+    }
 }
