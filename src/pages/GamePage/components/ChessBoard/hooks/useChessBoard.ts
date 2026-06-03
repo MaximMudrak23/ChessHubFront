@@ -67,6 +67,13 @@ export default function useChessBoard(
         const selectedPiece = getPieceById(pieces, pieceID);
         if (!selectedPiece) return false;
 
+        const targetPiece = pieces.find(p => p.square === targetSquare);
+
+        if (targetPiece && getPieceSide(targetPiece) === getPieceSide(selectedPiece)) {
+            playSound('illegal');
+            return false;
+        }
+
         if (!canMovePiece(selectedPiece, pieces, targetSquare, lastMove)) {
             playSound('illegal');
             return false;
