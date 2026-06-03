@@ -3,11 +3,12 @@ import a from './animations.module.scss'
 import clsx from 'clsx';
 
 type Variant = 'none' | 'green' | 'red' | 'blue' | 'black' | 'profile' | 'error' | 'welcome' | 'transparent';
-type Animation = 'game' | 'main' | 'floating' | 'mini-jump' | 'white-hover'| 'hover-icon';
+type Animation = 'game' | 'main' | 'floating' | 'mini-jump' | 'white-hover'| 'hover-icon' | 'rec-text';
 
 type Props = {
     text?: string;
     icon?: string;
+    effect?: React.ReactNode;
 
     variant: Variant;
     animation?: Animation | Animation[];
@@ -19,24 +20,33 @@ type Props = {
     onClick: () => void;
 }
 
-export default function Button(propsOBJ: Props) {
-    const animations = Array.isArray(propsOBJ.animation) ? propsOBJ.animation : propsOBJ.animation ? [propsOBJ.animation] : [];
+export default function Button(props: Props) {
+    const animations = Array.isArray(props.animation)
+        ? props.animation
+        : props.animation
+            ? [props.animation]
+            : [];
 
     return (
         <button
             className={clsx(
-                propsOBJ.className,
+                props.className,
                 s.button,
-                s[`button--${propsOBJ.variant}`],
+                s[`button--${props.variant}`],
                 animations.map(anim => a[`animation--${anim}`]),
-                propsOBJ.active === false && s.inactive,
+                props.active === false && s.inactive,
             )}
-            disabled={propsOBJ.active === false}
-            style={propsOBJ.styleProps}
-            onClick={propsOBJ.onClick}
+            disabled={props.active === false}
+            style={props.styleProps}
+            onClick={props.onClick}
         >
-            {propsOBJ.text && <span>{propsOBJ.text}</span>}
-            {propsOBJ.icon && <img src={propsOBJ.icon} alt='Button Icon' draggable={false} />}
+            {props.effect && (
+                <span className={s.effect}>
+                    {props.effect}
+                </span>
+            )}
+            {props.text && <span>{props.text}</span>}
+            {props.icon && <img src={props.icon} alt='Button Icon' draggable={false} />}
         </button>
     )
 }

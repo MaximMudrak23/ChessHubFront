@@ -8,6 +8,7 @@ import { useLoadGame } from './components/ChessBoard/hooks/useLoadGame'
 import { useFinishGame } from './components/ChessBoard/hooks/useFinishGame'
 import { useGameSocket } from './hooks/useGameSocket'
 import { useGameSounds } from './hooks/useGameSounds'
+import { useEffect } from 'react'
 
 export default function GamePage() {
     const { id } = useParams();
@@ -19,18 +20,30 @@ export default function GamePage() {
     const pieces = useGameStore(s => s.pieces);
     const lastMove = useGameStore(s => s.lastMove);
     const gameId = useGameStore(s => s.gameId);
-
+    const clearGame = useGameStore(s => s.clearGame);
+    
     useLoadGame(id);
     useFinishGame();
     useGameSocket(gameId);
     useGameSounds();
 
+    
+    const currentPlayer = user && players
+    ? Object.values(players).find(p => p.userId === user.id)
+    : null;
+    
+    const isSpectator = Boolean(user && players && !currentPlayer);
+    
+    useEffect(() => {
+        return () => {
+            if (isSpectator) {
+                clearGame();
+            }
+        };
+    }, [isSpectator, clearGame]);
+    
     if (!user || !players) return null;
-
-    const currentPlayer = Object.values(players).find(
-        p => p.userId === user.id
-    );
-
+    
     const currentUserSide = currentPlayer?.side ?? null;
     const perspective = currentPlayer?.side ?? 'white';
 

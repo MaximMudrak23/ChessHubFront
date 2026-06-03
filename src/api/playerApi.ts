@@ -42,3 +42,13 @@ export async function getPlayerById(token: string, id: string): Promise<GetUserB
 
     return res.json();
 }
+
+export async function getPlayerActiveGame(token: string, id: string) {
+    const res = await fetch(`${API_URL}/players/active-game/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return await res.json();
+}

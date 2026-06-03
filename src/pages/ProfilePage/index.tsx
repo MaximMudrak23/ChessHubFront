@@ -4,14 +4,16 @@ import UserAvatar from '../../components/User/UserAvatar'
 import UserName from '../../components/User/UserName'
 import Button from '../../components/UI/Button'
 import ProfilePlate from './components/ProfilePlate'
+import ProfileSongPlate from './components/ProfileSongPlate'
 import { useParams } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom'
 import { getFileURL } from '@/utils/getFileURL'
-import ProfileSongPlate from './components/ProfileSongPlate.tsx'
 import { useEffect, useState } from 'react'
-import { getPlayerById } from '@/api/playerApi.ts'
+import { getPlayerById, getPlayerActiveGame } from '@/api/playerApi.ts'
 import type { User } from '@/types/user.types'
+import Spectate from './components/JSON/spectate.json'
+import Lottie from 'lottie-react'
 
 export default function ProfilePage() {
     const navigate = useNavigate();
@@ -21,6 +23,7 @@ export default function ProfilePage() {
     const token = useUserStore(s => s.token);
 
     const [profileUser, setProfileUser] = useState<User | null>(null);
+    const [activeGameId, setActiveGameId] = useState<string | null>(null);
 
     useEffect(() => {
         if (!id || !myUser || !token) return;
@@ -42,6 +45,22 @@ export default function ProfilePage() {
 
         loadUser();
     }, [id, myUser, token]);
+
+    useEffect(() => {
+        if (!id || !token) return;
+
+        const loadActiveGame = async () => {
+            try {
+                const data = await getPlayerActiveGame(token, id);
+                setActiveGameId(data.game?._id ?? null);
+            } catch (error) {
+                console.log(error);
+                setActiveGameId(null);
+            }
+        }
+
+        loadActiveGame();
+    }, [id, token]);
 
     if (!profileUser || !myUser) return null;
 
@@ -97,6 +116,24 @@ export default function ProfilePage() {
                         animation='white-hover'
                         onClick={() => navigate(`/profile/${id}/edit`)}
                     />}
+                    {!isMyProfile && activeGameId && (
+                        <Button
+                            text={'Spectate Game'}
+                            variant='profile'
+                            animation={['rec-text', 'white-hover']}
+                            onClick={() => navigate(`/game/${activeGameId}`)}
+                            effect={
+                                <Lottie
+                                    animationData={Spectate}
+                                    loop
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                />
+                            }
+                        />
+                    )}
                 </div>
             </header>
         </SteamContentWrapper>

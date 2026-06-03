@@ -59,5 +59,31 @@
             transform: translate(-50%,-50%);
         }
     }
+    &--rec-text {
+        span {
+            display: inline-block;
+            font-weight: 700;
+
+            background: linear-gradient(
+                90deg,
+                #d91f1f,
+                #ff4d4d,
+                #b80000,
+                #ff6b6b,
+                #d91f1f
+            );
+            background-size: 300% 100%;
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
+            animation: rec-gradient 2.5s linear infinite,
+        }
+
+        @keyframes rec-gradient {
+            from { background-position: 0% 50%; }
+            to   { background-position: 300% 50%; }
+        }
+    }
 }
-// сюда добавлять все еффектики, все абсолютно и разрешить просто чтобы можно было по пару эффектов добавлять, ну и офк переработать потом их мб, чтобы не повторялись. (либо разрешить давать цвет ховеру но это духода, не хочу.

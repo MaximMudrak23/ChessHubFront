@@ -8,10 +8,22 @@
 
     transition: opacity 0.25s ease, background-color 0.25s ease;
     user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    
     // cursor: pointer;
 
     &:disabled { opacity: 0.5; pointer-events: none; }
     img { display: block; }
+
+    .effect {
+        height: 85%;
+        pointer-events: none;
+        z-index: 0;
+    }
     
     &--green {
         background: linear-gradient(to bottom, #9FD05E, #45753C);
