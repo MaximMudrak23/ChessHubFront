@@ -21,6 +21,8 @@
 
     .effect {
         height: 85%;
+        aspect-ratio: 1 / 1;
+
         pointer-events: none;
         z-index: 0;
     }

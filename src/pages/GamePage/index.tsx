@@ -23,22 +23,19 @@ export default function GamePage() {
     const clearGame = useGameStore(s => s.clearGame);
     
     useLoadGame(id);
-    useFinishGame();
+    // useFinishGame();
     useGameSocket(gameId);
     useGameSounds();
-
     
     const currentPlayer = user && players
-    ? Object.values(players).find(p => p.userId === user.id)
-    : null;
+        ? Object.values(players).find(p => String(p.userId) === String(user.id))
+        : null;
     
     const isSpectator = Boolean(user && players && !currentPlayer);
     
     useEffect(() => {
         return () => {
-            if (isSpectator) {
-                clearGame();
-            }
+            if (isSpectator) clearGame();
         };
     }, [isSpectator, clearGame]);
     

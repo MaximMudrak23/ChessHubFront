@@ -2,11 +2,11 @@ import type { Game } from '@/store/gameStore';
 
 export function mapServerGameToClientGame(serverGame: any): Game {
     return {
-        gameId: serverGame._id,
+        gameId: String(serverGame._id),
         players: {
             white: {
                 type: serverGame.white.playerType,
-                userId: serverGame.white.playerId,
+                userId: String(serverGame.white.playerId),
                 side: 'white',
                 userName: serverGame.white.name,
                 userElo: serverGame.white.elo,
@@ -16,7 +16,7 @@ export function mapServerGameToClientGame(serverGame: any): Game {
             },
             black: {
                 type: serverGame.black.playerType,
-                userId: serverGame.black.playerId,
+                userId: String(serverGame.black.playerId),
                 side: 'black',
                 userName: serverGame.black.name,
                 userElo: serverGame.black.elo,

@@ -14,6 +14,7 @@ import { getPlayerById, getPlayerActiveGame } from '@/api/playerApi.ts'
 import type { User } from '@/types/user.types'
 import Spectate from './components/JSON/spectate.json'
 import Lottie from 'lottie-react'
+import { socket } from '@/socket/socket';
 
 export default function ProfilePage() {
     const navigate = useNavigate();
@@ -61,6 +62,27 @@ export default function ProfilePage() {
 
         loadActiveGame();
     }, [id, token]);
+
+    useEffect(() => {
+        if (!id || !token) return;
+
+        if (!socket.connected) {
+            socket.connect();
+        }
+
+        socket.emit('player:watch', id);
+
+        function handleActiveGameUpdate(gameId: string | null) {
+            setActiveGameId(gameId);
+        }
+
+        socket.on('player:active-game:update', handleActiveGameUpdate);
+
+        return () => {
+            socket.emit('player:unwatch', id);
+            socket.off('player:active-game:update', handleActiveGameUpdate);
+        };
+    }, [id]);
 
     if (!profileUser || !myUser) return null;
 
