@@ -5,7 +5,6 @@ import { useUserStore } from '@/store/userStore'
 import { useGameStore } from '@/store/gameStore'
 import { useParams } from 'react-router-dom';
 import { useLoadGame } from './components/ChessBoard/hooks/useLoadGame'
-import { useFinishGame } from './components/ChessBoard/hooks/useFinishGame'
 import { useGameSocket } from './hooks/useGameSocket'
 import { useGameSounds } from './hooks/useGameSounds'
 import { useEffect } from 'react'
@@ -23,7 +22,6 @@ export default function GamePage() {
     const clearGame = useGameStore(s => s.clearGame);
     
     useLoadGame(id);
-    // useFinishGame();
     useGameSocket(gameId);
     useGameSounds();
     

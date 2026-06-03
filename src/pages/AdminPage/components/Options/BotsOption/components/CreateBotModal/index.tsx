@@ -91,7 +91,7 @@ export default function CreateBotModal({ onClose, onCreate }: Props) {
 
                 <div className={s.buttons_container}>
                     <Button
-                        text="Save"
+                        text="Create"
                         variant="profile"
                         animation="white-hover"
                         onClick={handleCreate}
