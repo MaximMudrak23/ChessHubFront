@@ -131,13 +131,15 @@ export default function ProfilePage() {
                     {profileSong && (
                         <ProfileSongPlate song={profileSong} />
                     )}
-                    {isMyProfile && <Button
-                        text={'Edit Profile'}
-                        active={true}
-                        variant='profile'
-                        animation='white-hover'
-                        onClick={() => navigate(`/profile/${id}/edit`)}
-                    />}
+                    {isMyProfile &&
+                        <Button
+                            text={'Edit Profile'}
+                            active={true}
+                            variant='profile'
+                            animation='white-hover'
+                            onClick={() => navigate(`/profile/${id}/edit`)}
+                        />
+                    }
                     {!isMyProfile && activeGameId && (
                         <Button
                             text={'Spectate Game'}

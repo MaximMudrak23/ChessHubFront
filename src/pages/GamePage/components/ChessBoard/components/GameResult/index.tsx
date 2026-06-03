@@ -44,6 +44,9 @@ export default function GameResult({isGameEnded, gameStatus, winnerSide}: Props)
             {gameStatus === 'insufficient-material-draw' &&
                 <p className={s.result_table}>Draw! Insufficient material</p>
             }
+            {gameStatus === 'resignation' && (
+                <p className={s.result_table}>Game ended by resignation</p>
+            )}
 
             <div className={s.button_folder}>
                 <Button

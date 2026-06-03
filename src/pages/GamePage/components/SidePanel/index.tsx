@@ -1,10 +1,12 @@
 import s from './styles.module.scss'
 import UserCard from '../../../../components/User/UserCard';
 import MoveRow from './components/MoveRow';
+import Button from '@/components/UI/Button';
 import type { Players, Side, Move } from '../../utils/types/game.types';
 import { getSortedUsers } from './utils/getSortedUsers';
 import { useEffect, useRef } from 'react';
 import { SVG } from '@/constants/paths';
+import { useResignGame } from '../../hooks/useResignGame';
 
 type Props = {
     players: Players;
@@ -14,8 +16,11 @@ type Props = {
 }
 
 export default function SidePanel(props: Props) {
+    const {canResign, resignGame} = useResignGame();
+
     const sortedUsers = getSortedUsers(props.players, props.perspective);
     const movesRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
         const el = movesRef.current;
         if (!el) return;
@@ -54,6 +59,23 @@ export default function SidePanel(props: Props) {
                     ))}
                 </div>
             </div>
+
+            {canResign &&
+                <div className={s.button_folder}>
+                    <Button
+                        text={'Resign'}
+                        active={true}
+                        variant='black'
+                        animation='white-hover'
+                        onClick={resignGame}
+                        styleProps={{
+                            height: '65%',
+                            width: '100px',
+                            borderRadius: '5px',
+                        }}
+                    />
+                </div>
+            }
         </div>
     )
 }

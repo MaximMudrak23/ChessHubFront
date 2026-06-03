@@ -16,7 +16,8 @@ export type GameStatus =
     | 'stalemate'
     | 'fifty-move-draw'
     | 'threefold-repetition-draw'
-    | 'insufficient-material-draw';
+    | 'insufficient-material-draw'
+    | 'resignation';
 
 export type PieceType = {
     id: string;
