@@ -1,59 +1,40 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { findGame } from '@/api/gameApi';
+
+import { socket } from '@/socket/socket'
 import { useUserStore } from '@/store/userStore';
-import { useGameStore } from '@/store/gameStore';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
-import { mapServerGameToClientGame } from '@/utils/mapServerGameToClientGame';
 
 export default function MatchmakingWatcher() {
     const navigate = useNavigate();
 
+    const user = useUserStore(s => s.user);
     const token = useUserStore(s => s.token);
-    const setGame = useGameStore(s => s.setGame);
 
     const isSearching = useMatchmakingStore(s => s.isSearching);
-    const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
-    const setEloRange = useMatchmakingStore(s => s.setEloRange);
-    const setSearchStartedAt = useMatchmakingStore(s => s.setSearchStartedAt);
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
 
     useEffect(() => {
-        if (!isSearching || !token) return;
+        if (!isSearching || !user || !token) return;
 
-        const checkGame = async () => {
-            try {
-                const data = await findGame(token);
+        if (!socket.connected) {
+            socket.connect();
+        }
 
-                if (data.status === 'searching') {
-                    setEloRange(data.eloRange);
-                    return;
-                }
+        socket.emit('matchmaking:join', user.id);
 
-                if (data.status === 'matched' || data.status === 'in_game') {
-                    clearMatchmaking();
-                    
-                    setGame(mapServerGameToClientGame(data.game));
-                    navigate(`/game/${data.game._id}`);
-                }
-            } catch (error) {
-                console.log(error);
-                clearMatchmaking();
-            }
+        function handleMatchFound(gameId: string) {
+            clearMatchmaking();
+            navigate(`/game/${gameId}`);
+        }
+
+        socket.on('match:found', handleMatchFound);
+
+        return () => {
+            socket.emit('matchmaking:leave', user.id);
+            socket.off('match:found', handleMatchFound);
         };
-
-        const interval = setInterval(checkGame, 3000);
-
-        return () => clearInterval(interval);
-    }, [
-        isSearching,
-        token,
-        setGame,
-        navigate,
-        setIsSearching,
-        setEloRange,
-        setSearchStartedAt,
-    ]);
+    }, [isSearching, user, token, clearMatchmaking, navigate]);
 
     return null;
 }

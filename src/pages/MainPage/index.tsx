@@ -46,6 +46,12 @@ export default function MainPage() {
 
             const data = await findGame(token);
 
+            if (data.status === 'matched' || data.status === 'in_game') {
+                clearMatchmaking();
+                navigate(`/game/${data.game._id}`);
+                return;
+            }
+
             if (data.status === 'searching') {
                 setEloRange(data.eloRange);
             }
