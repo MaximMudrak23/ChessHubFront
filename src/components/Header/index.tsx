@@ -30,11 +30,20 @@ export default function Header() {
     const options = useHeaderOptions();
     
     useEffect(() => {
-        const onResize = function() {setWidth(window.innerWidth)};
+        const onResize = () => {
+            setWidth(window.innerWidth);
+        };
+
         window.addEventListener('resize', onResize);
-        if (width > 760) {setIsOpen(false)};
+
         return () => window.removeEventListener('resize', onResize);
     }, []);
+
+    useEffect(() => {
+        if (width > 760) {
+            setIsOpen(false);
+        }
+    }, [width]);
 
     useEffect(() => {
         if (!isSearching || !searchStartedAt) {

@@ -32,7 +32,10 @@ export default function Aside(props: Props) {
                             img={o.img}
                             text={o.text}
                             variation='aside'
-                            onClick={o.onClick}
+                            onClick={() => {
+                                o.onClick();
+                                props.setIsOpen(false);
+                            }}
                         />
                     ))}
                 </OptionsContainer>
