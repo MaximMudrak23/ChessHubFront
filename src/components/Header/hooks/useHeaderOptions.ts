@@ -3,12 +3,16 @@ import { useMemo } from "react";
 import { useUserStore } from '@/store/userStore'
 import { useGameStore } from '@/store/gameStore'
 import { useMatchmakingStore } from '@/store/matchmakingStore'
+import { cancelSearch } from '@/api/gameApi';
 import { SVG } from "@/constants/paths";
 
 export function useHeaderOptions() {
     const navigate = useNavigate();
     
     const user = useUserStore(s => s.user);
+    const token = useUserStore(s => s.token);
+    const isSearching = useMatchmakingStore(s => s.isSearching);
+
     const logout = useUserStore(s => s.logout);
     const clearGame = useGameStore(s => s.clearGame);
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
@@ -50,17 +54,26 @@ export function useHeaderOptions() {
         baseOptions.push({
             img: SVG.logoutIcon,
             text: 'Logout',
-            onClick: () => {
+            onClick: async () => {
+                try {
+                    if (token && isSearching) {
+                        await cancelSearch(token);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+
                 logout();
                 clearGame();
                 clearMatchmaking();
+
                 localStorage.removeItem('token');
                 navigate('/');
             },
         });
 
         return baseOptions;
-    }, [navigate, user, logout, clearGame, clearMatchmaking]);
+    }, [navigate, user, token, isSearching, logout, clearGame, clearMatchmaking]);
 
     return options;
 }

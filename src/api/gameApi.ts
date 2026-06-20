@@ -102,3 +102,17 @@ export async function makeMove(
 
     return res.json();
 }
+
+export async function getSearchStatus(token: string) {
+    const res = await fetch(`${API_URL}/game/search-status`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to get search status');
+    }
+
+    return res.json();
+}

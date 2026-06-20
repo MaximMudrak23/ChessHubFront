@@ -4,7 +4,8 @@ import Button from '../../components/UI/Button'
 import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom';
-import { findGame, cancelSearch } from '@/api/gameApi';
+import { useEffect } from 'react';
+import { findGame, cancelSearch, getSearchStatus } from '@/api/gameApi';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
 
 export default function MainPage() {
@@ -60,6 +61,23 @@ export default function MainPage() {
             clearMatchmaking();
         }
     }
+
+    useEffect(() => {
+        if (!user || !token) return;
+
+        getSearchStatus(token)
+            .then(data => {
+                if (!data.searching) {
+                    clearMatchmaking();
+                    return;
+                }
+
+                setIsSearching(true);
+                setEloRange(data.eloRange);
+                setSearchStartedAt(new Date(data.searchStartedAt).getTime());
+            })
+            .catch(console.log);
+    }, [user, token]);
 
     return (
         <>
