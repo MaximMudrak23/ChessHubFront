@@ -12,6 +12,13 @@ export default function KeyCard(props: Props) {
             <p className={s.title}>Code</p>
             <p className={s.value}>{props.keyValue}</p>
             <Button
+                text='Copy'
+                variant='profile'
+                animation='white-hover'
+                onClick={() => navigator.clipboard.writeText(props.keyValue)}
+                className={s.button}
+            />
+            <Button
                 text='Delete'
                 variant='profile'
                 animation='white-hover'
