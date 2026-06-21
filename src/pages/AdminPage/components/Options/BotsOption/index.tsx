@@ -119,9 +119,13 @@ export default function BotsOption() {
                             const confirmed = confirm(`Delete bot "${bot.name}"?`);
                             if (!confirmed) return;
 
-                            await deleteAdminBot(token, bot.id);
-
-                            setBots(prev => prev.filter(item => item.id !== bot.id));
+                            try {
+                                await deleteAdminBot(token, bot.id);
+                                setBots(prev => prev.filter(item => item.id !== bot.id));
+                            } catch (error) {
+                                alert('You cannot delete this bot while it has an active game');
+                                console.log(error);
+                            }
                         }}
                         secondaryActionText={bot.status === 'disabled' ? 'Activate bot' : 'Disable bot'}
                         onSecondaryAction={() => handleToggleBotStatus(bot)}
