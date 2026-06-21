@@ -53,3 +53,49 @@ export async function me(token: string): Promise<Omit<AuthResponse, 'token'>> {
 
     return res.json();
 }
+
+export async function registerStart(email: string, password: string, key: string) {
+    const res = await fetch(`${API_URL}/auth/register/start`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, key }),
+    });
+
+    if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Failed to start registration');
+    }
+
+    return res.json();
+}
+
+export async function getRegisterStatus(email: string) {
+    const res = await fetch(
+        `${API_URL}/auth/register/status?email=${encodeURIComponent(email)}`
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to get register status');
+    }
+
+    return res.json();
+}
+
+export async function resendRegisterEmail(email: string) {
+    const res = await fetch(`${API_URL}/auth/register/resend`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Failed to resend email');
+    }
+
+    return res.json();
+}
