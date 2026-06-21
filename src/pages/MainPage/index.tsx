@@ -1,22 +1,18 @@
 import s from './styles.module.scss'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import Button from '../../components/UI/Button'
-import { useGameStore } from '@/store/gameStore';
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { findGame, cancelSearch, getSearchStatus } from '@/api/gameApi';
+import { useState, useEffect } from 'react';
+import { findGame, cancelSearch, getSearchStatus, getActiveGame } from '@/api/gameApi';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
 
 export default function MainPage() {
     const navigate = useNavigate();
-
+    const [activeGameID, setActiveGameID] = useState<string | null>(null);
+    
     const user = useUserStore(s => s.user);
     const token = useUserStore(s => s.token);
-    
-    const gameID = useGameStore(s => s.gameId);
-    const gameStatus = useGameStore(s => s.gameStatus);
-    const activeGameID = gameStatus === 'playing' ? gameID : null;
 
     const isSearching = useMatchmakingStore(s => s.isSearching);
     const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
@@ -31,7 +27,7 @@ export default function MainPage() {
         if (!user || !token) return;
 
         if (activeGameID) {
-            navigate(`/game/${gameID}`);
+            navigate(`/game/${activeGameID}`);
             return;
         }
 
@@ -77,7 +73,24 @@ export default function MainPage() {
                 setSearchStartedAt(new Date(data.searchStartedAt).getTime());
             })
             .catch(console.log);
-    }, [user, token]);
+    }, [
+        user,
+        token,
+        clearMatchmaking,
+        setIsSearching,
+        setEloRange,
+        setSearchStartedAt,
+    ]);
+
+    useEffect(() => {
+        if (!token) return;
+
+        getActiveGame(token)
+            .then(data => {
+                setActiveGameID(data.game?._id ?? null);
+            })
+            .catch(console.log);
+    }, [token]);
 
     return (
         <>
