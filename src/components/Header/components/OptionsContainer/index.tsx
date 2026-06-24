@@ -1,5 +1,3 @@
-import s from './styles.module.scss'
-
 type Props = {
     className: string;
     children?: React.ReactNode;
