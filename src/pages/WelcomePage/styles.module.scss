@@ -5,6 +5,8 @@
 }
 
 .main {
+    min-width: fit-content;
+    
     flex: 1;
     background: linear-gradient(var(--angle), #4C2A79, #000, #4C2A79);
 

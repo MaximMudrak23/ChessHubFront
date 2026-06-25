@@ -57,6 +57,7 @@ export const SVG = {
     eye: '/svg/eye.svg',
     gear: '/svg/gear.svg',
     house: '/svg/house.svg',
+    externalLink: '/svg/external-link.svg',
     labsIcon: '/svg/labs-icon.svg',
     leftArrow: '/svg/left-arrow.svg',
     marketIcon: '/svg/market-icon.svg',

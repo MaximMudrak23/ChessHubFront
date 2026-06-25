@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage'
 import ProfileEdit from './pages/ProfileEdit'
 import AdminPage from './pages/AdminPage'
 import GamePage from './pages/GamePage'
+import WhatIsChessHubPage from './pages/WhatIsChessHubPage'
 import Page404 from './pages/Page404'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route element={<PublicOnlyRoute />}>
           <Route path='/' element={<WelcomePage />} />
+          <Route path='/what-is-chesshub' element={<WhatIsChessHubPage />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

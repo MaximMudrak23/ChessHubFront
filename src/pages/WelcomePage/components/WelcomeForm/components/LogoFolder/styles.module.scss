@@ -9,15 +9,23 @@
 
     display: flex;
     align-items: center;
-    gap: 24px;
+    justify-content: space-between;
 
     user-select: none;
+}
 
-    & > img {
+.logo {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    img {
         height: 85%; // fix later
     }
 
-    & > span {
+    span {
         font-size: clamp(1rem, 1.8rem, 2rem); // fix later
         font-weight: 500;
 
