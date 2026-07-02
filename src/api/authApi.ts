@@ -1,6 +1,10 @@
 import type { AuthResponse } from '@/types/user.types';
 import { API_URL } from './config';
 
+type RegisterStartResponse =
+    | { message: string }
+    | AuthResponse;
+
 export async function login(email: string, password: string): Promise<AuthResponse> {
     const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -54,7 +58,11 @@ export async function me(token: string): Promise<Omit<AuthResponse, 'token'>> {
     return res.json();
 }
 
-export async function registerStart(email: string, password: string, key: string) {
+export async function registerStart(
+    email: string,
+    password: string,
+    key: string
+): Promise<RegisterStartResponse> {
     const res = await fetch(`${API_URL}/auth/register/start`, {
         method: 'POST',
         headers: {

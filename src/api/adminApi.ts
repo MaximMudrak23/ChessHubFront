@@ -1,5 +1,6 @@
 import { API_URL } from './config'
 import type { User } from '@/types/user.types'
+import type { EngineType } from '@/constants/engineConfig'
 
 export async function getAdminUsers(token: string): Promise<{ users: User[] }> {
     const res = await fetch(`${API_URL}/admin/users`, {
@@ -88,7 +89,7 @@ export async function deleteAdminKey(token: string, id: string) {
 
 type CreateBotData = {
     name: string;
-    botType: 'stockfish' | 'mirror' | 'personality';
+    engine: EngineType;
     skillLevel: number;
 };
 
@@ -113,7 +114,7 @@ export async function createAdminBot(token: string, data: CreateBotData) {
 export type AdminBot = {
     id: string;
     isBot: true;
-    botType: 'stockfish' | 'mirror' | 'personality';
+    botType: 'classic';
     name: string;
     description?: string;
     avatarURL?: string;
@@ -122,7 +123,7 @@ export type AdminBot = {
     profileBackground?: any;
     profileSong?: any;
     elo: number;
-    engine: 'stockfish';
+    engine: EngineType;
     skillLevel: number;
     pgnFiles: string[];
     status: 'idle' | 'searching' | 'playing' | 'disabled';

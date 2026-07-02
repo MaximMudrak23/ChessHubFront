@@ -72,7 +72,7 @@ export default function Header() {
         }
 
         socket.emit('player:watch', user.id);
-        socket.emit('matchmaking:join', user.id);
+        // socket.emit('matchmaking:join', user.id);
 
         function handleMatchmakingUpdate(data: {
             searching: boolean;
@@ -94,7 +94,7 @@ export default function Header() {
         return () => {
             socket.off('matchmaking:status:update', handleMatchmakingUpdate);
             socket.emit('player:unwatch', user.id);
-            socket.emit('matchmaking:leave', user.id);
+            // socket.emit('matchmaking:leave', user.id);
         };
     }, [
         user?.id,

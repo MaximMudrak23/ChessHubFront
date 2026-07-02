@@ -2,28 +2,37 @@ import s from './styles.module.scss'
 import Input from '@/components/UI/Input'
 import Button from '@/components/UI/Button'
 import { useState } from 'react'
-
-type BotType = 'stockfish' | 'mirror' | 'personality'
+import { ENGINE_CONFIG, type EngineType } from '@/constants/engineConfig'
 
 type Props = {
     onClose: () => void;
     onCreate: (data: {
-        botType: BotType;
         name: string;
+        engine: EngineType;
         skillLevel: number;
     }) => void;
 }
 
 export default function CreateBotModal({ onClose, onCreate }: Props) {
-    const [botType, setBotType] = useState<BotType>('stockfish');
-    const [botName, setBotName] = useState('');
+    const [engine, setEngine] = useState<EngineType>('stockfish');
+    const [botName, setName] = useState('');
     const [skillLevel, setSkillLevel] = useState('5');
 
-    const skillOptions = Array.from({ length: 21 }, (_, i) => i);
+    const config = ENGINE_CONFIG[engine];
+    
+    const skillOptions = Array.from(
+        { length: config.maxSkill - config.minSkill + 1 },
+        (_, i) => config.minSkill + i
+    );
+
+    const handleEngineChange = (nextEngine: EngineType) => {
+        setEngine(nextEngine);
+        setSkillLevel(String(ENGINE_CONFIG[nextEngine].defaultSkill));
+    };
 
     const handleCreate = () => {
         onCreate({
-            botType,
+            engine,
             name: botName,
             skillLevel: Number(skillLevel),
         });
@@ -35,31 +44,16 @@ export default function CreateBotModal({ onClose, onCreate }: Props) {
         <div className={s.create_bot_modal_background} onClick={onClose}>
             <div className={s.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={s.tabs}>
-                    <Button
-                        text="Stockfish"
-                        variant="profile"
-                        animation="white-hover"
-                        onClick={() => setBotType('stockfish')}
-                        className={`${s.button} ${botType === 'stockfish' ? s.active_button : ''}`}
-                    />
-
-                    <Button
-                        text="Mirror"
-                        variant="profile"
-                        animation="white-hover"
-                        active={false}
-                        onClick={() => {}}
-                        className={s.button}
-                    />
-
-                    <Button
-                        text="Personality"
-                        variant="profile"
-                        animation="white-hover"
-                        active={false}
-                        onClick={() => {}}
-                        className={s.button}
-                    />
+                    {(Object.keys(ENGINE_CONFIG) as EngineType[]).map(item => (
+                        <Button
+                            key={item}
+                            text={ENGINE_CONFIG[item].title}
+                            variant="profile"
+                            animation="white-hover"
+                            onClick={() => handleEngineChange(item)}
+                            className={`${s.button} ${engine === item ? s.active_button : ''}`}
+                        />
+                    ))}
                 </div>
 
                 <div className={s.fields}>
@@ -67,7 +61,7 @@ export default function CreateBotModal({ onClose, onCreate }: Props) {
                         id="bot-name-input"
                         name="botName"
                         value={botName}
-                        onChangeHandler={setBotName}
+                        onChangeHandler={setName}
                         variant="profile"
                         placeholderText="Name"
                         styleProps={{

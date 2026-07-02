@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { createAdminBot, deleteAdminBot, getAdminBots, disableAdminBot, activateAdminBot} from '@/api/adminApi'
 import type { AdminBot } from '@/api/adminApi'
 import { useUserStore } from '@/store/userStore'
+import type { EngineType } from '@/constants/engineConfig'
 
 export default function BotsOption() {
     const token = useUserStore(s => s.token);
@@ -30,7 +31,7 @@ export default function BotsOption() {
     }, [token]);
 
     const handleCreateBot = async (data: {
-        botType: 'stockfish' | 'mirror' | 'personality';
+        engine: EngineType;
         name: string;
         skillLevel: number;
     }) => {
@@ -64,7 +65,7 @@ export default function BotsOption() {
 
     const filteredBots = bots.filter(bot =>
         bot.name.toLowerCase().includes(value.toLowerCase()) ||
-        bot.botType.toLowerCase().includes(value.toLowerCase())
+        bot.engine.toLowerCase().includes(value.toLowerCase())
     );
 
     return (
@@ -98,7 +99,7 @@ export default function BotsOption() {
                     <PlayerCard
                         key={bot.id}
                         name={bot.name}
-                        subtitle={`${bot.botType} • Skill ${bot.skillLevel}`}
+                        subtitle={`${bot.engine} • Skill ${bot.skillLevel}`}
                         avatarURL={bot.avatarURL}
                         frameURL={bot.avatarFrameURL}
                         fields={[

@@ -38,7 +38,14 @@ export default function InputsFolder({selectedTab}: Props) {
 
     async function handleSignUp() {
         try {
-            await registerStart(signUp.email, signUp.password, signUp.key);
+            const data = await registerStart(signUp.email, signUp.password, signUp.key);
+
+            if ('token' in data && 'user' in data) {
+                setAuth(data.user, data.token);
+                localStorage.setItem('token', data.token);
+                navigate('/main');
+                return;
+            }
 
             setSignUpStep('waiting-email');
         } catch (error) {
