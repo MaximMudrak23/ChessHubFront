@@ -34,7 +34,6 @@ export default function ChessPieces(props: Props) {
         e: React.MouseEvent<HTMLImageElement>,
         id: string,
         fromSquare: Square,
-        side: Side
     ) {
         e.preventDefault();
         e.stopPropagation();
@@ -131,7 +130,7 @@ export default function ChessPieces(props: Props) {
                             if (!props.currentUserSide) return;
                             if (side !== props.currentUserSide) return;
 
-                            handlePieceMouseDown(e, id, square, side);
+                            handlePieceMouseDown(e, id, square);
                         }}
                     />
                 );

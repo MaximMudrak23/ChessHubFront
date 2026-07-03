@@ -1,12 +1,12 @@
 import s from './styles.module.scss'
-import Button from '@/components/UI/Button'
+// import Button from '@/components/UI/Button'
 import { LOGO } from '@/constants/paths'
-import { SVG } from '@/constants/paths'
-import { useNavigate } from 'react-router-dom'
+// import { SVG } from '@/constants/paths'
+// import { useNavigate } from 'react-router-dom'
 
 
 export default function LogoFolder() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <div className={s.logo_folder}>
@@ -15,7 +15,7 @@ export default function LogoFolder() {
                 <span>CHESSHUB</span>
             </div>
 
-            <Button
+            {/* <Button
                 text='What is ChessHub?'
                 icon={SVG.externalLink}
                 variant='aura'
@@ -23,7 +23,7 @@ export default function LogoFolder() {
                     padding: '12px',
                 }}
                 onClick={()=>navigate('/what-is-chesshub')}
-            />
+            /> */}
         </div>
     )
 }
