@@ -86,11 +86,9 @@ export default function ChessPieces(props: Props) {
 
             const targetSquare = props.hoveredSquareRef.current;
             if (isDragging && targetSquare && targetSquare !== fromSquare) {
-                if (side !== props.currentTurn) return;
-
                 setNoTransitionID(id);
                 props.movePiece(targetSquare, id);
-
+                
                 requestAnimationFrame(() => {
                     setNoTransitionID(null);
                 });

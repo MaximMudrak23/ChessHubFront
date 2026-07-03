@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Side } from "../../../utils/types/game.types";
 import type { Square, PieceType, PieceCode } from "../utils/types/chess.types";
 import { getPieceSide, getPieceById } from "../utils/lib/getPiece";
@@ -35,6 +35,17 @@ export default function useChessBoard(
     const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
     const positionHistory = useGameStore(s => s.positionHistory);
 
+    const latestRef = useRef({
+        currentTurn, pieces, lastMove, gameStatus, token, gameId,
+        players, moves, halfmoveClock, fullmoveNumber, positionHistory,
+    });
+    useEffect(() => {
+        latestRef.current = {
+            currentTurn, pieces, lastMove, gameStatus, token, gameId,
+            players, moves, halfmoveClock, fullmoveNumber, positionHistory,
+        };
+    });
+
     function clearSelection() {
         setSelectedPieceID(null);
     }
@@ -49,8 +60,6 @@ export default function useChessBoard(
         const targetSide = getPieceSide(targetPiece);
 
         if (targetSide === currentUserSide) {
-            if (targetSide !== currentTurn) return;
-            
             setSelectedPieceID(pieceID);
             return;
         }
@@ -59,6 +68,11 @@ export default function useChessBoard(
     }
 
     function movePiece(targetSquare: Square, pieceID = selectedPieceID): boolean {
+        const {
+            currentTurn, pieces, lastMove, gameStatus, token, gameId,
+            players,
+        } = latestRef.current;
+        
         if (gameStatus !== 'playing') return false;
         if (!pieceID) return false;
         if (isMovePendingRef.current) return false;
@@ -66,6 +80,11 @@ export default function useChessBoard(
 
         const selectedPiece = getPieceById(pieces, pieceID);
         if (!selectedPiece) return false;
+
+        if (getPieceSide(selectedPiece) !== currentTurn) {
+            playSound('illegal');
+            return false;
+        }
 
         const targetPiece = pieces.find(p => p.square === targetSquare);
 
@@ -84,6 +103,8 @@ export default function useChessBoard(
             return false;
         }
 
+        const { halfmoveClock, fullmoveNumber, positionHistory, moves } = latestRef.current;
+
         const previousGame = {
             gameId,
             players,
@@ -99,13 +120,13 @@ export default function useChessBoard(
         };
 
         const optimisticPieces = pieces
-        .filter(p => p.square !== targetSquare)
-        .map(p => p.id === pieceID ? {
-                ...p,
-                square: targetSquare,
-                hasMoved: true,
-            } : p
-        );
+            .filter(p => p.square !== targetSquare)
+            .map(p => p.id === pieceID ? {
+                    ...p,
+                    square: targetSquare,
+                    hasMoved: true,
+                } : p
+            );
 
         setGame({
             ...previousGame,
@@ -143,7 +164,10 @@ export default function useChessBoard(
     }
 
     const selectedPiece = selectedPieceID ? getPieceById(pieces, selectedPieceID) : null;
-    const availableMoves = selectedPiece ? getAvailableMoves(selectedPiece, pieces, lastMove) : [];
+    const isMyTurn = currentUserSide !== null && currentTurn === currentUserSide;
+    const availableMoves = selectedPiece && isMyTurn
+        ? getAvailableMoves(selectedPiece, pieces, lastMove)
+        : [];
     
     const isCheck = isKingInCheck(pieces, currentTurn);
 
