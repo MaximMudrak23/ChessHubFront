@@ -48,3 +48,21 @@ npm run dev
 ## Backend
 
 This project requires the ChessHub backend to be running.
+
+### Build Docker image
+
+```bash
+docker build --build-arg VITE_API_URL=http://192.168.1.8:3000 -t chesshub-front .
+```
+
+### Run Docker container
+
+```bash
+docker run -p 8080:80 chesshub-front
+```
+
+The server will be available at:
+
+```
+http://localhost:8080
+```
