@@ -3,8 +3,11 @@
     min-height: 350px; // adaptive
 
     --size: 85vmin;
+    --board-radius: 5px;
+
     width: var(--size);
     height: var(--size);
     
     position: relative;
+    border-radius: var(--board-radius);
 }
