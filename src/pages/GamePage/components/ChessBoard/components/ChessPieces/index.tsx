@@ -3,7 +3,7 @@ import type { PieceType, Square } from '../../utils/types/chess.types';
 import type { Side } from '../../../../utils/types/game.types';
 import { cellSize, squareToPosition } from '../../utils/lib/board';
 import { getPieceSide } from '../../utils/lib/getPiece';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { CHESS_PIECES } from '@/constants/paths';
 import clsx from 'clsx';
 
@@ -21,12 +21,21 @@ type Props = {
 
 export default function ChessPieces(props: Props) {
     const [noTransitionID, setNoTransitionID] = useState<string | null>(null);
-   
+    const suppressClickRef = useRef(false);
+
     function handlePieceClick(e: React.MouseEvent, square: Square, id: string) {
+        e.stopPropagation();
+
+        if (suppressClickRef.current) {
+            suppressClickRef.current = false;
+            return;
+        }
+
         if (e.ctrlKey || e.metaKey) {
             props.onSquareClick(e, square);
             return;
         }
+
         props.selectPiece(id);
     }
 
@@ -103,6 +112,11 @@ export default function ChessPieces(props: Props) {
             document.body.style.cursor = '';
 
             const targetSquare = props.hoveredSquareRef.current;
+            
+            if (isDragging) {
+                suppressClickRef.current = true;
+            }
+            
             if (isDragging && targetSquare && targetSquare !== fromSquare) {
                 setNoTransitionID(id);
                 props.movePiece(targetSquare, id);
