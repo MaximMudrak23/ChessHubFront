@@ -104,7 +104,13 @@ export default function ChessBoard(props: Props) {
     }
 
     return (
-        <div className={s.chess_board} ref={boardRef} onMouseMove={handleBoardMouseMove} onMouseLeave={handleBoardMouseLeave}>
+        <div
+            data-chess-board
+            className={s.chess_board}
+            ref={boardRef}
+            onMouseMove={handleBoardMouseMove}
+            onMouseLeave={handleBoardMouseLeave}
+        >
             <GameResult
                 isGameEnded={isGameEnded}
                 gameStatus={gameStatus}

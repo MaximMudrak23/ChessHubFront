@@ -66,3 +66,13 @@ The server will be available at:
 ```
 http://localhost:8080
 ```
+
+### Rebuild Docker image
+
+If Docker keeps using an old frontend build, find and remove the old container and image:
+
+```bash
+docker ps -a --filter ancestor=chesshub-front
+docker rm -f CONTAINER_ID
+docker rmi chesshub-front
+```

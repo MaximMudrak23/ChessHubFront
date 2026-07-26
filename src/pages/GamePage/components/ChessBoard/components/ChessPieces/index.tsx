@@ -46,6 +46,12 @@ export default function ChessPieces(props: Props) {
         const centerOffsetX = e.clientX - (rect.left + rect.width / 2);
         const centerOffsetY = e.clientY - (rect.top + rect.height / 2);
 
+        const board = img.closest<HTMLElement>('[data-chess-board]');
+        if (!board) return;
+
+        const boardRect = board.getBoundingClientRect();
+        const overflow = rect.width * 0.25;
+
         const start = {
             transform: img.style.transform,
             transition: img.style.transition,
@@ -61,15 +67,28 @@ export default function ChessPieces(props: Props) {
 
         img.style.transition = 'none';
         img.style.zIndex = '1000';
-        document.body.style.cursor = 'grabbing';
+        // document.body.style.cursor = 'grabbing';
 
         function move(ev: MouseEvent) {
-            const dx = ev.clientX - startMouse.x + centerOffsetX;
-            const dy = ev.clientY - startMouse.y + centerOffsetY;
+            const mouseDx = ev.clientX - startMouse.x;
+            const mouseDy = ev.clientY - startMouse.y;
 
-            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            if (Math.abs(mouseDx) > 3 || Math.abs(mouseDy) > 3) {
                 isDragging = true;
             }
+
+            const rawDx = mouseDx + centerOffsetX;
+            const rawDy = mouseDy + centerOffsetY;
+
+            const dx = Math.max(
+                boardRect.left - rect.left - overflow,
+                Math.min(rawDx, boardRect.right - rect.right + overflow),
+            );
+
+            const dy = Math.max(
+                boardRect.top - rect.top - overflow,
+                Math.min(rawDy, boardRect.bottom - rect.bottom + overflow),
+            );
 
             img.style.transform = `translate(${dx}px, ${dy}px)`;
         }
