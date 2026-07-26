@@ -34,14 +34,16 @@ export default function useChessBoard(
     const halfmoveClock = useGameStore(s => s.halfmoveClock);
     const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
     const positionHistory = useGameStore(s => s.positionHistory);
+    const winnerSide = useGameStore(s => s.winnerSide);
 
     const latestRef = useRef({
-        currentTurn, pieces, lastMove, gameStatus, token, gameId,
+        currentTurn, pieces, lastMove, gameStatus, winnerSide, token, gameId,
         players, moves, halfmoveClock, fullmoveNumber, positionHistory,
     });
+
     useEffect(() => {
         latestRef.current = {
-            currentTurn, pieces, lastMove, gameStatus, token, gameId,
+            currentTurn, pieces, lastMove, gameStatus, winnerSide, token, gameId,
             players, moves, halfmoveClock, fullmoveNumber, positionHistory,
         };
     });
@@ -69,7 +71,13 @@ export default function useChessBoard(
 
     function movePiece(targetSquare: Square, pieceID = selectedPieceID): boolean {
         const {
-            currentTurn, pieces, lastMove, gameStatus, token, gameId,
+            currentTurn,
+            pieces,
+            lastMove,
+            gameStatus,
+            winnerSide,
+            token,
+            gameId,
             players,
         } = latestRef.current;
         
@@ -117,6 +125,7 @@ export default function useChessBoard(
             positionHistory,
             gameStatus,
             moveMeta: null,
+            winner: winnerSide,
         };
 
         const optimisticPieces = pieces
@@ -164,8 +173,9 @@ export default function useChessBoard(
     }
 
     const selectedPiece = selectedPieceID ? getPieceById(pieces, selectedPieceID) : null;
-    const isMyTurn = currentUserSide !== null && currentTurn === currentUserSide;
-    const availableMoves = selectedPiece && isMyTurn
+    // const isMyTurn = currentUserSide !== null && currentTurn === currentUserSide;
+
+    const availableMoves = selectedPiece /*&& isMyTurn*/
         ? getAvailableMoves(selectedPiece, pieces, lastMove)
         : [];
     

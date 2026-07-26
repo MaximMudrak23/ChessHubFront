@@ -18,6 +18,7 @@ export default function GamePage() {
     const moves = useGameStore(s => s.moves);
     const pieces = useGameStore(s => s.pieces);
     const lastMove = useGameStore(s => s.lastMove);
+    const winnerSide = useGameStore(s => s.winnerSide);
     const gameId = useGameStore(s => s.gameId);
     const clearGame = useGameStore(s => s.clearGame);
     
@@ -48,6 +49,7 @@ export default function GamePage() {
                 currentUserSide={currentUserSide}
                 perspective={perspective}
                 currentTurn={currentTurn}
+                winnerSide={winnerSide}
                 pieces={pieces}
                 lastMove={lastMove}
             />

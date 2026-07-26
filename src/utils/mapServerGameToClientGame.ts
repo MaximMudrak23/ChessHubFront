@@ -3,6 +3,7 @@ import type { Game } from '@/store/gameStore';
 export function mapServerGameToClientGame(serverGame: any): Game {
     return {
         gameId: String(serverGame._id),
+
         players: {
             white: {
                 type: serverGame.white.playerType,
@@ -14,6 +15,7 @@ export function mapServerGameToClientGame(serverGame: any): Game {
                 frameURL: serverGame.white.avatarFrameURL,
                 userIcons: serverGame.white.userIcons,
             },
+
             black: {
                 type: serverGame.black.playerType,
                 userId: String(serverGame.black.playerId),
@@ -25,6 +27,7 @@ export function mapServerGameToClientGame(serverGame: any): Game {
                 userIcons: serverGame.black.userIcons,
             },
         },
+
         currentTurn: serverGame.currentTurn,
         moves: serverGame.moves ?? [],
         pieces: serverGame.pieces ?? [],
@@ -32,10 +35,14 @@ export function mapServerGameToClientGame(serverGame: any): Game {
         halfmoveClock: serverGame.halfmoveClock ?? 0,
         fullmoveNumber: serverGame.fullmoveNumber ?? 1,
         positionHistory: serverGame.positionHistory ?? [],
+
         gameStatus:
             serverGame.status === 'finished'
                 ? serverGame.finishedReason
                 : 'playing',
+
+        winner: serverGame.winner ?? null,
+
         moveMeta: serverGame.moveMeta ?? null,
     };
 }

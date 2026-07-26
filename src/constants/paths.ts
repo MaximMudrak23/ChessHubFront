@@ -63,6 +63,7 @@ export const SVG = {
     marketIcon: '/svg/market-icon.svg',
     menuIcon: '/svg/menu-icon.svg',
     more: '/svg/more.svg',
+    cup: '/svg/cup.svg',
     optionIcon: '/svg/option-icon.svg',
     profileIcon: '/svg/user-profile.svg',
     adminIcon: '/svg/admin-page.svg',

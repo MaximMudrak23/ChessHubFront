@@ -27,6 +27,7 @@ export type Game = {
     positionHistory: string[];
     gameStatus: GameStatus;
     moveMeta: MoveMeta | null;
+    winner: Side | 'draw' | null;
 };
 
 export type GameStore = {
@@ -45,6 +46,7 @@ export type GameStore = {
     positionHistory: string[];
     gameStatus: GameStatus;
     moveMeta: MoveMeta | null;
+    winnerSide: Side | null;
 
     setGame: (game: Game) => void;
     clearGame: () => void;
@@ -62,6 +64,7 @@ export const useGameStore = create<GameStore>((set) => ({
     positionHistory: [],
     gameStatus: 'playing',
     moveMeta: null,
+    winnerSide: null,
 
     setGame: (game) => set({
         gameId: game.gameId,
@@ -75,6 +78,10 @@ export const useGameStore = create<GameStore>((set) => ({
         positionHistory: game.positionHistory,
         gameStatus: game.gameStatus,
         moveMeta: game.moveMeta,
+        winnerSide:
+            game.winner === 'white' || game.winner === 'black'
+                ? game.winner
+                : null,
     }),
 
     clearGame: () => set({
@@ -89,5 +96,6 @@ export const useGameStore = create<GameStore>((set) => ({
         positionHistory: [],
         gameStatus: 'playing',
         moveMeta: null,
+        winnerSide: null,
     }),
 }));

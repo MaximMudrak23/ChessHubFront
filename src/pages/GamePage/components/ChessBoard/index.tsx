@@ -11,6 +11,7 @@ type Props = {
     perspective: Side;
     currentUserSide: Side | null;
     currentTurn: Side;
+    winnerSide: Side | null;
     pieces: PieceType[];
     lastMove: {
         piece: PieceCode;
@@ -50,8 +51,6 @@ export default function ChessBoard(props: Props) {
     }
     
     const isGameEnded = gameStatus !== 'playing';
-
-    const winnerSide = gameStatus === 'checkmate' ? props.currentTurn === 'white' ? 'black' : 'white' : null;
 
     const boardRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
@@ -114,7 +113,8 @@ export default function ChessBoard(props: Props) {
             <GameResult
                 isGameEnded={isGameEnded}
                 gameStatus={gameStatus}
-                winnerSide={winnerSide}
+                winnerSide={props.winnerSide}
+                currentUserSide={props.currentUserSide}
             />
             <BoardGrid
                 perspective={props.perspective}
