@@ -8,15 +8,15 @@ export function useGameSounds() {
     const moveMeta = useGameStore(s => s.moveMeta);
     const gameStatus = useGameStore(s => s.gameStatus);
 
-    const prevLastMoveRef = useRef(lastMove);
+    // const prevLastMoveRef = useRef(lastMove);
     const prevGameStatusRef = useRef(gameStatus);
 
     useEffect(() => {
-        if (!prevLastMoveRef.current && lastMove) {
-            playSound('game-start');
-            prevLastMoveRef.current = lastMove;
-            return;
-        }
+        // if (!prevLastMoveRef.current && lastMove) {
+        //     playSound('game-start');
+        //     prevLastMoveRef.current = lastMove;
+        //     return;
+        // }
 
         if (!lastMove || !moveMeta) return;
 
@@ -34,7 +34,7 @@ export function useGameSounds() {
             playSound('move-self');
         }
 
-        prevLastMoveRef.current = lastMove;
+        // prevLastMoveRef.current = lastMove;
     }, [lastMove, moveMeta]);
 
     useEffect(() => {

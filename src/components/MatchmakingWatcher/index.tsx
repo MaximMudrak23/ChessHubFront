@@ -5,6 +5,7 @@ import { findGame } from '@/api/gameApi';
 import { socket } from '@/socket/socket'
 import { useUserStore } from '@/store/userStore';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
+import { playGameStartOnce } from '@/pages/GamePage/components/ChessBoard/utils/lib/playSound';
 
 export default function MatchmakingWatcher() {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function MatchmakingWatcher() {
 
         function handleMatchFound(gameId: string) {
             clearMatchmaking();
+            playGameStartOnce(gameId);
             navigate(`/game/${gameId}`);
         }
 
@@ -49,7 +51,16 @@ export default function MatchmakingWatcher() {
                     setEloRange(data.eloRange);
                 }
 
-                if (data.status === 'matched' || data.status === 'in_game') {
+                if (data.status === 'matched') {
+                    const gameId = String(data.game._id);
+
+                    clearMatchmaking();
+                    playGameStartOnce(gameId);
+                    navigate(`/game/${gameId}`);
+                    return;
+                }
+
+                if (data.status === 'in_game') {
                     clearMatchmaking();
                     navigate(`/game/${data.game._id}`);
                 }

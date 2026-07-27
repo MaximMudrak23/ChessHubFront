@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { findGame, cancelSearch, getSearchStatus, getActiveGame } from '@/api/gameApi';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
+import { playGameStartOnce } from '@/pages/GamePage/components/ChessBoard/utils/lib/playSound';
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -43,7 +44,16 @@ export default function MainPage() {
 
             const data = await findGame(token);
 
-            if (data.status === 'matched' || data.status === 'in_game') {
+            if (data.status === 'matched') {
+                const gameId = String(data.game._id);
+
+                clearMatchmaking();
+                playGameStartOnce(gameId);
+                navigate(`/game/${gameId}`);
+                return;
+            }
+
+            if (data.status === 'in_game') {
                 clearMatchmaking();
                 navigate(`/game/${data.game._id}`);
                 return;
