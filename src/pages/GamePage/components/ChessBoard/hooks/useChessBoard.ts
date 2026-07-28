@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Side } from "../../../utils/types/game.types";
-import type { Square, PieceType, PieceCode } from "../utils/types/chess.types";
+import type { Square, PieceType, PieceCode, PromotionPiece } from '../utils/types/chess.types';
 import { getPieceSide, getPieceById } from "../utils/lib/getPiece";
 import { getAvailableMoves } from "../utils/lib/getAvaibleMoves";
 import { playSound } from "../utils/lib/playSound";
@@ -14,6 +14,12 @@ import { isMoveSafe } from '../utils/lib/isMoveSafe';
 
 // useChessBoard, обязан просто управлять кликами и дергать за функции как ниточки в зависимости от того, на что мы кликнули
 
+type PendingPromotion = {
+    pieceID: string;
+    targetSquare: Square;
+    side: Side;
+};
+
 export default function useChessBoard(
     currentUserSide: Side | null,
     currentTurn: Side,
@@ -21,6 +27,8 @@ export default function useChessBoard(
     lastMove: { piece: PieceCode; from: Square; to: Square; } | null,
 ) {
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
+    const [pendingPromotion, setPendingPromotion] =
+    useState<PendingPromotion | null>(null);
     const [markedSquares, setMarkedSquares] = useState<Square[]>([]);
     const isMovePendingRef = useRef(false);
 
@@ -53,6 +61,8 @@ export default function useChessBoard(
     }
 
     function selectPiece(pieceID: string, toggle = false) {
+        if (pendingPromotion) return;
+        
         if (gameStatus !== 'playing') return;
         if (!currentUserSide) return;
 
@@ -74,7 +84,7 @@ export default function useChessBoard(
         movePiece(targetPiece.square);
     }
 
-    function movePiece(targetSquare: Square, pieceID = selectedPieceID): boolean {
+    function movePiece(targetSquare: Square, pieceID = selectedPieceID, promotion?: PromotionPiece): boolean {
         const {
             currentTurn,
             pieces,
@@ -85,6 +95,8 @@ export default function useChessBoard(
             gameId,
             players,
         } = latestRef.current;
+
+        if (pendingPromotion && !promotion) return false;
         
         if (gameStatus !== 'playing') return false;
         if (!pieceID) return false;
@@ -116,6 +128,30 @@ export default function useChessBoard(
             return false;
         }
 
+        const selectedSide = getPieceSide(selectedPiece);
+
+        const isPromotion =
+            selectedPiece.piece[1] === 'p' &&
+            (
+                (selectedSide === 'white' && targetSquare[1] === '8') ||
+                (selectedSide === 'black' && targetSquare[1] === '1')
+            );
+
+        if (isPromotion && !promotion) {
+            setPendingPromotion({
+                pieceID,
+                targetSquare,
+                side: selectedSide,
+            });
+
+            setSelectedPieceID(null);
+            return true;
+        }
+
+        const movedPieceCode: PieceCode = promotion
+            ? `${selectedSide === 'white' ? 'w' : 'b'}${promotion}` as PieceCode
+            : selectedPiece.piece;
+
         const { halfmoveClock, fullmoveNumber, positionHistory, moves } = latestRef.current;
 
         const previousGame = {
@@ -135,11 +171,15 @@ export default function useChessBoard(
 
         const optimisticPieces = pieces
             .filter(p => p.square !== targetSquare)
-            .map(p => p.id === pieceID ? {
-                    ...p,
-                    square: targetSquare,
-                    hasMoved: true,
-                } : p
+            .map(p =>
+                p.id === pieceID
+                    ? {
+                        ...p,
+                        piece: movedPieceCode,
+                        square: targetSquare,
+                        hasMoved: true,
+                    }
+                    : p
             );
 
         setGame({
@@ -161,6 +201,7 @@ export default function useChessBoard(
             gameId,
             pieceID,
             targetSquare,
+            promotion,
         })
             .catch(error => {
                 console.log(error);
@@ -171,6 +212,25 @@ export default function useChessBoard(
             });
 
         return true;
+    }
+
+    function cancelPromotion() {
+        setPendingPromotion(null);
+        setSelectedPieceID(null);
+    }
+
+    function choosePromotion(promotion: PromotionPiece) {
+        if (!pendingPromotion) return;
+
+        const moved = movePiece(
+            pendingPromotion.targetSquare,
+            pendingPromotion.pieceID,
+            promotion,
+        );
+
+        if (moved) {
+            setPendingPromotion(null);
+        }
     }
 
     function toggleMarkedSquare(square: Square) {
@@ -197,5 +257,8 @@ export default function useChessBoard(
         isCheck,
         gameStatus,
         clearSelection,
+        pendingPromotion,
+        cancelPromotion,
+        choosePromotion,
     };
 }

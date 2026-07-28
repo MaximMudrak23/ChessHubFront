@@ -1,3 +1,4 @@
+import type { PromotionPiece, Square } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
 import { API_URL } from './config';
 
 export async function findGame(token: string) {
@@ -84,7 +85,8 @@ export async function makeMove(
     data: {
         gameId: string;
         pieceID: string;
-        targetSquare: string;
+        targetSquare: Square;
+        promotion?: PromotionPiece;
     }
 ) {
     const res = await fetch(`${API_URL}/game/move`, {

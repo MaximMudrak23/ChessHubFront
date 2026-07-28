@@ -2,9 +2,10 @@ import s from './styles.module.scss'
 import BoardGrid from './components/BoardGrid'
 import ChessPieces from './components/ChessPieces'
 import GameResult from './components/GameResult'
+import PromotionPicker from './components/PromotionPicker'
 import useChessBoard from './hooks/useChessBoard'
 import type { Side } from '../../utils/types/game.types'
-import type { PieceType, PieceCode, Square } from './utils/types/chess.types'
+import type { PieceType, PieceCode, Square, PromotionPiece } from './utils/types/chess.types'
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -32,6 +33,9 @@ export default function ChessBoard(props: Props) {
         isCheck,
         gameStatus,
         clearSelection,
+        pendingPromotion,
+        cancelPromotion,
+        choosePromotion,
     } = useChessBoard(
         props.currentUserSide,
         props.currentTurn,
@@ -69,6 +73,7 @@ export default function ChessBoard(props: Props) {
 
     const [hoveredSquare, setHoveredSquare] = useState<Square | null>(null);
     const hoveredSquareRef = useRef<Square | null>(null);
+    
     function handleBoardMouseMove(e: React.MouseEvent) {
         if (!boardRef.current) return;
 
@@ -101,6 +106,13 @@ export default function ChessBoard(props: Props) {
         hoveredSquareRef.current = null;
         setHoveredSquare(null);
     }
+
+    const promotionPieces: readonly PromotionPiece[] = [
+        'q',
+        'r',
+        'b',
+        'n',
+    ];
 
     return (
         <div
@@ -138,6 +150,16 @@ export default function ChessBoard(props: Props) {
                 hoveredSquareRef={hoveredSquareRef}
                 currentUserSide={props.currentUserSide}
             />
+            {pendingPromotion && (
+                <PromotionPicker
+                    side={pendingPromotion.side}
+                    square={pendingPromotion.targetSquare}
+                    perspective={props.perspective}
+                    pieces={promotionPieces}
+                    onSelect={choosePromotion}
+                    onClose={cancelPromotion}
+                />
+            )}
         </div>
     )
 }
