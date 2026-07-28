@@ -129,6 +129,7 @@ export default function ChessBoard(props: Props) {
             <ChessPieces
                 pieces={props.pieces}
                 perspective={props.perspective}
+                selectedPieceID={selectedPieceID}
                 selectPiece={selectPiece}
                 onSquareClick={handleSquareClick}
                 isCheck={isCheck}

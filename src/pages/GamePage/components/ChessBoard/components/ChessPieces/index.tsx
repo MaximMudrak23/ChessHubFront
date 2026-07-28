@@ -10,7 +10,8 @@ import clsx from 'clsx';
 type Props = {
     pieces: PieceType[];
     perspective: Side;
-    selectPiece: (pieceID: string) => void;
+    selectedPieceID: string | null;
+    selectPiece: (pieceID: string, toggle?: boolean) => void;
     onSquareClick: (e: React.MouseEvent, square: Square) => void;
     isCheck: boolean;
     currentTurn: Side;
@@ -21,22 +22,27 @@ type Props = {
 
 export default function ChessPieces(props: Props) {
     const [noTransitionID, setNoTransitionID] = useState<string | null>(null);
+    
     const suppressClickRef = useRef(false);
+    const wasSelectedOnMouseDownRef = useRef(false);
 
     function handlePieceClick(e: React.MouseEvent, square: Square, id: string) {
         e.stopPropagation();
 
         if (suppressClickRef.current) {
             suppressClickRef.current = false;
+            wasSelectedOnMouseDownRef.current = false;
             return;
         }
 
         if (e.ctrlKey || e.metaKey) {
+            wasSelectedOnMouseDownRef.current = false;
             props.onSquareClick(e, square);
             return;
         }
 
-        props.selectPiece(id);
+        props.selectPiece(id, wasSelectedOnMouseDownRef.current);
+        wasSelectedOnMouseDownRef.current = false;
     }
 
     function handlePieceMouseDown(
@@ -47,6 +53,7 @@ export default function ChessPieces(props: Props) {
         e.preventDefault();
         e.stopPropagation();
 
+        wasSelectedOnMouseDownRef.current = props.selectedPieceID === id;
         props.selectPiece(id);
 
         const img = e.currentTarget;

@@ -52,7 +52,7 @@ export default function useChessBoard(
         setSelectedPieceID(null);
     }
 
-    function selectPiece(pieceID: string) {
+    function selectPiece(pieceID: string, toggle = false) {
         if (gameStatus !== 'playing') return;
         if (!currentUserSide) return;
 
@@ -62,6 +62,11 @@ export default function useChessBoard(
         const targetSide = getPieceSide(targetPiece);
 
         if (targetSide === currentUserSide) {
+            if (toggle && selectedPieceID === pieceID) {
+                setSelectedPieceID(null);
+                return;
+            }
+
             setSelectedPieceID(pieceID);
             return;
         }
