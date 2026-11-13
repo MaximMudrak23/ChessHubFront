@@ -2,7 +2,7 @@
 
 Frontend for **ChessHub** — an online chess platform where players can compete against both humans and bots.
 
-Unlike many chess websites, bots participate in the matchmaking system alongside regular players. Each bot has its own profile, Elo rating, and configurable playing strength. Matchmaking is based on Elo to provide balanced games.
+Bots have their own profiles and Elo ratings. Playing strength is configurable when supported by the engine. Matchmaking is handled by the ChessHub backend.
 
 The project also includes player profile customization, an administration panel, a player search page, achievements, statistics, and real-time gameplay powered by WebSockets.
 
@@ -19,60 +19,63 @@ The project also includes player profile customization, an administration panel,
 - Lottie React
 - clsx
 
-## Requirements
+## How to run?
 
-Before running the project locally, install:
+Run commands from root ChessHubFront directory.
+Requires Node.js 20.x (20.19.0+) or 22.12.0+, npm, and a running ChessHub backend (`http://localhost:3000` by default).
 
-- Node.js
-- Git
+### First time setup:
 
-### Clone the repository
-
-```bash
-git clone https://github.com/MaximMudrak23/ChessHubFront.git
-cd ChessHubFront
-```
-
-### Install dependencies
+Install Node.js (includes npm). Install Git if you need to clone the repositories.
 
 ```bash
-npm install
+npm ci # First setup or after dependency/lockfile changes
 ```
 
-### Start the development server
+**Start frontend** (each development session):
 
 ```bash
 npm run dev
 ```
 
-## Backend
+**After start**
 
-This project requires the ChessHub backend to be running.
+- Browser: Open `http://localhost:5173` (or the URL displayed by Vite).
 
-### Build Docker image
+- Backend: API requests and Socket.IO connect directly to `VITE_API_URL` (`http://localhost:3000` by default). Set `VITE_API_URL` before starting Vite or building the frontend to use another address.
 
-```bash
-docker build --build-arg VITE_API_URL=http://192.168.1.8:3000 -t chesshub-front .
-```
+- Stop: Press `Ctrl+C` in the frontend terminal.
 
-### Run Docker container
+- Auto-restart: Changes in frontend source files are reflected automatically. No rebuild is needed during development.
 
-```bash
-docker run -p 8080:80 chesshub-front
-```
+**Warning:** Start ChessHubBack separately using its README instructions.
 
-The server will be available at:
+## Other
+## Built image — no automatic restart
 
-```
-http://localhost:8080
-```
-
-### Rebuild Docker image
-
-If Docker keeps using an old frontend build, find and remove the old container and image:
+Build the frontend Docker image (adjust VITE_API_URL to the backend address reachable from your browser):
 
 ```bash
-docker ps -a --filter ancestor=chesshub-front
-docker rm -f CONTAINER_ID
-docker rmi chesshub-front
+docker build --build-arg VITE_API_URL=http://localhost:3000 -t chesshub-front .
 ```
+
+Run it (the backend must be reachable from your browser):
+
+```bash
+docker run --rm --name chesshub-front \
+  -p 127.0.0.1:8080:80 chesshub-front
+```
+
+Open `http://localhost:8080`.
+
+After code changes, rebuild the image and start a new container.
+
+## Checks
+
+```bash
+npm run lint
+npm run build
+```
+
+- lint — checks code for linting issues.
+- build — checks and creates the production frontend bundle.
