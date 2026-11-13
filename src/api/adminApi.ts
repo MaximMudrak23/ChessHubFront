@@ -87,20 +87,61 @@ export async function deleteAdminKey(token: string, id: string) {
     return res.json();
 }
 
-type CreateBotData = {
+export type CreateBotData = {
     name: string;
     engine: EngineType;
     skillLevel: number;
+    avatarFile?: File;
 };
 
-export async function createAdminBot(token: string, data: CreateBotData) {
+export async function createAdminBot(token: string, data: CreateBotData): Promise<{ message: string; bot: AdminBot }> {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('engine', data.engine);
+    formData.append('skillLevel', String(data.skillLevel));
+
+    if (data.avatarFile) {
+        formData.append('avatar', data.avatarFile);
+    }
+
     const res = await fetch(`${API_URL}/admin/bots`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: formData,
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+
+    return res.json();
+}
+
+type UpdateBotData = {
+    name?: string;
+    avatarFile?: File;
+};
+
+export async function updateAdminBot(token: string, id: string, data: UpdateBotData): Promise<{ message: string; bot: AdminBot }> {
+    const formData = new FormData();
+
+    if (data.name !== undefined) {
+        formData.append('name', data.name);
+    }
+
+    if (data.avatarFile) {
+        formData.append('avatar', data.avatarFile);
+    }
+
+    const res = await fetch(`${API_URL}/admin/bots/${id}`, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
     });
 
     if (!res.ok) {

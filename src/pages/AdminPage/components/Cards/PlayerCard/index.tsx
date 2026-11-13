@@ -14,6 +14,7 @@ type Props = {
     fields: [string, string][];
     onDelete: () => void;
     deleteText?: string;
+    onEdit?: () => void;
     
     secondaryActionText?: string;
     secondaryActionActive?: boolean;
@@ -28,6 +29,7 @@ export default function PlayerCard({
     fields,
     onDelete,
     deleteText = 'Delete account',
+    onEdit,
     secondaryActionText,
     onSecondaryAction,
 }: Props) {
@@ -74,6 +76,15 @@ export default function PlayerCard({
                 ))}
 
                 <div className={s.buttons_container}>
+                    {onEdit && (
+                        <Button
+                            text="Edit"
+                            variant="profile"
+                            animation="white-hover"
+                            onClick={onEdit}
+                            styleProps={{ flex: 1, height: 65 }}
+                        />
+                    )}
                     {onSecondaryAction && (
                         <Button
                             text={secondaryActionText ?? 'Action'}

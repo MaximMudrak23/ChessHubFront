@@ -4,15 +4,15 @@ import Button from '@/components/UI/Button'
 import PlayerCard from '../../Cards/PlayerCard'
 import CreateBotModal from './components/CreateBotModal'
 import { useEffect, useState } from 'react'
-import { createAdminBot, deleteAdminBot, getAdminBots, disableAdminBot, activateAdminBot} from '@/api/adminApi'
-import type { AdminBot } from '@/api/adminApi'
+import { createAdminBot, updateAdminBot, deleteAdminBot, getAdminBots, disableAdminBot, activateAdminBot} from '@/api/adminApi'
+import type { AdminBot, CreateBotData } from '@/api/adminApi'
 import { useUserStore } from '@/store/userStore'
-import type { EngineType } from '@/constants/engineConfig'
 
 export default function BotsOption() {
     const token = useUserStore(s => s.token);
     const [value, setValue] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [editingBot, setEditingBot] = useState<AdminBot | null>(null);
     const [bots, setBots] = useState<AdminBot[]>([]);
 
     useEffect(() => {
@@ -30,18 +30,18 @@ export default function BotsOption() {
         loadBots();
     }, [token]);
 
-    const handleCreateBot = async (data: {
-        engine: EngineType;
-        name: string;
-        skillLevel: number;
-    }) => {
-        if (!token) return;
+    const handleSaveBot = async (data: CreateBotData) => {
+        if (!token) throw new Error('Please sign in again');
 
-        try {
+        if (editingBot) {
+            const res = await updateAdminBot(token, editingBot.id, {
+                name: data.name !== editingBot.name ? data.name : undefined,
+                avatarFile: data.avatarFile,
+            });
+            setBots(prev => prev.map(bot => bot.id === editingBot.id ? res.bot : bot));
+        } else {
             const res = await createAdminBot(token, data);
             setBots(prev => [res.bot, ...prev]);
-        } catch (error) {
-            console.log(error);
         }
     }
 
@@ -89,7 +89,10 @@ export default function BotsOption() {
                     text='Create Bot'
                     variant='profile'
                     animation='white-hover'
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => {
+                        setEditingBot(null);
+                        setIsOpen(true);
+                    }}
                     className={s.button}
                 />
             </div>
@@ -114,6 +117,10 @@ export default function BotsOption() {
                             ['PGN files', String(bot.pgnFiles.length)],
                         ]}
                         deleteText="Delete bot"
+                        onEdit={() => {
+                            setEditingBot(bot);
+                            setIsOpen(true);
+                        }}
                         onDelete={async () => {
                             if (!token) return;
 
@@ -136,8 +143,9 @@ export default function BotsOption() {
 
             {isOpen && (
                 <CreateBotModal
+                    bot={editingBot ?? undefined}
                     onClose={() => setIsOpen(false)}
-                    onCreate={handleCreateBot}
+                    onSave={handleSaveBot}
                 />
             )}
         </>

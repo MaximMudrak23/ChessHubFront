@@ -19,6 +19,13 @@ export const ENGINE_CONFIG = {
         maxSkill: 25,
         defaultSkill: 5,
     },
+
+    reckless: {
+        title: 'Reckless',
+        minSkill: 1,
+        maxSkill: 1,
+        defaultSkill: 1,
+    },
 } as const;
 
 export type EngineType = keyof typeof ENGINE_CONFIG;
