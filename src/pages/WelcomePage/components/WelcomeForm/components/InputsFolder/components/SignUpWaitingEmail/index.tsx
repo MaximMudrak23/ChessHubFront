@@ -4,40 +4,22 @@ import Lottie from 'lottie-react'
 import EmailLottie from './JSON/Email.json'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/store/userStore';
-import { getRegisterStatus, resendRegisterEmail } from '@/api/authApi';
+import { resendRegisterEmail } from '@/api/authApi';
+import { pollRegisterStatus } from './pollRegisterStatus';
 
 type Props = {
     email: string;
+    onVerified: () => void;
     onChangeEmail: () => void;
 }
 
-export default function SignUpWaitingEmail({ email, onChangeEmail }: Props) {
-    const navigate = useNavigate();
-    const setAuth = useUserStore(s => s.setAuth);
-    
+export default function SignUpWaitingEmail({ email, onVerified, onChangeEmail }: Props) {
     const [isSending, setIsSending] = useState(false);
     const [resendSeconds, setResendSeconds] = useState(60);
 
     useEffect(() => {
-        const timer = setInterval(async () => {
-            try {
-                const data = await getRegisterStatus(email);
-
-                if (!data.verified) return;
-
-                setAuth(data.user, data.token);
-                localStorage.setItem('token', data.token);
-
-                navigate('/main');
-            } catch (error) {
-                console.log(error);
-            }
-        }, 3000);
-
-        return () => clearInterval(timer);
-    }, [email, navigate, setAuth]);
+        return pollRegisterStatus(email, onVerified);
+    }, [email, onVerified]);
 
     useEffect(() => {
         if (resendSeconds <= 0) return;

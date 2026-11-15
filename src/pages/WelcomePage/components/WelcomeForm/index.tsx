@@ -12,7 +12,7 @@ export default function WelcomeForm() {
         <section className={s.welcome_form}>
             <LogoFolder />
             <TabsFolder tab={selectedTab} changeTab={setSelectedTab} />
-            <InputsFolder selectedTab={selectedTab} />
+            <InputsFolder selectedTab={selectedTab} changeTab={setSelectedTab} />
         </section>
     )
 }

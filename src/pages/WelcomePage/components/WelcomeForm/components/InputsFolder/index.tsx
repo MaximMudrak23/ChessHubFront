@@ -1,6 +1,6 @@
 import s from './styles.module.scss'
 import { AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
 import type { SelectedTab } from '../../index'
@@ -10,18 +10,27 @@ import SignInForm from './components/SignInForm'
 import SignUpForm from './components/SignUpForm'
 import SignUpWaitingEmail from './components/SignUpWaitingEmail'
 
-type Props = { selectedTab: SelectedTab; }
+type Props = {
+    selectedTab: SelectedTab;
+    changeTab: (tab: SelectedTab) => void;
+}
 type SignIn = { email: string; password: string }
 type SignUp = { email: string; password: string; key: string }
 type SignUpStep = 'form' | 'waiting-email';
 
-export default function InputsFolder({selectedTab}: Props) {
+export default function InputsFolder({selectedTab, changeTab}: Props) {
     const [signIn,setSignIn] = useState<SignIn>({email: '', password: ''})
     const [signUp,setSignUp] = useState<SignUp>({email: '', password: '', key: ''})
     const [signUpStep, setSignUpStep] = useState<SignUpStep>('form');
     
     const setAuth = useUserStore(s => s.setAuth);
     const navigate = useNavigate();
+
+    const handleEmailVerified = useCallback(() => {
+        setSignUpStep('form');
+        setSignIn({ email: signUp.email, password: '' });
+        changeTab('signin');
+    }, [signUp.email, changeTab]);
 
     async function handleSignIn() {
         try {
@@ -75,6 +84,7 @@ export default function InputsFolder({selectedTab}: Props) {
                 {selectedTab === 'signup' && signUpStep === 'waiting-email' && (
                     <SignUpWaitingEmail
                         email={signUp.email}
+                        onVerified={handleEmailVerified}
                         onChangeEmail={() => setSignUpStep('form')}
                     />
                 )}

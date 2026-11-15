@@ -2,10 +2,13 @@ import type { AuthResponse } from '@/types/user.types';
 import { API_URL } from './config';
 
 type RegisterStartResponse =
-    | { message: string }
-    | AuthResponse;
+    | { message: 'Verification email sent' }
+    | (AuthResponse & { message: 'User created' });
 
-export async function login(email: string, password: string): Promise<AuthResponse> {
+type RegisterStatusResponse = { verified: boolean };
+type LoginResponse = AuthResponse & { message: 'Login success' };
+
+export async function login(email: string, password: string): Promise<LoginResponse> {
     const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -79,7 +82,7 @@ export async function registerStart(
     return res.json();
 }
 
-export async function getRegisterStatus(email: string) {
+export async function getRegisterStatus(email: string): Promise<RegisterStatusResponse> {
     const res = await fetch(
         `${API_URL}/auth/register/status?email=${encodeURIComponent(email)}`
     );
