@@ -1,6 +1,35 @@
 import type { Game } from '@/store/gameStore';
+import type { Player } from '@/pages/GamePage/utils/types/game.types';
+import type { GameStatus } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
 
-export function mapServerGameToClientGame(serverGame: any): Game {
+type ServerPlayer = {
+    playerType: Player['type'];
+    playerId: string;
+    name: string;
+    elo: number;
+    avatarURL?: string;
+    avatarFrameURL?: string;
+    userIcons?: Player['userIcons'];
+};
+
+export type ServerGame = {
+    _id: string;
+    white: ServerPlayer;
+    black: ServerPlayer;
+    currentTurn: Game['currentTurn'];
+    status: string;
+    finishedReason?: GameStatus;
+    moves?: Game['moves'];
+    pieces?: Game['pieces'];
+    lastMove?: Game['lastMove'];
+    halfmoveClock?: number;
+    fullmoveNumber?: number;
+    positionHistory?: string[];
+    winner?: Game['winner'];
+    moveMeta?: Game['moveMeta'];
+};
+
+export function mapServerGameToClientGame(serverGame: ServerGame): Game {
     return {
         gameId: String(serverGame._id),
 
@@ -38,7 +67,7 @@ export function mapServerGameToClientGame(serverGame: any): Game {
 
         gameStatus:
             serverGame.status === 'finished'
-                ? serverGame.finishedReason
+                ? serverGame.finishedReason ?? 'playing'
                 : 'playing',
 
         winner: serverGame.winner ?? null,

@@ -4,21 +4,21 @@ import Button from '../../components/UI/Button'
 import { useUserStore } from '@/store/userStore'
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { findGame, cancelSearch, getSearchStatus, getActiveGame } from '@/api/gameApi';
+import { cancelSearch, getSearchStatus, getActiveGame } from '@/api/gameApi';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
-import { playGameStartOnce } from '@/pages/GamePage/components/ChessBoard/utils/lib/playSound';
+import { getSocketSessionVersion } from '@/socket/socket';
 
 export default function MainPage() {
     const navigate = useNavigate();
-    const [activeGameID, setActiveGameID] = useState<string | null>(null);
+    const [activeGame, setActiveGame] = useState<{ id: string | null; session: number } | null>(null);
+    const session = getSocketSessionVersion();
+    const activeGameID = activeGame?.session === session ? activeGame.id : null;
     
     const user = useUserStore(s => s.user);
     const token = useUserStore(s => s.token);
 
     const isSearching = useMatchmakingStore(s => s.isSearching);
-    const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
-    const setEloRange = useMatchmakingStore(s => s.setEloRange);
-    const setSearchStartedAt = useMatchmakingStore(s => s.setSearchStartedAt);
+    const startSearch = useMatchmakingStore(s => s.startSearch);
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
 
     const buttonText = activeGameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
@@ -33,74 +33,42 @@ export default function MainPage() {
         }
 
         if (isSearching) {
-            await cancelSearch(token);
             clearMatchmaking();
+            const revision = useMatchmakingStore.getState().revision;
+            try {
+                await cancelSearch(token);
+            } catch (error) {
+                console.log(error);
+                // Restore server state only if no new search/account has replaced this cancellation.
+                try {
+                    const status = await getSearchStatus(token);
+                    if (session === getSocketSessionVersion() && revision === useMatchmakingStore.getState().revision) {
+                        useMatchmakingStore.getState().setSearchStatus(status);
+                    }
+                } catch (statusError) {
+                    console.log(statusError);
+                }
+            }
             return;
         }
 
-        try {
-            setIsSearching(true);
-            setSearchStartedAt(Date.now());
-
-            const data = await findGame(token);
-
-            if (data.status === 'matched') {
-                const gameId = String(data.game._id);
-
-                clearMatchmaking();
-                playGameStartOnce(gameId);
-                navigate(`/game/${gameId}`);
-                return;
-            }
-
-            if (data.status === 'in_game') {
-                clearMatchmaking();
-                navigate(`/game/${data.game._id}`);
-                return;
-            }
-
-            if (data.status === 'searching') {
-                setEloRange(data.eloRange);
-            }
-        } catch (error) {
-            console.log(error);
-            clearMatchmaking();
-        }
+        startSearch();
     }
 
     useEffect(() => {
-        if (!user || !token) return;
-
-        getSearchStatus(token)
-            .then(data => {
-                if (!data.searching) {
-                    clearMatchmaking();
-                    return;
-                }
-
-                setIsSearching(true);
-                setEloRange(data.eloRange);
-                setSearchStartedAt(new Date(data.searchStartedAt).getTime());
-            })
-            .catch(console.log);
-    }, [
-        user,
-        token,
-        clearMatchmaking,
-        setIsSearching,
-        setEloRange,
-        setSearchStartedAt,
-    ]);
-
-    useEffect(() => {
         if (!token) return;
+        let active = true;
+        const currentSession = getSocketSessionVersion();
 
         getActiveGame(token)
             .then(data => {
-                setActiveGameID(data.game?._id ?? null);
+                if (active && currentSession === getSocketSessionVersion()) {
+                    setActiveGame({ id: data.game?._id ?? null, session: currentSession });
+                }
             })
             .catch(console.log);
-    }, [token]);
+        return () => { active = false; };
+    }, [token, user?.id]);
 
     return (
         <>

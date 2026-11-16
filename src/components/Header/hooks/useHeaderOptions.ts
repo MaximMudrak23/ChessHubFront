@@ -55,6 +55,12 @@ export function useHeaderOptions() {
             img: SVG.logoutIcon,
             text: 'Logout',
             onClick: async () => {
+                logout();
+                clearGame();
+                clearMatchmaking();
+                localStorage.removeItem('token');
+                navigate('/');
+
                 try {
                     if (token && isSearching) {
                         await cancelSearch(token);
@@ -62,13 +68,6 @@ export function useHeaderOptions() {
                 } catch (error) {
                     console.log(error);
                 }
-
-                logout();
-                clearGame();
-                clearMatchmaking();
-
-                localStorage.removeItem('token');
-                navigate('/');
             },
         });
 

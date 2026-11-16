@@ -8,20 +8,19 @@ import Aside from './components/Aside'
 import { useEffect, useState } from 'react'
 import { useHeaderOptions } from './hooks/useHeaderOptions'
 import { useUserStore } from '@/store/userStore'
-import { useMatchmakingStore } from '@/store/matchmakingStore'
-import { socket } from '@/socket/socket'
+import { useMatchmakingStore, type SearchStatus } from '@/store/matchmakingStore'
+import { getSearchStatus } from '@/api/gameApi'
+import { subscribeToSocketState } from '@/socket/subscribeToSocketState'
 
 export default function Header() {
     const user = useUserStore(s => s.user);
+    const token = useUserStore(s => s.token);
     
     const isSearching = useMatchmakingStore(s => s.isSearching);
     const eloRange = useMatchmakingStore(s => s.eloRange);
     const searchStartedAt = useMatchmakingStore(s => s.searchStartedAt);
 
-    const setIsSearching = useMatchmakingStore(s => s.setIsSearching);
-    const setEloRange = useMatchmakingStore(s => s.setEloRange);
-    const setSearchStartedAt = useMatchmakingStore(s => s.setSearchStartedAt);
-    const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
+    const setSearchStatus = useMatchmakingStore(s => s.setSearchStatus);
 
     const [searchSeconds, setSearchSeconds] = useState(0);
     const [isOpen,setIsOpen] = useState<boolean>(false);
@@ -65,42 +64,20 @@ export default function Header() {
     }, [isSearching, searchStartedAt]);
 
     useEffect(() => {
-        if (!user?.id) return;
+        if (!user?.id || !token) return;
 
-        if (!socket.connected) {
-            socket.connect();
-        }
-
-        socket.emit('player:watch', user.id);
-
-        function handleMatchmakingUpdate(data: {
-            searching: boolean;
-            eloRange: number | null;
-            searchStartedAt: string | null;
-        }) {
-            if (!data.searching) {
-                clearMatchmaking();
-                return;
-            }
-
-            setIsSearching(true);
-            setEloRange(data.eloRange);
-            setSearchStartedAt(new Date(data.searchStartedAt!).getTime());
-        }
-
-        socket.on('matchmaking:status:update', handleMatchmakingUpdate);
-
-        return () => {
-            socket.off('matchmaking:status:update', handleMatchmakingUpdate);
-            socket.emit('player:unwatch', user.id);
-        };
-    }, [
-        user?.id,
-        clearMatchmaking,
-        setIsSearching,
-        setEloRange,
-        setSearchStartedAt,
-    ]);
+        return subscribeToSocketState<SearchStatus>({
+            event: 'matchmaking:status:update',
+            loadSnapshot: () => getSearchStatus(token),
+            getSnapshotVersion: () => useMatchmakingStore.getState().revision,
+            canApplySnapshot: () => !useMatchmakingStore.getState().isStartingSearch,
+            onUpdate: data => {
+                // A connection snapshot may still say idle while POST /game/find starts.
+                if (!data.searching && useMatchmakingStore.getState().isStartingSearch) return;
+                setSearchStatus(data);
+            },
+        });
+    }, [user?.id, token, setSearchStatus]);
     return (
         <>
             <header className={s.header}>

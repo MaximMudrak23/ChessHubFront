@@ -5,9 +5,7 @@ import { useUserStore } from '@/store/userStore'
 import { useGameStore } from '@/store/gameStore'
 import { useParams } from 'react-router-dom';
 import { useLoadGame } from './components/ChessBoard/hooks/useLoadGame'
-import { useGameSocket } from './hooks/useGameSocket'
 import { useGameSounds } from './hooks/useGameSounds'
-import { useEffect } from 'react'
 
 export default function GamePage() {
     const { id } = useParams();
@@ -20,25 +18,15 @@ export default function GamePage() {
     const lastMove = useGameStore(s => s.lastMove);
     const winnerSide = useGameStore(s => s.winnerSide);
     const gameId = useGameStore(s => s.gameId);
-    const clearGame = useGameStore(s => s.clearGame);
     
     useLoadGame(id);
-    useGameSocket(gameId);
     useGameSounds();
     
     const currentPlayer = user && players
         ? Object.values(players).find(p => String(p.userId) === String(user.id))
         : null;
     
-    const isSpectator = Boolean(user && players && !currentPlayer);
-    
-    useEffect(() => {
-        return () => {
-            if (isSpectator) clearGame();
-        };
-    }, [isSpectator, clearGame]);
-    
-    if (!user || !players) return null;
+    if (!user || !players || gameId !== id) return null;
     
     const currentUserSide = currentPlayer?.side ?? null;
     const perspective = currentPlayer?.side ?? 'white';

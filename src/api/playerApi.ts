@@ -50,5 +50,9 @@ export async function getPlayerActiveGame(token: string, id: string) {
         },
     });
 
-    return await res.json();
+    if (!res.ok) {
+        throw new Error('Failed to get player active game');
+    }
+
+    return res.json();
 }
