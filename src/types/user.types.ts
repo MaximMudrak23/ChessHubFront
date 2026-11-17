@@ -1,6 +1,9 @@
+import type { BACKGROUNDS, BOARDS, CHESS_PIECES } from '@/constants/paths';
+
 export type IconType = { title: string; iconURL: string; }
-export type BoardTheme = 'water'
-export type MenuBackground = 'default' | 'red-bull' | 'wood';
+export type BoardTheme = keyof typeof BOARDS;
+export type PieceSet = keyof typeof CHESS_PIECES;
+export type MenuBackground = keyof typeof BACKGROUNDS;
 export type UserRole = 'user' | 'admin';
 export type ProfileBackground = {
     type: 'image' | 'video';
@@ -29,9 +32,12 @@ export type User = {
     unlockedProfileSongs: ProfileSong[];
     profileBackground?: ProfileBackground;
     profileSong?: ProfileSong;
-    boardTheme: BoardTheme;
-    menuBackground: MenuBackground;
+    boardTheme: string;
+    pieceSet: string;
+    menuBackground: string;
 }
+
+export type AppearanceSettings = Pick<User, 'boardTheme' | 'pieceSet' | 'menuBackground'>;
 
 export type AuthResponse = {
     user: User;

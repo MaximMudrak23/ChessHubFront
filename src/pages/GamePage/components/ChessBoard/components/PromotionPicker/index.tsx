@@ -1,5 +1,7 @@
 import s from './styles.module.scss'
 import { CHESS_PIECES, SVG } from '@/constants/paths';
+import { useUserStore } from '@/store/userStore';
+import { getAppearance } from '@/utils/getAppearance';
 
 import type { Side } from '../../../../utils/types/game.types';
 import type {
@@ -27,6 +29,8 @@ export default function PromotionPicker({
     onSelect,
     onClose,
 }: Props) {
+    const user = useUserStore(s => s.user);
+    const pieceImages = CHESS_PIECES[getAppearance(user).pieceSet];
     const color = side === 'white' ? 'w' : 'b';
 
     const { left, top } = squareToPosition(square, perspective);
@@ -53,7 +57,7 @@ export default function PromotionPicker({
                         onClick={() => onSelect(piece)}
                     >
                         <img
-                            src={CHESS_PIECES.default[pieceCode]}
+                            src={pieceImages[pieceCode]}
                             alt={pieceCode}
                             draggable={false}
                         />

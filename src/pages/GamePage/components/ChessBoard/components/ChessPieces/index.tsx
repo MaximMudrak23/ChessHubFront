@@ -6,6 +6,8 @@ import { getPieceSide } from '../../utils/lib/getPiece';
 import { useRef, useState } from 'react';
 import { CHESS_PIECES } from '@/constants/paths';
 import clsx from 'clsx';
+import { useUserStore } from '@/store/userStore';
+import { getAppearance } from '@/utils/getAppearance';
 
 type Props = {
     pieces: PieceType[];
@@ -21,6 +23,8 @@ type Props = {
 }
 
 export default function ChessPieces(props: Props) {
+    const user = useUserStore(s => s.user);
+    const pieceImages = CHESS_PIECES[getAppearance(user).pieceSet];
     const [noTransitionID, setNoTransitionID] = useState<string | null>(null);
     
     const suppressClickRef = useRef(false);
@@ -151,7 +155,7 @@ export default function ChessPieces(props: Props) {
                 return (
                     <img
                         key={id}
-                        src={CHESS_PIECES.default[piece]}
+                        src={pieceImages[piece]}
                         alt={`${piece} on ${square}`}
                         draggable={false}
                         className={clsx(

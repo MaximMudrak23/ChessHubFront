@@ -2,12 +2,19 @@ import s from './styles.module.scss'
 import SteamContentWrapper from '../../components/SteamContentWrapper'
 import OptionsScreen from '@/components/Modules/OptionsScreen';
 import { SVG } from '@/constants/paths';
+import BoardAndFiguresOption from './components/BoardAndFiguresOption';
 
 const OPTIONS_PAGE_OPTIONS = [
     {
-        optionName: 'Game Process',
-        title: 'Game Process',
-        description: ['Change your nickname and description'],
+        optionName: 'Board & Figures',
+        title: 'Board & Figures',
+        description: ['Settings for making your gameplay looks more better'],
+        Component: BoardAndFiguresOption,
+    },
+    {
+        optionName: 'Gameplay',
+        title: 'Gameplay',
+        description: ['Settings for making your gameplay more comfortable'],
         // Component: GeneralProfileEdit,
     },
 ];

@@ -1,34 +1,48 @@
+// Add a file to public/backgrounds and register its name and URL here.
 export const BACKGROUNDS = {
-    default: '/backgrounds/default.jpg',
-    redBull: '/backgrounds/red-bull.webp',
-    wood: '/backgrounds/wood.png',
-    darkMac: '/backgrounds/dark-mac.jpg',
+    default: { name: 'Default', url: '/backgrounds/default.jpg' },
+    'red-bull': { name: 'Red Bull', url: '/backgrounds/red-bull.webp' },
+    wood: { name: 'Wood', url: '/backgrounds/wood.png' },
+    'dark-mac': { name: 'Dark Mac', url: '/backgrounds/dark-mac.jpg' },
+    city: { name: 'City', url: '/backgrounds/city.png' },
 };
+// Add board files to public/boards/<id> and register them here; the settings list is built automatically.
 export const BOARDS = {
     water: {
-        preview: '/boards/water/preview.png',
+        name: 'Water',
+        preview: '/boards/water/unlockable_preview.png',
         blackCell: '/boards/water/black-cell.png',
         whiteCell: '/boards/water/white-cell.png',
         blackLettersColor: '#FFFFFF',
         whiteLettersColor: '#74A0B5',
     }
 };
-export const CHESS_PIECES = {
-    default: {
-        bb: '/chess-pieces/default/bb.png',
-        bk: '/chess-pieces/default/bk.png',
-        bn: '/chess-pieces/default/bn.png',
-        bp: '/chess-pieces/default/bp.png',
-        bq: '/chess-pieces/default/bq.png',
-        br: '/chess-pieces/default/br.png',
+function createPieceSet(folder: string, name: string) {
+    const path = `/chess-pieces/${folder}`;
 
-        wb: '/chess-pieces/default/wb.png',
-        wk: '/chess-pieces/default/wk.png',
-        wn: '/chess-pieces/default/wn.png',
-        wp: '/chess-pieces/default/wp.png',
-        wq: '/chess-pieces/default/wq.png',
-        wr: '/chess-pieces/default/wr.png',
+    return {
+        name,
+        bb: `${path}/bb.png`,
+        bk: `${path}/bk.png`,
+        bn: `${path}/bn.png`,
+        bp: `${path}/bp.png`,
+        bq: `${path}/bq.png`,
+        br: `${path}/br.png`,
+        wb: `${path}/wb.png`,
+        wk: `${path}/wk.png`,
+        wn: `${path}/wn.png`,
+        wp: `${path}/wp.png`,
+        wq: `${path}/wq.png`,
+        wr: `${path}/wr.png`,
     }
+}
+
+// Each folder contains 12 PNGs with standard piece codes; wn.png is always the thumbnail.
+// Add a folder to public/chess-pieces and register it here to include it in settings.
+export const CHESS_PIECES = {
+    default: createPieceSet('default', 'Default'),
+    set1: createPieceSet('set-1', 'Set 1'),
+    set2: createPieceSet('set-2', 'Set 2'),
 };
 export const CHESS_SOUNDS = {
     capture: '/chess-sounds/capture.mp3',
@@ -65,7 +79,8 @@ export const SVG = {
     menuIcon: '/svg/menu-icon.svg',
     more: '/svg/more.svg',
     cup: '/svg/cup.svg',
-    optionIcon: '/svg/option-icon.svg',
+    optionIcon: '/svg/option-icon.svg', // del ts
+    options: '/svg/options.svg',
     profileIcon: '/svg/user-profile.svg',
     adminIcon: '/svg/admin-page.svg',
     profilePause: '/svg/profile-pause.svg',

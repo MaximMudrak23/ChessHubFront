@@ -6,6 +6,7 @@ import type { Side } from '../../../../utils/types/game.types';
 import clsx from 'clsx';
 import { useUserStore } from '@/store/userStore';
 import { BOARDS } from '@/constants/paths';
+import { getAppearance } from '@/utils/getAppearance';
 
 type Props = {
     perspective: Side;
@@ -34,7 +35,7 @@ export default function BoardGrid(props: Props) {
     const selectedPiece = props.pieces.find(p => p.id === props.selectedPieceID);
     const selectedSquare = selectedPiece?.square;
 
-    const boardTheme = BOARDS[user.boardTheme];
+    const boardTheme = BOARDS[getAppearance(user).boardTheme];
 
     for (let row = 0; row < boardSize; row++) {
         for (let col = 0; col < boardSize; col++) {

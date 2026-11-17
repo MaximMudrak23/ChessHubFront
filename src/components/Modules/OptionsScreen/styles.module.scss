@@ -1,6 +1,6 @@
 .content {
     flex: 1;
-    background-color: #1B1918;
+    background-color: rgba($color: #1B1918, $alpha: 0.75);
     padding-top: 36px;
     display: flex;
 
@@ -15,6 +15,7 @@
     
     flex: 1;
     min-width: 400px;
+    padding-bottom: 200px;
 
     display: flex;
     flex-direction: column;

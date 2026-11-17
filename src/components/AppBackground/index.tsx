@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
+import { getMenuBackground } from '@/utils/getMenuBackground';
 
 export default function AppBackground() {
     const user = useUserStore(s => s.user);
+    const backgroundOverride = useUserStore(s => s.backgroundOverride);
 
     useEffect(() => {
-        const bg = user?.menuBackground || 'default.jpg';
+        const background = getMenuBackground(backgroundOverride ?? user?.menuBackground);
 
         document.documentElement.style.setProperty(
             '--main-background',
-            `url('/backgrounds/${bg}')`
+            `url('${background.url}')`
         );
-    }, [user?.menuBackground]);
+    }, [user?.menuBackground, backgroundOverride]);
 
     return null;
 }

@@ -1,5 +1,23 @@
-import type { AuthResponse, ProfileBackground, ProfileSong, User } from '@/types/user.types';
+import type { AppearanceSettings, AuthResponse, ProfileBackground, ProfileSong, User } from '@/types/user.types';
 import { API_URL } from './config';
+
+export async function updateAppearance(token: string, data: AppearanceSettings): Promise<Omit<AuthResponse, 'token'>> {
+    const res = await fetch(`${API_URL}/users/appearance`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        const error = await res.json().catch(() => null);
+        throw new Error(error?.message || 'Unable to save appearance. Please try again.');
+    }
+
+    return res.json();
+}
 
 type UpdateProfileData = {
     name?: string;

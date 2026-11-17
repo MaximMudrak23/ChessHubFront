@@ -51,25 +51,32 @@ export function useHeaderOptions() {
             });
         }
 
-        baseOptions.push({
-            img: SVG.logoutIcon,
-            text: 'Logout',
-            onClick: async () => {
-                logout();
-                clearGame();
-                clearMatchmaking();
-                localStorage.removeItem('token');
-                navigate('/');
-
-                try {
-                    if (token && isSearching) {
-                        await cancelSearch(token);
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
+        baseOptions.push(
+            {
+                img: SVG.options,
+                text: 'Options',
+                onClick: () => navigate('/options'),
             },
-        });
+            {
+                img: SVG.logoutIcon,
+                text: 'Logout',
+                onClick: async () => {
+                    logout();
+                    clearGame();
+                    clearMatchmaking();
+                    localStorage.removeItem('token');
+                    navigate('/');
+
+                    try {
+                        if (token && isSearching) {
+                            await cancelSearch(token);
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                },
+            }
+        );
 
         return baseOptions;
     }, [navigate, user, token, isSearching, logout, clearGame, clearMatchmaking]);
