@@ -79,3 +79,40 @@ npm run build
 
 - lint — checks code for linting issues.
 - build — checks and creates the production frontend bundle.
+
+## Host on your Wi-Fi
+
+Replace `<YOUR_LOCAL_IP>` with your computer's local IP address.
+
+**macOS (terminal):**
+
+```bash
+VITE_API_URL=http://<YOUR_LOCAL_IP>:3000 npm run dev -- --host 0.0.0.0
+```
+
+**Windows (powershell):**
+
+```powershell
+$env:VITE_API_URL = "http://<YOUR_LOCAL_IP>:3000"
+npm run dev -- --host 0.0.0.0
+```
+
+Start the backend using its Wi-Fi instructions. On another device connected to the same Wi-Fi, open `http://<YOUR_LOCAL_IP>:5173`.
+
+### How to find `<YOUR_LOCAL_IP>` address
+
+To find your local IP address, run in the terminal:
+
+**Windows (PowerShell):**
+
+Find **IPv4 Address** under your active Wi-Fi adapter.
+
+```powershell
+ipconfig
+```
+
+**macOS (terminal):**
+
+```bash
+ipconfig getifaddr en0
+```
