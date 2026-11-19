@@ -1,0 +1,44 @@
+.player {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 288px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #141116;
+    color: #f6f2f9;
+}
+
+.screen {
+    position: relative;
+    flex: 1;
+    min-height: 200px;
+    background: #000;
+
+    iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+}
+
+.message {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    left: 16px;
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(#18141c, 0.9);
+    color: #cec4d5;
+    font-size: 12px;
+
+    a {
+        color: #d1a0ff;
+        text-underline-offset: 3px;
+    }
+}

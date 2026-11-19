@@ -1,5 +1,24 @@
 import type { PromotionPiece, Square } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
+import type { GameHistoryResponse } from '@/types/gameHistory.types';
 import { API_URL } from './config';
+
+export async function getGameHistory(
+    token: string,
+    page = 1,
+    limit = 20,
+    signal?: AbortSignal,
+): Promise<GameHistoryResponse> {
+    const res = await fetch(`${API_URL}/game/history?page=${page}&limit=${limit}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal,
+    });
+
+    if (!res.ok) {
+        throw new Error('Could not load game history. Please try again.');
+    }
+
+    return res.json();
+}
 
 export async function findGame(token: string) {
     const res = await fetch(`${API_URL}/game/find`, {

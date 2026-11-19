@@ -7,9 +7,13 @@ import { useState, useEffect } from 'react';
 import { cancelSearch, getSearchStatus, getActiveGame } from '@/api/gameApi';
 import { useMatchmakingStore } from '@/store/matchmakingStore';
 import { getSocketSessionVersion } from '@/socket/socket';
+import VideoPlayer from './components/VideoPlayer';
+import GameHistory from './components/GameHistory';
+import { useGameHistory } from './hooks/useGameHistory';
 
 export default function MainPage() {
     const navigate = useNavigate();
+    const history = useGameHistory();
     const [activeGame, setActiveGame] = useState<{ id: string | null; session: number } | null>(null);
     const session = getSocketSessionVersion();
     const activeGameID = activeGame?.session === session ? activeGame.id : null;
@@ -21,7 +25,7 @@ export default function MainPage() {
     const startSearch = useMatchmakingStore(s => s.startSearch);
     const clearMatchmaking = useMatchmakingStore(s => s.clearMatchmaking);
 
-    const buttonText = activeGameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game';
+    const buttonText = activeGameID ? 'Return to Game' : isSearching ? 'Cancel Search' : 'Find Game (Rating)';
     const buttonColor = activeGameID ? 'blue' : isSearching ? 'red' : 'green';
 
     async function handleFindGame() {
@@ -71,17 +75,50 @@ export default function MainPage() {
     }, [token, user?.id]);
 
     return (
-        <>
-            <SteamContentWrapper>
-                <p style={{textAlign: 'center', paddingTop: '48px', fontSize: '1.2rem'}}>Unfortunately, I haven't figured out what to put on this page yet, so it's empty for now. 😢</p>
-            </SteamContentWrapper>
-            <Button
-                text={buttonText}
-                variant={buttonColor}
-                animation='main'
-                className={s.floating}
-                onClick={handleFindGame}
+        <SteamContentWrapper>
+            <section className={s.top_section} aria-labelledby='play-chess-title'>
+                <div className={s.game_block}>
+                    <div className={s.matchmaking_group}>
+                        <h1 id='play-chess-title' className={s.title}>Play Chess</h1>
+                        <Button
+                            text={buttonText}
+                            variant={buttonColor}
+                            animation='game'
+                            className={s.button}
+                            onClick={handleFindGame}
+                        />
+                    </div>
+                    <div className={s.lobby_group}>
+                        <Button
+                            text='Create Lobby'
+                            variant='glass'
+                            className={s.button}
+                            active={false}
+                            onClick={() => {}}
+                        />
+                        <Button
+                            text='Join Lobby'
+                            variant='glass'
+                            className={s.button}
+                            active={false}
+                            onClick={() => {}}
+                        />
+                    </div>
+                </div>
+                <VideoPlayer
+                    className={s.video_block}
+                    videoId='3tBzm-X8tyU'
+                    title='0 Elo Chess — GothamChess'
+                />
+            </section>
+            <GameHistory
+                games={history.games}
+                isLoading={history.isLoading}
+                error={history.error}
+                hasMore={history.hasMore}
+                onLoadMore={history.loadMore}
+                onRetry={history.retry}
             />
-        </>
+        </SteamContentWrapper>
     )
 }
