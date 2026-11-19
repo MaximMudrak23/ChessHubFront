@@ -10,7 +10,7 @@ export const BACKGROUNDS = {
 export const BOARDS = {
     water: {
         name: 'Water',
-        preview: '/boards/water/unlockable_preview.png',
+        preview: '/boards/water/preview.png',
         blackCell: '/boards/water/black-cell.png',
         whiteCell: '/boards/water/white-cell.png',
         blackLettersColor: '#FFFFFF',
@@ -43,6 +43,23 @@ export const CHESS_PIECES = {
     default: createPieceSet('default', 'Default'),
     set1: createPieceSet('set-1', 'Set 1'),
     set2: createPieceSet('set-2', 'Set 2'),
+    set3: createPieceSet('set-3', 'Set 3'),
+    set4: createPieceSet('set-4', 'Set 4'),
+    set5: createPieceSet('set-5', 'Set 5'),
+    set6: createPieceSet('set-6', 'Set 6'),
+    set7: createPieceSet('set-7', 'Set 7'),
+    set8: createPieceSet('set-8', 'Set 8'),
+    set9: createPieceSet('set-9', 'Set 9'),
+    set10: createPieceSet('set-10', 'Set 10'),
+    set11: createPieceSet('set-11', 'Set 11'),
+    set12: createPieceSet('set-12', 'Set 12'),
+    set13: createPieceSet('set-13', 'Set 13'),
+    set14: createPieceSet('set-14', 'Set 14'),
+    set15: createPieceSet('set-15', 'Set 15'),
+    set16: createPieceSet('set-16', 'Set 16'),
+    set17: createPieceSet('set-17', 'Set 17'),
+    set18: createPieceSet('set-18', 'Set 18'),
+    set19: createPieceSet('set-19', 'Set 19'),
 };
 export const CHESS_SOUNDS = {
     capture: '/chess-sounds/capture.mp3',
