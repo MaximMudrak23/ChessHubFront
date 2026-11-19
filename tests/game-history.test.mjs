@@ -46,7 +46,7 @@ test('history displays game-start ratings, date and a native link to the game', 
     assert.match(html, /datetime="2026-11-14T12:00:00Z"/i);
     assert.match(html, /href="\/game\/aaaaaaaaaaaaaaaaaaaaaaaa"/);
     assert.match(html, /aria-label="Win"/);
-    assert.match(html, />64<\/td>/);
+    assert.match(html, />64<\/a><\/td>/);
     assert.doesNotMatch(html, /Your game history is empty|Game history is not available/);
 });
 
@@ -59,8 +59,14 @@ test('all result types have accessible labels and missing ratings do not turn in
     for (const label of ['Win', 'Loss', 'Draw']) assert.match(html, new RegExp(`aria-label="${label}"`));
     assert.match(html, /\(—\)/);
     assert.equal((html.match(/\(0\)/g) ?? []).length, 1);
-    assert.match(html, />0<\/td>/);
-    assert.equal((html.match(/href="\/game\//g) ?? []).length, 3);
+    assert.match(html, />0<\/a><\/td>/);
+    const rows = [...html.matchAll(/<tr\b[^>]*>(.*?)<\/tr>/g)].filter(([, row]) => row.includes('<td>'));
+    assert.equal(rows.length, 3);
+    for (const [index, [, row]] of rows.entries()) {
+        const links = [...row.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
+        assert.deepEqual(links, Array(4).fill(`/game/${['a', 'b', 'c'][index].repeat(24)}`));
+        assert.equal((row.match(/tabindex="-1"/g) ?? []).length, 3);
+    }
 });
 
 test('an invalid game date is displayed as unavailable', () => {

@@ -54,12 +54,15 @@
     }
 
     td {
+        height: 1px; // Let links fill the row height established by the players cell.
+        padding: 0;
         background: rgba(#000, 0.1);
         font-weight: 500;
     }
 
-    td:first-child {
+    td:first-child .game_link {
         padding-left: 30px;
+        justify-content: flex-start;
         text-align: left;
     }
 
@@ -75,8 +78,6 @@
 .date_column { width: 24%; }
 
 .row {
-    position: relative;
-
     &:hover td,
     &:focus-within td {
         background: rgba(#fff, 0.05);
@@ -84,25 +85,18 @@
 }
 
 .game_link {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 10px 16px;
     color: inherit;
     text-decoration: none;
     cursor: pointer;
 
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-    }
-
     &:focus-visible {
-        outline: none;
-
-        &::after {
-            outline: 2px solid #9fd05e;
-            outline-offset: -2px;
-        }
+        outline: 2px solid #9fd05e;
+        outline-offset: -2px;
     }
 }
 

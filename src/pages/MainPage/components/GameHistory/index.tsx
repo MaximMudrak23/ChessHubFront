@@ -39,12 +39,13 @@ function HistoryRow({ game }: { game: GameHistoryEntry }) {
     const date = new Date(game.finishedAt);
     const validDate = !Number.isNaN(date.getTime());
     const formattedDate = validDate ? dateFormatter.format(date).replaceAll('/', '.') : '—';
+    const gamePath = `/game/${encodeURIComponent(game.id)}`;
 
     return (
         <tr className={s.row}>
             <td>
                 <Link
-                    to={`/game/${encodeURIComponent(game.id)}`}
+                    to={gamePath}
                     className={s.game_link}
                     aria-label={`View game between ${game.white.name} and ${game.black.name} from ${formattedDate}`}
                 >
@@ -55,20 +56,26 @@ function HistoryRow({ game }: { game: GameHistoryEntry }) {
                 </Link>
             </td>
             <td>
-                <svg
-                    className={clsx(s.result, s[game.result])}
-                    width='32' height='32' viewBox='0 0 32 32'
-                    fill='currentColor' role='img' aria-label={resultLabels[game.result]}
-                >
-                    <path
-                        fillRule='evenodd'
-                        d={`M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0Z${resultCutouts[game.result]}`}
-                    />
-                </svg>
+                <Link to={gamePath} className={s.game_link} tabIndex={-1}>
+                    <svg
+                        className={clsx(s.result, s[game.result])}
+                        width='32' height='32' viewBox='0 0 32 32'
+                        fill='currentColor' role='img' aria-label={resultLabels[game.result]}
+                    >
+                        <path
+                            fillRule='evenodd'
+                            d={`M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0Z${resultCutouts[game.result]}`}
+                        />
+                    </svg>
+                </Link>
             </td>
-            <td>{game.movesCount}</td>
             <td>
-                <time dateTime={validDate ? game.finishedAt : undefined}>{formattedDate}</time>
+                <Link to={gamePath} className={s.game_link} tabIndex={-1}>{game.movesCount}</Link>
+            </td>
+            <td>
+                <Link to={gamePath} className={s.game_link} tabIndex={-1}>
+                    <time dateTime={validDate ? game.finishedAt : undefined}>{formattedDate}</time>
+                </Link>
             </td>
         </tr>
     );
