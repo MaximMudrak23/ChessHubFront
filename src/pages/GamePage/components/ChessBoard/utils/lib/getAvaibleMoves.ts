@@ -7,7 +7,8 @@ import { isMoveSafe } from './isMoveSafe';
 export function getAvailableMoves(
     piece: PieceType,
     pieces: PieceType[],
-    lastMove?: { piece: string; from: Square; to: Square } | null
+    lastMove?: { piece: string; from: Square; to: Square } | null,
+    validateMove?: (square: Square) => boolean,
 ) {
     const moves: { square: Square; type: 'move' | 'capture' }[] = [];
     const pieceSide = getPieceSide(piece);
@@ -16,8 +17,12 @@ export function getAvailableMoves(
         for (let col = 0; col < boardSize; col++) {
             const square = coordsToSquare(row, col);
 
-            if (!canMovePiece(piece, pieces, square, lastMove)) continue;
-            if (!isMoveSafe(piece, pieces, square)) continue;
+            if (validateMove) {
+                if (!validateMove(square)) continue;
+            } else {
+                if (!canMovePiece(piece, pieces, square, lastMove)) continue;
+                if (!isMoveSafe(piece, pieces, square)) continue;
+            }
             
             const targetPiece = getPieceBySquare(pieces, square);
 

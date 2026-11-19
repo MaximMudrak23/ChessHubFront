@@ -1,7 +1,6 @@
 import s from './styles.module.scss'
 import Button from '../../../../../../components/UI/Button';
 import clsx from 'clsx';
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion'
 import type { GameStatus } from '../../utils/types/chess.types';
@@ -9,24 +8,21 @@ import type { Side } from '../../../../utils/types/game.types';
 import { SVG } from '@/constants/paths';
 
 type Props = {
-    isGameEnded: boolean;
+    isOpen: boolean;
+    onClose: () => void;
     gameStatus: GameStatus;
     winnerSide: Side | null;
     currentUserSide: Side | null;
 }
 
 export default function GameResult({
-    isGameEnded,
+    isOpen,
+    onClose,
     gameStatus,
     winnerSide,
     currentUserSide,
 }: Props) {
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        setIsOpen(isGameEnded);
-    }, [isGameEnded]);
 
     const isSpectator = currentUserSide === null;
     const isDraw = gameStatus.includes('draw') || gameStatus === 'stalemate';
@@ -77,7 +73,11 @@ export default function GameResult({
             />
 
             <motion.div
-                className={clsx(s.game_result, isOpen && isGameEnded && s.active)}
+                role="dialog"
+                aria-label="Game result"
+                aria-hidden={!isOpen}
+                inert={!isOpen}
+                className={clsx(s.game_result, isOpen && s.active)}
                 initial={false}
                 animate={{
                     opacity: isOpen ? 1 : 0,
@@ -103,7 +103,8 @@ export default function GameResult({
             >
                 <button
                     className={s.close_button}
-                    onClick={() => setIsOpen(false)}
+                    aria-label="Close game result"
+                    onClick={onClose}
                 />
 
                 <div className={s.result_table}>

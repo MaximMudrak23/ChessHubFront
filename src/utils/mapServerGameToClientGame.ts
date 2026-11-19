@@ -32,6 +32,7 @@ export type ServerGame = {
 export function mapServerGameToClientGame(serverGame: ServerGame): Game {
     return {
         gameId: String(serverGame._id),
+        isActive: serverGame.status === 'active',
 
         players: {
             white: {
@@ -63,7 +64,7 @@ export function mapServerGameToClientGame(serverGame: ServerGame): Game {
         lastMove: serverGame.lastMove ?? null,
         halfmoveClock: serverGame.halfmoveClock ?? 0,
         fullmoveNumber: serverGame.fullmoveNumber ?? 1,
-        positionHistory: serverGame.positionHistory ?? [],
+        positionHistory: serverGame.positionHistory ?? null,
 
         gameStatus:
             serverGame.status === 'finished'

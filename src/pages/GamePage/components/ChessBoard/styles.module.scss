@@ -11,3 +11,8 @@
     position: relative;
     border-radius: var(--board-radius);
 }
+
+.board_position {
+    position: absolute;
+    inset: 0;
+}

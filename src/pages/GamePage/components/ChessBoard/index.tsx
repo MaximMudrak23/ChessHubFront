@@ -7,8 +7,14 @@ import useChessBoard from './hooks/useChessBoard'
 import type { Side } from '../../utils/types/game.types'
 import type { PieceType, PieceCode, Square, PromotionPiece } from './utils/types/chess.types'
 import { useEffect, useRef, useState } from 'react';
+import { useGameStore } from '@/store/gameStore';
+import { useGameResult } from '../../hooks/useGameResult';
 
 type Props = {
+    interactionKey: string;
+    canInteract: boolean;
+    analysisMode: boolean;
+    animationPieces?: PieceType[];
     perspective: Side;
     currentUserSide: Side | null;
     currentTurn: Side;
@@ -22,6 +28,23 @@ type Props = {
 }
 
 export default function ChessBoard(props: Props) {
+    const gameStatus = useGameStore(s => s.gameStatus);
+    const result = useGameResult();
+    return (
+        <div className={s.chess_board}>
+            <GameResult
+                isOpen={result.isOpen}
+                onClose={result.close}
+                gameStatus={gameStatus}
+                winnerSide={props.winnerSide}
+                currentUserSide={props.currentUserSide}
+            />
+            <BoardPosition {...props} />
+        </div>
+    );
+}
+
+function BoardPosition(props: Props) {
     const {
         selectedPieceID,
         selectPiece,
@@ -31,7 +54,6 @@ export default function ChessBoard(props: Props) {
         setMarkedSquares,
         toggleMarkedSquare,
         isCheck,
-        gameStatus,
         clearSelection,
         pendingPromotion,
         cancelPromotion,
@@ -41,6 +63,8 @@ export default function ChessBoard(props: Props) {
         props.currentTurn,
         props.pieces,
         props.lastMove,
+        props.interactionKey,
+        props.analysisMode,
     );
     
     function handleSquareClick(e: React.MouseEvent, square: Square) {
@@ -54,8 +78,6 @@ export default function ChessBoard(props: Props) {
         if (!moved) { clearSelection(); }
     }
     
-    const isGameEnded = gameStatus !== 'playing';
-
     const boardRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         function handleDocumentClick(e: MouseEvent) {
@@ -69,7 +91,7 @@ export default function ChessBoard(props: Props) {
 
         document.addEventListener('click', handleDocumentClick);
         return () => { document.removeEventListener('click', handleDocumentClick); };
-    }, [clearSelection]);
+    }, [clearSelection, setMarkedSquares]);
 
     const [hoveredSquare, setHoveredSquare] = useState<Square | null>(null);
     const hoveredSquareRef = useRef<Square | null>(null);
@@ -117,17 +139,11 @@ export default function ChessBoard(props: Props) {
     return (
         <div
             data-chess-board
-            className={s.chess_board}
+            className={s.board_position}
             ref={boardRef}
             onMouseMove={handleBoardMouseMove}
             onMouseLeave={handleBoardMouseLeave}
         >
-            <GameResult
-                isGameEnded={isGameEnded}
-                gameStatus={gameStatus}
-                winnerSide={props.winnerSide}
-                currentUserSide={props.currentUserSide}
-            />
             <BoardGrid
                 perspective={props.perspective}
                 selectedPieceID={selectedPieceID}
@@ -148,7 +164,10 @@ export default function ChessBoard(props: Props) {
                 currentTurn={props.currentTurn}
                 movePiece={movePiece}
                 hoveredSquareRef={hoveredSquareRef}
-                currentUserSide={props.currentUserSide}
+                currentUserSide={props.analysisMode ? props.currentTurn : props.currentUserSide}
+                canInteract={props.canInteract}
+                animationPieces={props.animationPieces}
+                interactionKey={props.interactionKey}
             />
             {pendingPromotion && (
                 <PromotionPicker

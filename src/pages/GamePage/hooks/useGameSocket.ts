@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { socket, getSocketSessionVersion } from '@/socket/socket';
 import { isObjectId, subscribeToSocketState } from '@/socket/subscribeToSocketState';
@@ -11,6 +11,8 @@ export function useGameSocket(gameId?: string) {
     const setGame = useGameStore(s => s.setGame);
     const token = useUserStore(s => s.token);
     const userId = useUserStore(s => s.user?.id);
+    const subscription = useMemo(() => ({ gameId, token, userId }), [gameId, token, userId]);
+    const [loadedSubscription, setLoadedSubscription] = useState<typeof subscription | null>(null);
 
     useEffect(() => {
         if (!gameId || !isObjectId(gameId)) return;
@@ -20,8 +22,12 @@ export function useGameSocket(gameId?: string) {
             join: () => { socket.emit('game:join', gameId); },
             leave: () => { socket.emit('game:leave', gameId); },
             loadSnapshot: async () => (await getGameById(gameId)).game,
+            getSnapshotVersion: () => useGameStore.getState().revision,
             accepts: game => String(game._id) === gameId,
-            onUpdate: game => setGame(mapServerGameToClientGame(game)),
+            onUpdate: game => {
+                setGame(mapServerGameToClientGame(game));
+                setLoadedSubscription(subscription);
+            },
         });
 
         return () => {
@@ -32,5 +38,7 @@ export function useGameSocket(gameId?: string) {
                 game.clearGame();
             }
         };
-    }, [gameId, token, userId, setGame]);
+    }, [gameId, token, userId, setGame, subscription]);
+
+    return loadedSubscription === subscription;
 }

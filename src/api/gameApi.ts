@@ -1,6 +1,17 @@
 import type { PromotionPiece, Square } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
 import type { GameHistoryResponse } from '@/types/gameHistory.types';
 import { API_URL } from './config';
+import type { ServerGame } from '@/utils/mapServerGameToClientGame';
+import type { GameStatus } from '@/pages/GamePage/components/ChessBoard/utils/types/chess.types';
+
+export class GameMoveError extends Error {
+    readonly status: number;
+
+    constructor(message: string, status: number) {
+        super(message);
+        this.status = status;
+    }
+}
 
 export async function getGameHistory(
     token: string,
@@ -107,7 +118,7 @@ export async function makeMove(
         targetSquare: Square;
         promotion?: PromotionPiece;
     }
-) {
+): Promise<{ game: ServerGame; gameStatus: GameStatus }> {
     const res = await fetch(`${API_URL}/game/move`, {
         method: 'POST',
         headers: {
@@ -118,7 +129,8 @@ export async function makeMove(
     });
 
     if (!res.ok) {
-        throw new Error('Failed to make move');
+        const body = await res.json().catch(() => null);
+        throw new GameMoveError(body?.message ?? 'Failed to make move', res.status);
     }
 
     return res.json();

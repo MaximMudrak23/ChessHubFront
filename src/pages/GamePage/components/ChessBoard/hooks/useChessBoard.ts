@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Side } from "../../../utils/types/game.types";
 import type { Square, PieceType, PieceCode, PromotionPiece } from '../utils/types/chess.types';
 import { getPieceSide, getPieceById } from "../utils/lib/getPiece";
 import { getAvailableMoves } from "../utils/lib/getAvaibleMoves";
 import { playSound } from "../utils/lib/playSound";
 
-import { makeMove } from '@/api/gameApi';
+import { canPlayCurrentPosition, submitGameMove } from '../../../utils/submitGameMove';
 import { useGameStore } from '@/store/gameStore';
-import { useUserStore } from '@/store/userStore';
 import { isKingInCheck } from '../utils/lib/isKingInCheck';
 import { canMovePiece } from '../utils/lib/canMovePiece';
 import { isMoveSafe } from '../utils/lib/isMoveSafe';
+import { canAnalyzePosition, getNavigationPly, getPositionAtPly } from '../../../utils/moveNavigation';
+import { analysisPromotion, applyAnalysisMove } from '../../../utils/analysisVariation';
 
 // useChessBoard, обязан просто управлять кликами и дергать за функции как ниточки в зависимости от того, на что мы кликнули
 
@@ -25,53 +26,57 @@ export default function useChessBoard(
     currentTurn: Side,
     pieces: PieceType[],
     lastMove: { piece: PieceCode; from: Square; to: Square; } | null,
+    interactionKey: string,
+    analysisMode: boolean,
 ) {
     const [selectedPieceID, setSelectedPieceID] = useState<string | null>(null);
     const [pendingPromotion, setPendingPromotion] =
     useState<PendingPromotion | null>(null);
     const [markedSquares, setMarkedSquares] = useState<Square[]>([]);
-    const isMovePendingRef = useRef(false);
-
-    const token = useUserStore(s => s.token);
     const gameId = useGameStore(s => s.gameId);
-    const setGame = useGameStore(s => s.setGame);
     const gameStatus = useGameStore(s => s.gameStatus);
+    const viewRevision = useGameStore(s => s.viewRevision);
+    const [previousInteractionKey, setPreviousInteractionKey] = useState(interactionKey);
+    if (previousInteractionKey !== interactionKey) {
+        setPreviousInteractionKey(interactionKey);
+        setSelectedPieceID(null);
+        setPendingPromotion(null);
+        setMarkedSquares([]);
+    }
 
-    const players = useGameStore(s => s.players);
-    const moves = useGameStore(s => s.moves);
-    const halfmoveClock = useGameStore(s => s.halfmoveClock);
-    const fullmoveNumber = useGameStore(s => s.fullmoveNumber);
-    const positionHistory = useGameStore(s => s.positionHistory);
-    const winnerSide = useGameStore(s => s.winnerSide);
-
-    const latestRef = useRef({
-        currentTurn, pieces, lastMove, gameStatus, winnerSide, token, gameId,
-        players, moves, halfmoveClock, fullmoveNumber, positionHistory,
-    });
-
-    useEffect(() => {
-        latestRef.current = {
-            currentTurn, pieces, lastMove, gameStatus, winnerSide, token, gameId,
-            players, moves, halfmoveClock, fullmoveNumber, positionHistory,
-        };
-    });
+    // Each visit to a position gets a new token, even when returning to the same square layout.
+    const interaction = useMemo(() => Symbol(interactionKey), [interactionKey]);
+    const activeRef = useRef<symbol | null>(null);
+    useLayoutEffect(() => {
+        activeRef.current = interaction;
+        return () => { activeRef.current = null; };
+    }, [interaction]);
 
     function clearSelection() {
         setSelectedPieceID(null);
     }
 
+    function canInteractNow() {
+        const state = useGameStore.getState();
+        if (state.gameId !== gameId || state.viewRevision !== viewRevision) return false;
+        return analysisMode ? canAnalyzePosition(state) : canPlayCurrentPosition(gameId);
+    }
+
+    function getAnalysisBoard() {
+        const state = useGameStore.getState();
+        const position = getPositionAtPly(state, getNavigationPly(state));
+        return position ? { ...position, pieces } : null;
+    }
+
     function selectPiece(pieceID: string, toggle = false) {
-        if (pendingPromotion) return;
-        
-        if (gameStatus !== 'playing') return;
-        if (!currentUserSide) return;
+        if (activeRef.current !== interaction || pendingPromotion || !canInteractNow()) return;
 
         const targetPiece = getPieceById(pieces, pieceID);
         if (!targetPiece) return;
 
         const targetSide = getPieceSide(targetPiece);
 
-        if (targetSide === currentUserSide) {
+        if (targetSide === (analysisMode ? currentTurn : currentUserSide)) {
             if (toggle && selectedPieceID === pieceID) {
                 setSelectedPieceID(null);
                 return;
@@ -85,28 +90,15 @@ export default function useChessBoard(
     }
 
     function movePiece(targetSquare: Square, pieceID = selectedPieceID, promotion?: PromotionPiece): boolean {
-        const {
-            currentTurn,
-            pieces,
-            lastMove,
-            gameStatus,
-            winnerSide,
-            token,
-            gameId,
-            players,
-        } = latestRef.current;
-
+        if (activeRef.current !== interaction || !canInteractNow() || !gameId || !pieceID) return false;
         if (pendingPromotion && !promotion) return false;
-        
-        if (gameStatus !== 'playing') return false;
-        if (!pieceID) return false;
-        if (isMovePendingRef.current) return false;
-        if (!token || !gameId || !players) return false;
+        const analysisBoard = analysisMode ? getAnalysisBoard() : null;
+        const { pieces, currentTurn, lastMove } = analysisBoard ?? useGameStore.getState();
 
         const selectedPiece = getPieceById(pieces, pieceID);
         if (!selectedPiece) return false;
 
-        if (getPieceSide(selectedPiece) !== currentTurn) {
+        if (getPieceSide(selectedPiece) !== currentTurn || (!analysisMode && getPieceSide(selectedPiece) !== currentUserSide)) {
             playSound('illegal');
             return false;
         }
@@ -118,12 +110,10 @@ export default function useChessBoard(
             return false;
         }
 
-        if (!canMovePiece(selectedPiece, pieces, targetSquare, lastMove)) {
-            playSound('illegal');
-            return false;
-        }
-
-        if (!isMoveSafe(selectedPiece, pieces, targetSquare)) {
+        const allowed = analysisBoard
+            ? applyAnalysisMove(analysisBoard, pieceID, targetSquare, promotion ?? analysisPromotion(selectedPiece, targetSquare))
+            : canMovePiece(selectedPiece, pieces, targetSquare, lastMove) && isMoveSafe(selectedPiece, pieces, targetSquare);
+        if (!allowed) {
             playSound('illegal');
             return false;
         }
@@ -148,68 +138,9 @@ export default function useChessBoard(
             return true;
         }
 
-        const movedPieceCode: PieceCode = promotion
-            ? `${selectedSide === 'white' ? 'w' : 'b'}${promotion}` as PieceCode
-            : selectedPiece.piece;
-
-        const { halfmoveClock, fullmoveNumber, positionHistory, moves } = latestRef.current;
-
-        const previousGame = {
-            gameId,
-            players,
-            currentTurn,
-            moves,
-            pieces,
-            lastMove,
-            halfmoveClock,
-            fullmoveNumber,
-            positionHistory,
-            gameStatus,
-            moveMeta: null,
-            winner: winnerSide,
-        };
-
-        const optimisticPieces = pieces
-            .filter(p => p.square !== targetSquare)
-            .map(p =>
-                p.id === pieceID
-                    ? {
-                        ...p,
-                        piece: movedPieceCode,
-                        square: targetSquare,
-                        hasMoved: true,
-                    }
-                    : p
-            );
-
-        setGame({
-            ...previousGame,
-            pieces: optimisticPieces,
-            currentTurn: currentTurn === 'white' ? 'black' : 'white',
-            lastMove: {
-                piece: selectedPiece.piece,
-                from: selectedPiece.square,
-                to: targetSquare,
-            },
-            moveMeta: null,
-        });
-
         setSelectedPieceID(null);
-        isMovePendingRef.current = true;
-
-        makeMove(token, {
-            gameId,
-            pieceID,
-            targetSquare,
-            promotion,
-        })
-            .catch(error => {
-                console.log(error);
-                setGame(previousGame);
-            })
-            .finally(() => {
-                isMovePendingRef.current = false;
-            });
+        if (analysisMode) return useGameStore.getState().moveInVariation(pieceID, targetSquare, promotion);
+        void submitGameMove(gameId, pieceID, targetSquare, promotion);
 
         return true;
     }
@@ -238,10 +169,12 @@ export default function useChessBoard(
     }
 
     const selectedPiece = selectedPieceID ? getPieceById(pieces, selectedPieceID) : null;
-    // const isMyTurn = currentUserSide !== null && currentTurn === currentUserSide;
 
-    const availableMoves = selectedPiece /*&& isMyTurn*/
-        ? getAvailableMoves(selectedPiece, pieces, lastMove)
+    const analysisBoard = analysisMode ? getAnalysisBoard() : null;
+    const availableMoves = selectedPiece && canInteractNow()
+        ? getAvailableMoves(selectedPiece, pieces, lastMove, analysisBoard
+            ? square => Boolean(applyAnalysisMove(analysisBoard, selectedPiece.id, square, analysisPromotion(selectedPiece, square)))
+            : undefined)
         : [];
     
     const isCheck = isKingInCheck(pieces, currentTurn);

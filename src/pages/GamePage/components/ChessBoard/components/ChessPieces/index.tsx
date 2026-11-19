@@ -3,13 +3,16 @@ import type { PieceType, Square } from '../../utils/types/chess.types';
 import type { Side } from '../../../../utils/types/game.types';
 import { cellSize, squareToPosition } from '../../utils/lib/board';
 import { getPieceSide } from '../../utils/lib/getPiece';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { CHESS_PIECES } from '@/constants/paths';
 import clsx from 'clsx';
 import { useUserStore } from '@/store/userStore';
 import { getAppearance } from '@/utils/getAppearance';
 
 type Props = {
+    canInteract: boolean;
+    animationPieces?: PieceType[];
+    interactionKey: string;
     pieces: PieceType[];
     perspective: Side;
     selectedPieceID: string | null;
@@ -25,13 +28,26 @@ type Props = {
 export default function ChessPieces(props: Props) {
     const user = useUserStore(s => s.user);
     const pieceImages = CHESS_PIECES[getAppearance(user).pieceSet];
+    // FEN lists squares in board order. Keep DOM order stable so moving an existing
+    // image to another square does not detach it and cancel its CSS transition.
+    const animatedPieces = props.pieces.map(piece => ({
+        ...piece,
+        animationId: props.animationPieces?.find(p => p.square === piece.square && p.piece === piece.piece)?.id ?? piece.id,
+    })).sort((a, b) => a.animationId.localeCompare(b.animationId));
     const [noTransitionID, setNoTransitionID] = useState<string | null>(null);
     
     const suppressClickRef = useRef(false);
     const wasSelectedOnMouseDownRef = useRef(false);
+    const cancelDragRef = useRef<(() => void) | null>(null);
+    useLayoutEffect(() => {
+        suppressClickRef.current = false;
+        wasSelectedOnMouseDownRef.current = false;
+        return () => { cancelDragRef.current?.(); };
+    }, [props.interactionKey]);
 
     function handlePieceClick(e: React.MouseEvent, square: Square, id: string) {
         e.stopPropagation();
+        if (!props.canInteract) return;
 
         if (suppressClickRef.current) {
             suppressClickRef.current = false;
@@ -56,6 +72,8 @@ export default function ChessPieces(props: Props) {
     ) {
         e.preventDefault();
         e.stopPropagation();
+        if (!props.canInteract) return;
+        cancelDragRef.current?.();
 
         wasSelectedOnMouseDownRef.current = props.selectedPieceID === id;
         props.selectPiece(id);
@@ -113,7 +131,7 @@ export default function ChessPieces(props: Props) {
             img.style.transform = `translate(${dx}px, ${dy}px)`;
         }
 
-        function up() {
+        function cancelDrag() {
             document.removeEventListener('mousemove', move);
             document.removeEventListener('mouseup', up);
 
@@ -121,7 +139,11 @@ export default function ChessPieces(props: Props) {
             img.style.transition = start.transition;
             img.style.zIndex = start.zIndex;
             document.body.style.cursor = '';
+            cancelDragRef.current = null;
+        }
 
+        function up() {
+            cancelDrag();
             const targetSquare = props.hoveredSquareRef.current;
             
             if (isDragging) {
@@ -142,11 +164,12 @@ export default function ChessPieces(props: Props) {
 
         document.addEventListener('mousemove', move);
         document.addEventListener('mouseup', up);
+        cancelDragRef.current = cancelDrag;
     }
 
     return (
         <div className={s.chess_pieces}>
-            {props.pieces.map(({ id, piece, square }) => {
+            {animatedPieces.map(({ id, piece, square, animationId }) => {
                 const { left, top } = squareToPosition(square, props.perspective);
                 const isKing = piece[1] === 'k';
                 const side = getPieceSide({ id, piece, square });
@@ -154,12 +177,13 @@ export default function ChessPieces(props: Props) {
 
                 return (
                     <img
-                        key={id}
+                        key={animationId}
                         src={pieceImages[piece]}
                         alt={`${piece} on ${square}`}
                         draggable={false}
                         className={clsx(
                             s.piece,
+                            !props.canInteract && s.readOnly,
                             isCheckedKing && s.check,
                             noTransitionID === id && s.noTransition
                         )}
@@ -171,6 +195,7 @@ export default function ChessPieces(props: Props) {
                         }}
                         onClick={(e) => handlePieceClick(e, square, id)}
                         onMouseDown={(e) => {
+                            if (!props.canInteract || e.button !== 0 || e.ctrlKey || e.metaKey) return;
                             if (!props.currentUserSide) return;
                             if (side !== props.currentUserSide) return;
 

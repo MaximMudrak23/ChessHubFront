@@ -1,50 +1,33 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import { useGameStore, type GameStore } from '@/store/gameStore';
+import { playSound, type SoundName } from '../components/ChessBoard/utils/lib/playSound';
+import { getNavigationPly, getPositionAtPly } from '../utils/moveNavigation';
 
-import { useGameStore } from '@/store/gameStore';
-import { playSound } from '../components/ChessBoard/utils/lib/playSound';
+function liveMoveSound(meta: GameStore['moveMeta']): Exclude<SoundName, 'game-end'> {
+    if (meta?.isCheck || meta?.isCheckmate) return 'move-check';
+    if (meta?.isPromotion) return 'promote';
+    if (meta?.isCastling) return 'castle';
+    return meta?.isCapture ? 'capture' : 'move-self';
+}
 
-export function useGameSounds() {
-    const lastMove = useGameStore(s => s.lastMove);
-    const moveMeta = useGameStore(s => s.moveMeta);
-    const gameStatus = useGameStore(s => s.gameStatus);
+export function getGameSound(state: GameStore, previous: GameStore, gameId?: string): SoundName | null {
+    if (!gameId || state.gameId !== gameId || previous.gameId !== gameId) return null;
+    const ply = getNavigationPly(state);
+    const previousPly = getNavigationPly(previous);
+    // Loading a finished game is silent. Live completion takes priority over the move sound.
+    if (previous.isActive && !state.isActive && !state.variation && !previous.variation &&
+        state.selectedPly === null && previous.selectedPly === null) {
+        return 'game-end';
+    }
+    if (ply === previousPly) return null;
+    const transitionPly = ply < previousPly ? previousPly : ply;
+    const transition = getPositionAtPly(ply < previousPly ? previous : state, transitionPly);
+    return transition?.sound ?? liveMoveSound(state.moveMeta);
+}
 
-    // const prevLastMoveRef = useRef(lastMove);
-    const prevGameStatusRef = useRef(gameStatus);
-
-    useEffect(() => {
-        // if (!prevLastMoveRef.current && lastMove) {
-        //     playSound('game-start');
-        //     prevLastMoveRef.current = lastMove;
-        //     return;
-        // }
-
-        if (!lastMove || !moveMeta) return;
-
-        if (moveMeta.isCheckmate) {
-            playSound('game-end');
-        } else if (moveMeta.isCheck) {
-            playSound('move-check');
-        } else if (moveMeta.isPromotion) {
-            playSound('promote');
-        } else if (moveMeta.isCastling) {
-            playSound('castle');
-        } else if (moveMeta.isCapture) {
-            playSound('capture');
-        } else {
-            playSound('move-self');
-        }
-
-        // prevLastMoveRef.current = lastMove;
-    }, [lastMove, moveMeta]);
-
-    useEffect(() => {
-        if (
-            prevGameStatusRef.current === 'playing' &&
-            gameStatus !== 'playing'
-        ) {
-            playSound('game-end');
-        }
-
-        prevGameStatusRef.current = gameStatus;
-    }, [gameStatus]);
+export function useGameSounds(gameId?: string) {
+    useEffect(() => useGameStore.subscribe((state, previous) => {
+        const sound = getGameSound(state, previous, gameId);
+        if (sound) playSound(sound);
+    }), [gameId]);
 }

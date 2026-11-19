@@ -1,4 +1,4 @@
-type SoundName =
+export type SoundName =
     | 'capture'
     | 'castle'
     | 'game-end'

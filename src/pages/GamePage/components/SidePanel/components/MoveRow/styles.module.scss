@@ -24,7 +24,15 @@
     }
 
     .moveSquare {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
         transition: background-color 0.25s ease;
-        &:hover { background-color: rgba($color: #FFF, $alpha: 0.2); }
+        &:hover, &.selected { background-color: rgba($color: #FFF, $alpha: 0.2); }
+        &:disabled { cursor: default; }
+        &:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
     }
 }

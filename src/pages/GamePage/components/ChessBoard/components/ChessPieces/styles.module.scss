@@ -23,3 +23,11 @@
 .noTransition {
     transition: none;
 }
+
+.readOnly, .readOnly:active {
+    cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .piece { transition: none; }
+}
