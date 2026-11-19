@@ -165,6 +165,115 @@ async function dragEnd(points) {
     await command('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', buttons: 0, clickCount: 1, x: points.tx, y: points.ty });
     await pause(40);
 }
+const arrowCount = () => evaluate(`document.querySelectorAll('[data-chess-board] svg path').length`);
+async function arrowStart(from = 'g1', to = 'f3', offset = 0.5) {
+    const points = await evaluate(`(() => {
+        const source = document.querySelector('[data-square="${from}"]').getBoundingClientRect();
+        const target = document.querySelector('[data-square="${to}"]').getBoundingClientRect();
+        return {x:source.x+source.width*${offset},y:source.y+source.height*${offset},tx:target.x+target.width*${offset},ty:target.y+target.height*${offset}};
+    })()`);
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', x: points.x, y: points.y });
+    await command('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'right', buttons: 2, clickCount: 1, x: points.x, y: points.y });
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', buttons: 2, x: points.tx, y: points.ty });
+    return points;
+}
+async function arrowEnd(points) {
+    await command('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'right', buttons: 0, clickCount: 1, x: points.tx, y: points.ty });
+    await pause(40);
+}
+async function verifyBoardArrows(flipped = false) {
+    const before = await evaluate('JSON.stringify({pieces:__state().pieces,moves:__moves})');
+    const first = await arrowStart();
+    await waitFor(`document.querySelectorAll('[data-chess-board] svg path').length === 1`);
+    assert.equal(await evaluate(`document.querySelector('[data-chess-board] svg path').getAttribute('transform')`),
+        flipped ? 'translate(150 50) rotate(63.43494882292201)' : 'translate(650 750) rotate(-116.56505117707799)');
+    assert.equal(await evaluate(`getComputedStyle(document.querySelector('[data-chess-board] svg')).fill`),'rgb(255, 204, 0)');
+    assert.equal(await evaluate(`getComputedStyle(document.querySelector('[data-chess-board] svg')).opacity`),'0.7');
+    assert.equal(await evaluate(`getComputedStyle(document.querySelector('[data-chess-board] svg')).pointerEvents`),'none');
+    await arrowEnd(first);
+    assert.equal(await arrowCount(),1,'release saves the preview');
+    await arrowEnd(await arrowStart('e2','e4'));
+    assert.equal(await arrowCount(),2,'multiple arrows coexist');
+    await arrowEnd(await arrowStart());
+    assert.equal(await arrowCount(),1,'drawing the same arrow removes it');
+    await arrowEnd(await arrowStart());
+    assert.equal(await arrowCount(),2,'a removed arrow can be drawn again');
+    const isMarked = square => evaluate(`document.querySelector('[data-square="${square}"]').className.includes('marked')`);
+    await arrowEnd(await arrowStart('e2','e2'));
+    assert.equal(await arrowCount(),2,'right clicking a single square adds no arrow');
+    assert.equal(await isMarked('e2'),true,'right click marks an occupied square');
+    await arrowEnd(await arrowStart('e2','e2'));
+    assert.equal(await isMarked('e2'),false,'another right click unmarks it');
+    await arrowEnd(await arrowStart('a3','a3',0.03));
+    assert.equal(await isMarked('a3'),true,'right click also marks an empty square near its corner');
+    await evaluate(`document.querySelector('[data-square="a3"]').dispatchEvent(new MouseEvent('click',{bubbles:true,ctrlKey:true}))`);
+    assert.equal(await isMarked('a3'),false,'Ctrl+click shares the same square marks');
+    const returned = await arrowStart('a3','a4');
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', buttons: 2, x: returned.x, y: returned.y });
+    await arrowEnd({...returned,tx:returned.x,ty:returned.y});
+    assert.equal(await isMarked('a3'),false,'dragging away and back does not count as a short click');
+    assert.equal(await evaluate(`document.querySelector('[data-chess-board]').dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))`),false);
+    const left = await arrowStart('a3','a4');
+    await arrowEnd(left);
+    await command('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', buttons: 1, clickCount: 1, x: left.x, y: left.y });
+    await command('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', buttons: 0, clickCount: 1, x: left.x, y: left.y });
+    assert.equal(await arrowCount(),3,'left click on an empty board square preserves arrows');
+    await evaluate(`document.querySelector('[data-square="a3"]').dispatchEvent(new MouseEvent('click',{bubbles:true,ctrlKey:true}))`);
+    await waitFor(`document.querySelector('[data-square="a3"]').className.includes('marked')`);
+    await evaluate(`${shown('wn','g1')}.click()`);
+    assert.equal(await arrowCount(),3,'selecting a piece preserves arrows');
+    await evaluate(`document.querySelector('[data-square="a3"]').click()`);
+    const markedCount = () => evaluate(`document.querySelectorAll('[data-square][class*="marked"]').length`);
+    assert.equal(await markedCount(),1);
+    // Cell corners, occupied destinations and quick consecutive gestures must all work.
+    for (const [from,to,offset] of [['a1','h8',0.03],['h8','a1',0.97],['b1','g8',0.5],['d4','e5',0.1]]) {
+        const count = await arrowCount();
+        await arrowEnd(await arrowStart(from,to,offset));
+        assert.equal(await arrowCount(),count+1,`${from} to ${to} draws from any point in the cell`);
+    }
+    const savedCount = await arrowCount();
+    const outside = await arrowStart('b3','c4');
+    const edge = await evaluate(`(() => { const r=document.querySelector('[data-chess-board]').getBoundingClientRect(); return {tx:r.right+10,ty:r.top+10}; })()`);
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', buttons: 2, x: edge.tx, y: edge.ty });
+    await arrowEnd({...outside,...edge});
+    assert.equal(await arrowCount(),savedCount,'release outside cancels only the draft');
+    const reentered = await arrowStart('b3','c4');
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', buttons: 2, x: edge.tx, y: edge.ty });
+    await command('Input.dispatchMouseEvent', { type: 'mouseMoved', buttons: 2, x: reentered.tx, y: reentered.ty });
+    await arrowEnd(reentered);
+    assert.equal(await arrowCount(),savedCount+1,'pointer capture supports leaving and reentering the board');
+    const blurred = await arrowStart('c3','d5');
+    await evaluate(`window.dispatchEvent(new Event('blur'))`);
+    await arrowEnd(blurred);
+    assert.equal(await arrowCount(),savedCount+1,'losing focus preserves saved arrows');
+    const navigated = await arrowStart('c3','d5');
+    await key('ArrowLeft');
+    await arrowEnd(navigated);
+    assert.equal(await arrowCount(),savedCount+1,'navigation cancels the draft and preserves saved arrows');
+    assert.equal(await markedCount(),1,'navigation also preserves marked squares');
+    await key('ArrowRight');
+    assert.equal(await arrowCount(),savedCount+1);
+    await key('Escape');
+    assert.equal(await arrowCount(),0,'Escape clears all saved arrows');
+    assert.equal(await markedCount(),0,'Escape clears all marked squares');
+    await arrowEnd(await arrowStart('a3','a3'));
+    const escaped = await arrowStart('c3','d5');
+    await key('Escape');
+    await arrowEnd(escaped);
+    assert.equal(await arrowCount(),0,'Escape cancels a draft so releasing cannot restore it');
+    assert.equal(await markedCount(),0);
+    const escapedClick = await arrowStart('a3','a3');
+    await key('Escape');
+    await arrowEnd(escapedClick);
+    assert.equal(await markedCount(),0,'Escape cancels a pending right click');
+    await arrowEnd(await arrowStart('a3','a3'));
+    await arrowEnd(await arrowStart());
+    await evaluate(`document.body.dispatchEvent(new MouseEvent('click',{bubbles:true}))`);
+    await waitFor(`document.querySelectorAll('[data-chess-board] svg path').length === 0`);
+    assert.equal(await markedCount(),0,'clicking outside clears arrows and marked squares together');
+    assert.equal(await evaluate('JSON.stringify({pieces:__state().pieces,moves:__moves})'),before,'annotations never move pieces or submit moves');
+    console.log(`PASS translucent yellow arrows, reliable gestures, persistence, outside clear and ${flipped ? 'black' : 'white'} perspective`);
+}
 try {
     await command('Page.enable');
     await command('Runtime.enable');
@@ -179,6 +288,7 @@ try {
     assert.equal(await evaluate(resultOpen),false);
     assert.equal(await active(), '1. Black: e5');
     assert.deepEqual(await highlightedPlayer(),['white']);
+    await verifyBoardArrows();
     await key('ArrowLeft'); await ply(1);
     assert.equal(await active(), '1. White: e4');
     assert.deepEqual(await highlightedPlayer(),['black'],'sidebar follows the displayed historical turn');
@@ -445,6 +555,7 @@ try {
     await waitFor('__state().latestPly===2 && !__state().isActive && document.querySelector("[data-chess-board]")');
     assert.equal(await evaluate(`document.querySelector('[data-row="0"][data-col="0"]').dataset.square`),'h1');
     assert.deepEqual(await highlightedPlayer(),['white']);
+    await verifyBoardArrows(true);
     const oppositeSide = await dragStart('wn','g1','f3'); await dragEnd(oppositeSide); await ply(3);
     assert.equal(await active(),'1. Black: e5');
     assert.deepEqual(await highlightedPlayer(),['black']);

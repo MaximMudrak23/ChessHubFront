@@ -1,5 +1,6 @@
 import s from './styles.module.scss'
 import BoardGrid from './components/BoardGrid'
+import BoardArrows from './components/BoardArrows'
 import ChessPieces from './components/ChessPieces'
 import GameResult from './components/GameResult'
 import PromotionPicker from './components/PromotionPicker'
@@ -79,18 +80,32 @@ function BoardPosition(props: Props) {
     }
     
     const boardRef = useRef<HTMLDivElement | null>(null);
+    const [annotationsRevision, setAnnotationsRevision] = useState(0);
     useEffect(() => {
+        function clearAnnotations() {
+            clearSelection();
+            setMarkedSquares([]);
+            setAnnotationsRevision(revision => revision + 1);
+        }
+
         function handleDocumentClick(e: MouseEvent) {
             if (!boardRef.current) return;
 
             if (!boardRef.current.contains(e.target as Node)) {
-                clearSelection();
-                setMarkedSquares([]);
+                clearAnnotations();
             }
         }
 
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Escape') clearAnnotations();
+        }
+
         document.addEventListener('click', handleDocumentClick);
-        return () => { document.removeEventListener('click', handleDocumentClick); };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
     }, [clearSelection, setMarkedSquares]);
 
     const [hoveredSquare, setHoveredSquare] = useState<Square | null>(null);
@@ -168,6 +183,13 @@ function BoardPosition(props: Props) {
                 canInteract={props.canInteract}
                 animationPieces={props.animationPieces}
                 interactionKey={props.interactionKey}
+            />
+            <BoardArrows
+                key={annotationsRevision}
+                boardRef={boardRef}
+                perspective={props.perspective}
+                interactionKey={props.interactionKey}
+                onToggleSquare={toggleMarkedSquare}
             />
             {pendingPromotion && (
                 <PromotionPicker

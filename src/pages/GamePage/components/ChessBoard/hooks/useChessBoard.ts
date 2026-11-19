@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Side } from "../../../utils/types/game.types";
 import type { Square, PieceType, PieceCode, PromotionPiece } from '../utils/types/chess.types';
 import { getPieceSide, getPieceById } from "../utils/lib/getPiece";
@@ -41,7 +41,6 @@ export default function useChessBoard(
         setPreviousInteractionKey(interactionKey);
         setSelectedPieceID(null);
         setPendingPromotion(null);
-        setMarkedSquares([]);
     }
 
     // Each visit to a position gets a new token, even when returning to the same square layout.
@@ -164,9 +163,9 @@ export default function useChessBoard(
         }
     }
 
-    function toggleMarkedSquare(square: Square) {
+    const toggleMarkedSquare = useCallback((square: Square) => {
         setMarkedSquares(cur => cur.includes(square) ? cur.filter(s => s !== square) : [...cur, square]);
-    }
+    }, []);
 
     const selectedPiece = selectedPieceID ? getPieceById(pieces, selectedPieceID) : null;
 
