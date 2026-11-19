@@ -8,6 +8,10 @@
     grid-template-rows: repeat(3, minmax(0, 1fr));
     border-radius: 8px;
     overflow: hidden;
+    // Show the top-left 3×3 squares of the full 8×8 board.
+    background-size: calc(100% * 8 / 3) auto;
+    background-position: top left;
+    background-repeat: no-repeat;
     user-select: none;
 }
 
@@ -17,8 +21,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-position: center;
-    background-size: cover;
 
     img {
         display: block;

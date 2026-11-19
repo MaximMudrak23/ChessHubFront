@@ -26,12 +26,16 @@ const PIECE_NAMES = {
 
 export default function BoardPreview({board, pieces}: Props) {
     return (
-        <div className={s.board} role='img' aria-label={`${board.name} board and pieces preview`}>
+        <div
+            className={s.board}
+            style={{backgroundImage: `url(${board.image})`}}
+            role='img'
+            aria-label={`${board.name} board and pieces preview`}
+        >
             {PREVIEW_PIECES.map((piece, index) => (
                 <div
                     key={index}
                     className={s.cell}
-                    style={{backgroundImage: `url(${index % 2 === 0 ? board.whiteCell : board.blackCell})`}}
                 >
                     {piece && <img src={pieces[piece]} alt={PIECE_NAMES[piece]} draggable={false} />}
                 </div>

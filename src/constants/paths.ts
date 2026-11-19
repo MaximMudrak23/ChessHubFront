@@ -6,16 +6,22 @@ export const BACKGROUNDS = {
     'dark-mac': { name: 'Dark Mac', url: '/backgrounds/dark-mac.jpg' },
     city: { name: 'City', url: '/backgrounds/city.png' },
 };
-// Add board files to public/boards/<id> and register them here; the settings list is built automatically.
+// Add an 8×8 board image and thumbnail to public/boards/<id> and register them here.
 export const BOARDS = {
     water: {
         name: 'Water',
         preview: '/boards/water/preview.png',
-        blackCell: '/boards/water/black-cell.png',
-        whiteCell: '/boards/water/white-cell.png',
+        image: '/boards/water/board.png',
         blackLettersColor: '#FFFFFF',
         whiteLettersColor: '#74A0B5',
-    }
+    },
+    ocean: {
+        name: 'Ocean',
+        preview: '/boards/ocean/preview.png',
+        image: '/boards/ocean/board.png',
+        blackLettersColor: '#FFF5EB',
+        whiteLettersColor: '#488BA3',
+    },
 };
 function createPieceSet(folder: string, name: string) {
     const path = `/chess-pieces/${folder}`;

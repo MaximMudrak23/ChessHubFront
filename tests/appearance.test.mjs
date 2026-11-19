@@ -231,7 +231,6 @@ test('an unknown saved board uses the standard board in the game', t => {
         perspective: 'white', selectedPieceID: null, availableMoves: [], lastMove: null,
         markedSquares: [], pieces: [], onSquareClick() {}, hoveredSquare: null,
     });
-    assert.match(html, /\/boards\/water\/white-cell\.png/);
-    assert.match(html, /\/boards\/water\/black-cell\.png/);
+    assert.match(html, /\/boards\/water\/board\.png/);
     assert.equal((html.match(/data-square=/g) ?? []).length, 64);
 });

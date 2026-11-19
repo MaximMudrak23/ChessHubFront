@@ -4,6 +4,9 @@
 
     border-radius: var(--board-radius);
     overflow: hidden;
+    background-size: 100% 100%;
+    background-position: top left;
+    background-repeat: no-repeat;
 
     display: grid;
     grid-template-columns: repeat(var(--board-size), 1fr);
@@ -82,8 +85,6 @@
     }
 
     .lightCell {
-        background-image: var(--board-light-square);
-
         &[data-col='0']::before, &[data-row='7']::after {
             opacity: 0.8;
             color: var(--board-light-letters-color);
@@ -91,8 +92,6 @@
     }
 
     .darkCell {
-        background-image: var(--board-dark-square);
-
         &[data-col='0']::before, &[data-row='7']::after {
             opacity: 0.8;
             color: var(--board-dark-letters-color);

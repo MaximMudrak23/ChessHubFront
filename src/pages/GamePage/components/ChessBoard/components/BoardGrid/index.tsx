@@ -61,8 +61,7 @@ export default function BoardGrid(props: Props) {
                 '--board-size': boardSize,
                 '--board-light-letters-color': boardTheme.whiteLettersColor,
                 '--board-dark-letters-color': boardTheme.blackLettersColor,
-                '--board-light-square': `url(${boardTheme.whiteCell})`,
-                '--board-dark-square': `url(${boardTheme.blackCell})`,
+                backgroundImage: `url(${boardTheme.image})`,
             } as React.CSSProperties}
         >
             {cells.map(({ square, isLight, file, rank, row, col }) => {
