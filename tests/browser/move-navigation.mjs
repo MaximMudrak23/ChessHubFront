@@ -534,13 +534,14 @@ try {
     await evaluate('__server=__fixture(2); __login(); __renderGame()');
     await waitFor('__state().isActive && __state().latestPly===2 && document.querySelector("[data-chess-board]")');
     await click('1. White: e4'); await ply(1);
-    await clickMove('bp','c7','c5'); await ply(2);
+    await clickMove('bp','c7','c5'); await ply(1);
+    assert.equal(await evaluate('__state().variation'),null,'active games cannot start local analysis');
     await evaluate('__sounds=[]; __update(__fixture(3)); __reconnect()');
     await waitFor('__state().latestPly===3');
-    assert.equal(await evaluate('__state().variation.rootPly'),1);
-    assert.ok(await evaluate(`Boolean(${shown('bp','c5')})`));
+    assert.equal(await evaluate('__state().variation'),null);
+    assert.ok(await evaluate(`Boolean(${shown('bp','c7')})`));
     assert.ok(await evaluate(`Boolean(${shown('wn','g1')})`));
-    assert.deepEqual(await highlightedPlayer(),['white'],'server turn does not override local turn');
+    assert.deepEqual(await highlightedPlayer(),['black'],'historical turn remains visible');
     await evaluate('__update(__fixture(3,{status:"finished",finishedReason:"resignation"}))');
     await pause(60);
     assert.equal(await evaluate(resultOpen),false);
@@ -549,7 +550,7 @@ try {
     await click('Latest position'); await ply(3);
     assert.ok(await evaluate(`Boolean(${shown('wn','f3')})`));
     assert.equal(await evaluate('__moves.length'),analysisRequests);
-    console.log('PASS live game updates, reconnect and completion preserve a local variation, and returning restores the newest recorded board');
+    console.log('PASS active history blocks local moves through reconnect and completion, and returning restores the newest recorded board');
 
     await evaluate('__server=__fixture(2,{status:"finished",finishedReason:"resignation"}); __login("222222222222222222222222"); __renderGame()');
     await waitFor('__state().latestPly===2 && !__state().isActive && document.querySelector("[data-chess-board]")');

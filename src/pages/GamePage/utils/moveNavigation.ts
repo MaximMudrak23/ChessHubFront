@@ -47,7 +47,7 @@ export function getPositionAtPly(state: NavigationState, ply: number): BoardPosi
 
 export function canAnalyzePosition(state: NavigationState & { isActive: boolean; isMovePending: boolean }): boolean {
     return Boolean(state.navigationPositions && !state.isMovePending &&
-        (!state.isActive || state.selectedPly !== null || state.variation));
+        !state.isActive);
 }
 
 // These display-only flags recover castling eligibility, not the server's piece history.

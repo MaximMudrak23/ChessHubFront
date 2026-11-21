@@ -98,7 +98,7 @@ export const useGameStore = create<GameStore>((set) => ({
         const latestPly = countPlies(game.moves);
         const navigationPositions = getNavigationPositions(game.moves, game.positionHistory);
         const sameGame = state.gameId === game.gameId;
-        const variation = sameGame && navigationPositions && state.variation && state.variation.rootPly <= latestPly
+        const variation = !game.isActive && sameGame && navigationPositions && state.variation && state.variation.rootPly <= latestPly
             ? state.variation : null;
         return {
             gameId: game.gameId,

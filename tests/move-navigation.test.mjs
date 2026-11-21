@@ -133,6 +133,8 @@ test('move response updates authoritative board with real IDs; pending request b
         return pending.promise;
     });
     const move = submitGameMove(id, 'server-g1', 'f3');
+    assert.equal(useGameStore.getState().pieces.find(p => p.id === 'server-g1').square, 'f3');
+    assert.equal(useGameStore.getState().latestPly, 2);
     await submitGameMove(id, 'server-g1', 'f3');
     assert.equal(request.mock.callCount(), 1);
     useGameStore.getState().selectPly(1);
@@ -331,6 +333,7 @@ const localMove = (from, to, promotion) => {
 
 test('local variation alternates both sides, pins its root and never changes or submits the recorded game', async t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     const request = t.mock.method(globalThis, 'fetch', () => { throw new Error('Unexpected analysis request'); });
     const canonical = useGameStore.getState();
     canonical.selectPly(1);
@@ -352,6 +355,7 @@ test('local variation alternates both sides, pins its root and never changes or 
 
 test('variation navigation follows the recorded prefix and local suffix while its sidebar root remains pinned', t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     useGameStore.getState().selectPly(1);
     localMove('c7', 'c5');
     localMove('g1', 'f3');
@@ -379,6 +383,7 @@ test('variation navigation follows the recorded prefix and local suffix while it
 
 test('clicking the same highlighted move discards the variation and immediately restores its recorded position', t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     useGameStore.getState().selectPly(1);
     localMove('c7', 'c5');
     const revision = useGameStore.getState().viewRevision;
@@ -392,6 +397,7 @@ test('clicking the same highlighted move discards the variation and immediately 
 
 test('a new move after rewinding replaces the local continuation; a move in the prefix creates a new root', t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     useGameStore.getState().selectPly(1);
     localMove('c7', 'c5');
     localMove('g1', 'f3');
@@ -420,13 +426,14 @@ test('analysis on a finished latest position accepts real server IDs and stays s
     assert.equal(viewed().pieces.some(p => p.square === 'g1'), true);
 });
 
-test('live updates and reconnect snapshots preserve analysis while another game, logout and invalid history reset it', t => {
+test('finished reconnect snapshots preserve analysis while another game, logout and invalid history reset it', t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     useGameStore.getState().selectPly(1);
     localMove('c7', 'c5');
     const variation = useGameStore.getState().variation;
-    load(game(3));
-    load(game(3));
+    load(game(3, { status: 'finished' }));
+    load(game(3, { status: 'finished' }));
     assert.equal(useGameStore.getState().variation, variation);
     assert.equal(useGameStore.getState().latestPly, 3);
     load(game(3, { status: 'finished', finishedReason: 'resignation' }));
@@ -446,6 +453,8 @@ test('analysis cannot start on the live active board or during a pending server 
     setup(t);
     assert.equal(useGameStore.getState().moveInVariation('server-g1', 'f3'), false);
     useGameStore.getState().selectPly(1);
+    assert.equal(localMove('c7', 'c5'), false);
+    load(game(2, { status: 'finished' }));
     useGameStore.setState({ isMovePending: true });
     assert.equal(localMove('c7', 'c5'), false);
     assert.equal(useGameStore.getState().variation, null);
@@ -515,8 +524,9 @@ test('analysis supports every promotion for both colors and leaves the original 
     }
 });
 
-test('local variation sounds follow its cursor and background game completion never plays game-end over analysis', t => {
+test('local variation sounds follow its cursor and finished snapshots stay silent', t => {
     setup(t);
+    load(game(2, { status: 'finished' }));
     useGameStore.getState().selectPly(1);
     const root = useGameStore.getState();
     localMove('c7', 'c5');
@@ -528,3 +538,46 @@ test('local variation sounds follow its cursor and background game completion ne
     load(game(3, { status: 'finished', finishedReason: 'resignation' }));
     assert.equal(getGameSound(useGameStore.getState(), back, id), null);
 });
+
+for (const socketUpdate of [false, true]) {
+    test(`failed optimistic move rolls back only without a newer socket update (${socketUpdate})`, async t => {
+        setup(t);
+        const before = useGameStore.getState();
+        const pending = deferred();
+        t.mock.method(globalThis, 'fetch', () => pending.promise);
+        const move = submitGameMove(id, 'server-g1', 'f3');
+        assert.equal(useGameStore.getState().pieces.find(p => p.id === 'server-g1').square, 'f3');
+        if (socketUpdate) load(game(3));
+        const authoritative = socketUpdate ? useGameStore.getState() : before;
+        pending.resolve(Response.json({ message: 'Rejected' }, { status: 400 }));
+        await move;
+        assert.equal(useGameStore.getState().pieces, authoritative.pieces);
+        assert.equal(useGameStore.getState().currentTurn, authoritative.currentTurn);
+        assert.equal(useGameStore.getState().isMovePending, false);
+    });
+}
+
+for (const [fen, from, to, promotion, expected, absent] of [
+    ['4k3/8/8/8/8/8/8/4K2R w K -', 'e1', 'g1', undefined, { g1: 'wk', f1: 'wr' }, ['e1', 'h1']],
+    ['4k3/8/8/3pP3/8/8/8/4K3 w - d6', 'e5', 'd6', undefined, { d6: 'wp' }, ['e5', 'd5']],
+    ['4k3/P7/8/8/8/8/8/4K3 w - -', 'a7', 'a8', 'n', { a8: 'wn' }, ['a7']],
+    ['4k3/8/8/3p4/2B5/8/8/4K3 w - -', 'c4', 'd5', undefined, { d5: 'wb' }, ['c4']],
+]) {
+    test(`optimistic ${from}-${to} handles special moves before HTTP completes`, async t => {
+        setup(t);
+        const position = parsePosition(fen);
+        load(game(2, { pieces: position.pieces, positionHistory: null,
+            lastMove: position.enPassant ? { piece: 'bp', from: 'd7', to: 'd5' } : null }));
+        const before = useGameStore.getState();
+        const pending = deferred();
+        t.mock.method(globalThis, 'fetch', () => pending.promise);
+        const move = submitGameMove(id, `history-${from}`, to, promotion);
+        const pieces = useGameStore.getState().pieces;
+        for (const [square, code] of Object.entries(expected)) assert.equal(pieces.find(p => p.square === square)?.piece, code);
+        for (const square of absent) assert.equal(pieces.some(p => p.square === square), false);
+        assert.equal(useGameStore.getState().moves, before.moves);
+        pending.resolve(Response.json({ message: 'Rejected' }, { status: 400 }));
+        await move;
+        assert.equal(useGameStore.getState().pieces, before.pieces);
+    });
+}

@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import {
-    getLastNavigationPly, getNavigationPly, getPositionAtPly, isArrowInput, type NavigationCommand,
+    describePositionTransition, getLastNavigationPly, getNavigationPly, getPositionAtPly, isArrowInput, type NavigationCommand,
 } from '../utils/moveNavigation';
 
 export function useMoveNavigation(gameId?: string) {
+    const pieces = useGameStore(s => s.pieces);
     const selectedPly = useGameStore(s => s.selectedPly);
     const latestPly = useGameStore(s => s.latestPly);
     const navigationPositions = useGameStore(s => s.navigationPositions);
@@ -34,6 +35,9 @@ export function useMoveNavigation(gameId?: string) {
     const state = { selectedPly, latestPly, navigationPositions, variation };
     const navigationPly = getNavigationPly(state);
     const position = variation || selectedPly !== null ? getPositionAtPly(state, navigationPly) : null;
+    const recordedPosition = navigationPositions?.[navigationPly];
+    const animationPieces = position?.pieces ?? (recordedPosition
+        ? describePositionTransition(recordedPosition, { ...recordedPosition, pieces }).pieces : undefined);
     return {
         viewedPly: variation?.rootPly ?? selectedPly ?? latestPly,
         navigationPly,
@@ -42,7 +46,7 @@ export function useMoveNavigation(gameId?: string) {
         viewRevision,
         canNavigate: navigationPositions !== null,
         isVariation: variation !== null,
-        animationPieces: position?.pieces ?? navigationPositions?.[navigationPly]?.pieces,
+        animationPieces,
         position,
         selectPly,
         navigatePosition,
