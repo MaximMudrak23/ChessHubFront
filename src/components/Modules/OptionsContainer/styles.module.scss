@@ -9,15 +9,4 @@
     overflow-y: auto;
     user-select: none;
 
-    &::-webkit-scrollbar {
-        width: 8px;
-        height: 12px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: #ADABAB;
-        
-        border-radius: 9999px;
-        border: 1px solid transparent;
-        background-clip: padding-box;
-    }
 }
